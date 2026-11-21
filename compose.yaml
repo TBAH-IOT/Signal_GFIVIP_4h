@@ -1,0 +1,10 @@
+services:
+  gfi-signal:
+    build: .
+    ports: ["127.0.0.1:8765:8765"]
+    volumes: ["gfi-state:/state"]
+    restart: unless-stopped
+    environment:
+      GFI_SECURE_COOKIE: "0" # set 1 behind an HTTPS product gateway
+volumes:
+  gfi-state:

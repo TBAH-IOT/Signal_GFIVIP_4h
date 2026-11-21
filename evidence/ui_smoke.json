@@ -1,0 +1,14 @@
+{
+  "cards": 5,
+  "notification_limit": 5,
+  "bell_opens": true,
+  "click_opens_coin_stats": true,
+  "continuous_n": 308,
+  "net_profit": 0.08452937268316332,
+  "max_dd": -0.045491756348782886,
+  "signal_name": "Signal_GFIVIP_4h",
+  "continuous_period_shown": true,
+  "mobile_no_overflow": true,
+  "javascript_errors": [],
+  "renderer": "installed Chrome via Playwright; real baseline data"
+}

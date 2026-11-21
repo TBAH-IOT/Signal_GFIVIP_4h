@@ -1,0 +1,3394 @@
+{
+  "model": {
+    "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+    "coins": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "ZEC",
+      "BNB",
+      "XRP",
+      "NEAR",
+      "DOGE",
+      "UNI",
+      "SUI",
+      "ENA",
+      "LINK",
+      "AVAX",
+      "ADA",
+      "BCH",
+      "FIL",
+      "LTC",
+      "DOT",
+      "ARB",
+      "AAVE"
+    ],
+    "bar_ms": 900000,
+    "hold_bars": 16,
+    "window": 672,
+    "min_periods": 168,
+    "quantile": 0.01,
+    "initial_usdt": 10000.0,
+    "order_budget_usdt": 500.0,
+    "cost_bps": 10,
+    "direction": "LONG",
+    "overlap": "blocked within coin, allowed across coins",
+    "entry": "next 15m open reference",
+    "exit": "open exactly 4h after entry",
+    "basis": "Binance USD-M premiumIndexKlines close, dimensionless",
+    "stop_loss": null,
+    "take_profit": null,
+    "dca": false,
+    "signal_name": "Signal_GFIVIP_4h",
+    "spec_hash": "c1eb358dcf8b5ac55f9907046d107121e53585d417c2fd17aa91b6388c4c9cf4",
+    "forecast": "frozen historical conditional mean, not guaranteed future price",
+    "notification_limit": 5,
+    "simulated_tracking": true,
+    "broker_execution": false
+  },
+  "notifications": {
+    "items": [
+      {
+        "coin": "LTC",
+        "priority": 16,
+        "entry_index": 20112,
+        "exit_index": 20128,
+        "signal_ms": 1795233600000,
+        "entry_ms": 1795234500000,
+        "exit_ms": 1795248900000,
+        "entry_price": 38.14,
+        "features": {
+          "mom16": -0.05989647522800101,
+          "basis": -0.00109499,
+          "mom_q01": -0.04843483271167784,
+          "basis_q01": -0.0010345110999999997,
+          "active": true,
+          "onset": true
+        },
+        "id": "bbe3f2634fb10639c36f30ac",
+        "signal_name": "Signal_GFIVIP_4h",
+        "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+        "symbol": "LTCUSDT",
+        "direction": "LONG",
+        "origin": "backfill",
+        "notification_live": false,
+        "history": [
+          {
+            "time_ms": 1795206600000,
+            "price": 39.92
+          },
+          {
+            "time_ms": 1795207500000,
+            "price": 39.59
+          },
+          {
+            "time_ms": 1795208400000,
+            "price": 39.75
+          },
+          {
+            "time_ms": 1795209300000,
+            "price": 39.78
+          },
+          {
+            "time_ms": 1795210200000,
+            "price": 40.02
+          },
+          {
+            "time_ms": 1795211100000,
+            "price": 40.47
+          },
+          {
+            "time_ms": 1795212000000,
+            "price": 40.34
+          },
+          {
+            "time_ms": 1795212900000,
+            "price": 40.54
+          },
+          {
+            "time_ms": 1795213800000,
+            "price": 40.58
+          },
+          {
+            "time_ms": 1795214700000,
+            "price": 40.7
+          },
+          {
+            "time_ms": 1795215600000,
+            "price": 40.69
+          },
+          {
+            "time_ms": 1795216500000,
+            "price": 40.63
+          },
+          {
+            "time_ms": 1795217400000,
+            "price": 40.56
+          },
+          {
+            "time_ms": 1795218300000,
+            "price": 40.66
+          },
+          {
+            "time_ms": 1795219200000,
+            "price": 40.62
+          },
+          {
+            "time_ms": 1795220100000,
+            "price": 40.57
+          },
+          {
+            "time_ms": 1795221000000,
+            "price": 40.58
+          },
+          {
+            "time_ms": 1795221900000,
+            "price": 40.55
+          },
+          {
+            "time_ms": 1795222800000,
+            "price": 40.66
+          },
+          {
+            "time_ms": 1795223700000,
+            "price": 40.7
+          },
+          {
+            "time_ms": 1795224600000,
+            "price": 40.54
+          },
+          {
+            "time_ms": 1795225500000,
+            "price": 40.58
+          },
+          {
+            "time_ms": 1795226400000,
+            "price": 40.66
+          },
+          {
+            "time_ms": 1795227300000,
+            "price": 40.47
+          },
+          {
+            "time_ms": 1795228200000,
+            "price": 40.54
+          },
+          {
+            "time_ms": 1795229100000,
+            "price": 40.23
+          },
+          {
+            "time_ms": 1795230000000,
+            "price": 40.15
+          },
+          {
+            "time_ms": 1795230900000,
+            "price": 40.07
+          },
+          {
+            "time_ms": 1795231800000,
+            "price": 39.8
+          },
+          {
+            "time_ms": 1795232700000,
+            "price": 38.59
+          },
+          {
+            "time_ms": 1795233600000,
+            "price": 38.74
+          },
+          {
+            "time_ms": 1795234500000,
+            "price": 38.14
+          }
+        ],
+        "actual_path": [
+          {
+            "time_ms": 1795234500000,
+            "price": 38.14
+          },
+          {
+            "time_ms": 1795235400000,
+            "price": 38.02
+          },
+          {
+            "time_ms": 1795236300000,
+            "price": 38.23
+          },
+          {
+            "time_ms": 1795237200000,
+            "price": 38.53
+          },
+          {
+            "time_ms": 1795238100000,
+            "price": 38.56
+          },
+          {
+            "time_ms": 1795239000000,
+            "price": 38.36
+          },
+          {
+            "time_ms": 1795239900000,
+            "price": 38.16
+          },
+          {
+            "time_ms": 1795240800000,
+            "price": 38.1
+          },
+          {
+            "time_ms": 1795241700000,
+            "price": 37.96
+          },
+          {
+            "time_ms": 1795242600000,
+            "price": 37.85
+          },
+          {
+            "time_ms": 1795243500000,
+            "price": 38.61
+          },
+          {
+            "time_ms": 1795244400000,
+            "price": 39.08
+          },
+          {
+            "time_ms": 1795245300000,
+            "price": 38.9
+          },
+          {
+            "time_ms": 1795246200000,
+            "price": 38.95
+          },
+          {
+            "time_ms": 1795247100000,
+            "price": 38.91
+          },
+          {
+            "time_ms": 1795248000000,
+            "price": 38.89
+          },
+          {
+            "time_ms": 1795248900000,
+            "price": 38.92
+          }
+        ],
+        "forecast": {
+          "method": "historical_conditional_mean_v1",
+          "scope": "same_coin",
+          "sample_count": 9,
+          "as_of_ms": 1795234500000,
+          "latest_training_exit_ms": 1793321100000,
+          "frozen": true,
+          "interval": "pointwise empirical p10-p90; not a confidence interval",
+          "stop_loss": null,
+          "take_profit": null,
+          "risk_reward": null,
+          "available": true,
+          "p_up": 0.6666666666666666,
+          "mean_4h": 0.02237955363014874,
+          "points": [
+            {
+              "time_ms": 1795234500000,
+              "mean_price": 38.14,
+              "p10_price": 38.14,
+              "p90_price": 38.14
+            },
+            {
+              "time_ms": 1795235400000,
+              "mean_price": 38.03277002391168,
+              "p10_price": 37.65370039364165,
+              "p90_price": 38.38937689060656
+            },
+            {
+              "time_ms": 1795236300000,
+              "mean_price": 38.15570560438667,
+              "p10_price": 37.80127516711661,
+              "p90_price": 38.50862512235127
+            },
+            {
+              "time_ms": 1795237200000,
+              "mean_price": 38.33390918481717,
+              "p10_price": 37.91717467755093,
+              "p90_price": 38.93604321683677
+            },
+            {
+              "time_ms": 1795238100000,
+              "mean_price": 38.38443444631264,
+              "p10_price": 37.95069015582162,
+              "p90_price": 39.08885800523715
+            },
+            {
+              "time_ms": 1795239000000,
+              "mean_price": 38.53446340848774,
+              "p10_price": 37.87175964491172,
+              "p90_price": 39.25492297237772
+            },
+            {
+              "time_ms": 1795239900000,
+              "mean_price": 38.6279817789642,
+              "p10_price": 37.99642337383017,
+              "p90_price": 39.44970509772554
+            },
+            {
+              "time_ms": 1795240800000,
+              "mean_price": 38.59883796705365,
+              "p10_price": 38.05112196305782,
+              "p90_price": 39.39277744620187
+            },
+            {
+              "time_ms": 1795241700000,
+              "mean_price": 38.82077129314827,
+              "p10_price": 38.17334103045799,
+              "p90_price": 39.571763794246905
+            },
+            {
+              "time_ms": 1795242600000,
+              "mean_price": 38.88502098075536,
+              "p10_price": 38.07128857517884,
+              "p90_price": 39.752914136100976
+            },
+            {
+              "time_ms": 1795243500000,
+              "mean_price": 38.976309560348234,
+              "p10_price": 37.88560703274512,
+              "p90_price": 40.038625597449375
+            },
+            {
+              "time_ms": 1795244400000,
+              "mean_price": 38.883057450831004,
+              "p10_price": 37.844251491489466,
+              "p90_price": 40.03178365057889
+            },
+            {
+              "time_ms": 1795245300000,
+              "mean_price": 38.857300536533224,
+              "p10_price": 37.75843653251588,
+              "p90_price": 39.976687770113365
+            },
+            {
+              "time_ms": 1795246200000,
+              "mean_price": 38.93205877873647,
+              "p10_price": 37.894266870479065,
+              "p90_price": 40.01928097251887
+            },
+            {
+              "time_ms": 1795247100000,
+              "mean_price": 38.963256787146285,
+              "p10_price": 37.894289814609145,
+              "p90_price": 40.05557770126515
+            },
+            {
+              "time_ms": 1795248000000,
+              "mean_price": 38.948493453999866,
+              "p10_price": 37.57037730515802,
+              "p90_price": 40.22867556234709
+            },
+            {
+              "time_ms": 1795248900000,
+              "mean_price": 38.993556175453875,
+              "p10_price": 37.607425341635,
+              "p90_price": 40.20043131437295
+            }
+          ]
+        },
+        "exit_price": 38.92,
+        "order_budget": 500.0,
+        "gross_notional": 499.75012493753127,
+        "quantity": 13.103044702085246,
+        "gross_pnl": 10.220374867626456,
+        "total_cost": 0.4997501249375313,
+        "net_pnl": 9.720624742688925,
+        "entry_reference": "Binance next 15m open; modeled reference, not a user fill",
+        "settlement": "SETTLED",
+        "stop_loss": null,
+        "take_profit": null,
+        "gross_return": 0.020450970110120537,
+        "net_return": 0.019450970110120536,
+        "status": "ENDED",
+        "status_label": "Đã kết thúc",
+        "quote": null,
+        "quote_stale": true,
+        "remaining_seconds": 0,
+        "unread": false
+      },
+      {
+        "coin": "AAVE",
+        "priority": 19,
+        "entry_index": 20112,
+        "exit_index": 20128,
+        "signal_ms": 1795233600000,
+        "entry_ms": 1795234500000,
+        "exit_ms": 1795248900000,
+        "entry_price": 92.43,
+        "features": {
+          "mom16": -0.05452127659574468,
+          "basis": -0.00136878,
+          "mom_q01": -0.05343596573803781,
+          "basis_q01": -0.0010026752999999998,
+          "active": true,
+          "onset": true
+        },
+        "id": "b370b07e2d39c67a2b77a92b",
+        "signal_name": "Signal_GFIVIP_4h",
+        "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+        "symbol": "AAVEUSDT",
+        "direction": "LONG",
+        "origin": "backfill",
+        "notification_live": false,
+        "history": [
+          {
+            "time_ms": 1795206600000,
+            "price": 95.27
+          },
+          {
+            "time_ms": 1795207500000,
+            "price": 94.77
+          },
+          {
+            "time_ms": 1795208400000,
+            "price": 95.2
+          },
+          {
+            "time_ms": 1795209300000,
+            "price": 95.22
+          },
+          {
+            "time_ms": 1795210200000,
+            "price": 95.98
+          },
+          {
+            "time_ms": 1795211100000,
+            "price": 97.7
+          },
+          {
+            "time_ms": 1795212000000,
+            "price": 97.0
+          },
+          {
+            "time_ms": 1795212900000,
+            "price": 97.37
+          },
+          {
+            "time_ms": 1795213800000,
+            "price": 96.93
+          },
+          {
+            "time_ms": 1795214700000,
+            "price": 97.39
+          },
+          {
+            "time_ms": 1795215600000,
+            "price": 97.87
+          },
+          {
+            "time_ms": 1795216500000,
+            "price": 98.22
+          },
+          {
+            "time_ms": 1795217400000,
+            "price": 97.93
+          },
+          {
+            "time_ms": 1795218300000,
+            "price": 98.4
+          },
+          {
+            "time_ms": 1795219200000,
+            "price": 97.97
+          },
+          {
+            "time_ms": 1795220100000,
+            "price": 97.76
+          },
+          {
+            "time_ms": 1795221000000,
+            "price": 97.57
+          },
+          {
+            "time_ms": 1795221900000,
+            "price": 97.84
+          },
+          {
+            "time_ms": 1795222800000,
+            "price": 97.86
+          },
+          {
+            "time_ms": 1795223700000,
+            "price": 97.74
+          },
+          {
+            "time_ms": 1795224600000,
+            "price": 97.76
+          },
+          {
+            "time_ms": 1795225500000,
+            "price": 97.8
+          },
+          {
+            "time_ms": 1795226400000,
+            "price": 98.28
+          },
+          {
+            "time_ms": 1795227300000,
+            "price": 98.16
+          },
+          {
+            "time_ms": 1795228200000,
+            "price": 98.21
+          },
+          {
+            "time_ms": 1795229100000,
+            "price": 97.22
+          },
+          {
+            "time_ms": 1795230000000,
+            "price": 97.25
+          },
+          {
+            "time_ms": 1795230900000,
+            "price": 96.91
+          },
+          {
+            "time_ms": 1795231800000,
+            "price": 96.08
+          },
+          {
+            "time_ms": 1795232700000,
+            "price": 92.69
+          },
+          {
+            "time_ms": 1795233600000,
+            "price": 92.81
+          },
+          {
+            "time_ms": 1795234500000,
+            "price": 92.43
+          }
+        ],
+        "actual_path": [
+          {
+            "time_ms": 1795234500000,
+            "price": 92.43
+          },
+          {
+            "time_ms": 1795235400000,
+            "price": 91.7
+          },
+          {
+            "time_ms": 1795236300000,
+            "price": 92.22
+          },
+          {
+            "time_ms": 1795237200000,
+            "price": 92.8
+          },
+          {
+            "time_ms": 1795238100000,
+            "price": 92.67
+          },
+          {
+            "time_ms": 1795239000000,
+            "price": 92.6
+          },
+          {
+            "time_ms": 1795239900000,
+            "price": 91.95
+          },
+          {
+            "time_ms": 1795240800000,
+            "price": 92.1
+          },
+          {
+            "time_ms": 1795241700000,
+            "price": 91.8
+          },
+          {
+            "time_ms": 1795242600000,
+            "price": 92.15
+          },
+          {
+            "time_ms": 1795243500000,
+            "price": 94.71
+          },
+          {
+            "time_ms": 1795244400000,
+            "price": 95.72
+          },
+          {
+            "time_ms": 1795245300000,
+            "price": 95.12
+          },
+          {
+            "time_ms": 1795246200000,
+            "price": 95.32
+          },
+          {
+            "time_ms": 1795247100000,
+            "price": 95.29
+          },
+          {
+            "time_ms": 1795248000000,
+            "price": 94.89
+          },
+          {
+            "time_ms": 1795248900000,
+            "price": 95.03
+          }
+        ],
+        "forecast": {
+          "method": "historical_conditional_mean_v1",
+          "scope": "same_coin",
+          "sample_count": 15,
+          "as_of_ms": 1795234500000,
+          "latest_training_exit_ms": 1794687300000,
+          "frozen": true,
+          "interval": "pointwise empirical p10-p90; not a confidence interval",
+          "stop_loss": null,
+          "take_profit": null,
+          "risk_reward": null,
+          "available": true,
+          "p_up": 0.6,
+          "mean_4h": 0.002756724514877481,
+          "points": [
+            {
+              "time_ms": 1795234500000,
+              "mean_price": 92.43,
+              "p10_price": 92.43,
+              "p90_price": 92.43
+            },
+            {
+              "time_ms": 1795235400000,
+              "mean_price": 92.76123228152548,
+              "p10_price": 91.95182071487993,
+              "p90_price": 93.86193324462323
+            },
+            {
+              "time_ms": 1795236300000,
+              "mean_price": 93.04434691900141,
+              "p10_price": 91.9026990521019,
+              "p90_price": 93.98169332976089
+            },
+            {
+              "time_ms": 1795237200000,
+              "mean_price": 92.88778001126903,
+              "p10_price": 92.20009337266224,
+              "p90_price": 93.44278803129092
+            },
+            {
+              "time_ms": 1795238100000,
+              "mean_price": 92.99585497294414,
+              "p10_price": 92.07238120907894,
+              "p90_price": 94.47885711575633
+            },
+            {
+              "time_ms": 1795239000000,
+              "mean_price": 93.03679639364158,
+              "p10_price": 91.336999350073,
+              "p90_price": 94.57348055312337
+            },
+            {
+              "time_ms": 1795239900000,
+              "mean_price": 93.20593802594247,
+              "p10_price": 91.23837134326166,
+              "p90_price": 95.2343760798899
+            },
+            {
+              "time_ms": 1795240800000,
+              "mean_price": 92.99473766586826,
+              "p10_price": 90.56041202954748,
+              "p90_price": 95.12674155143978
+            },
+            {
+              "time_ms": 1795241700000,
+              "mean_price": 93.0947561422833,
+              "p10_price": 91.11197420701473,
+              "p90_price": 95.29848669567839
+            },
+            {
+              "time_ms": 1795242600000,
+              "mean_price": 92.90645474684942,
+              "p10_price": 91.06210647160387,
+              "p90_price": 95.06901996480363
+            },
+            {
+              "time_ms": 1795243500000,
+              "mean_price": 92.89796128123453,
+              "p10_price": 91.2236171757855,
+              "p90_price": 95.03200937596398
+            },
+            {
+              "time_ms": 1795244400000,
+              "mean_price": 92.91010808259139,
+              "p10_price": 91.11560794238885,
+              "p90_price": 94.83822525211875
+            },
+            {
+              "time_ms": 1795245300000,
+              "mean_price": 93.08805462035227,
+              "p10_price": 90.73535087188375,
+              "p90_price": 94.4966489426919
+            },
+            {
+              "time_ms": 1795246200000,
+              "mean_price": 92.90025562970973,
+              "p10_price": 91.14746807014691,
+              "p90_price": 94.3676889685312
+            },
+            {
+              "time_ms": 1795247100000,
+              "mean_price": 92.97350402127265,
+              "p10_price": 91.24707537974511,
+              "p90_price": 94.49899780613751
+            },
+            {
+              "time_ms": 1795248000000,
+              "mean_price": 92.63249453966888,
+              "p10_price": 90.89971244757436,
+              "p90_price": 94.5293697288794
+            },
+            {
+              "time_ms": 1795248900000,
+              "mean_price": 92.68480404691013,
+              "p10_price": 90.69026865164864,
+              "p90_price": 94.69612112443797
+            }
+          ]
+        },
+        "exit_price": 95.03,
+        "order_budget": 500.0,
+        "gross_notional": 499.75012493753127,
+        "quantity": 5.406795682543884,
+        "gross_pnl": 14.057668774614113,
+        "total_cost": 0.4997501249375313,
+        "net_pnl": 13.557918649676582,
+        "entry_reference": "Binance next 15m open; modeled reference, not a user fill",
+        "settlement": "SETTLED",
+        "stop_loss": null,
+        "take_profit": null,
+        "gross_return": 0.02812939521800284,
+        "net_return": 0.02712939521800284,
+        "status": "ENDED",
+        "status_label": "Đã kết thúc",
+        "quote": null,
+        "quote_stale": true,
+        "remaining_seconds": 0,
+        "unread": false
+      },
+      {
+        "coin": "ENA",
+        "priority": 10,
+        "entry_index": 20112,
+        "exit_index": 20128,
+        "signal_ms": 1795233600000,
+        "entry_ms": 1795234500000,
+        "exit_ms": 1795248900000,
+        "entry_price": 0.09177,
+        "features": {
+          "mom16": -0.07237440614575963,
+          "basis": -0.00171842,
+          "mom_q01": -0.05965625947835891,
+          "basis_q01": -0.0014566285999999997,
+          "active": true,
+          "onset": true
+        },
+        "id": "a65e4696ea4c56244822ad4f",
+        "signal_name": "Signal_GFIVIP_4h",
+        "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+        "symbol": "ENAUSDT",
+        "direction": "LONG",
+        "origin": "backfill",
+        "notification_live": false,
+        "history": [
+          {
+            "time_ms": 1795206600000,
+            "price": 0.09659
+          },
+          {
+            "time_ms": 1795207500000,
+            "price": 0.09558
+          },
+          {
+            "time_ms": 1795208400000,
+            "price": 0.09622
+          },
+          {
+            "time_ms": 1795209300000,
+            "price": 0.09617
+          },
+          {
+            "time_ms": 1795210200000,
+            "price": 0.09693
+          },
+          {
+            "time_ms": 1795211100000,
+            "price": 0.09875
+          },
+          {
+            "time_ms": 1795212000000,
+            "price": 0.09847
+          },
+          {
+            "time_ms": 1795212900000,
+            "price": 0.09893
+          },
+          {
+            "time_ms": 1795213800000,
+            "price": 0.09807
+          },
+          {
+            "time_ms": 1795214700000,
+            "price": 0.09852
+          },
+          {
+            "time_ms": 1795215600000,
+            "price": 0.09925
+          },
+          {
+            "time_ms": 1795216500000,
+            "price": 0.09918
+          },
+          {
+            "time_ms": 1795217400000,
+            "price": 0.09949
+          },
+          {
+            "time_ms": 1795218300000,
+            "price": 0.09958
+          },
+          {
+            "time_ms": 1795219200000,
+            "price": 0.09911
+          },
+          {
+            "time_ms": 1795220100000,
+            "price": 0.09893
+          },
+          {
+            "time_ms": 1795221000000,
+            "price": 0.09867
+          },
+          {
+            "time_ms": 1795221900000,
+            "price": 0.09906
+          },
+          {
+            "time_ms": 1795222800000,
+            "price": 0.09931
+          },
+          {
+            "time_ms": 1795223700000,
+            "price": 0.09945
+          },
+          {
+            "time_ms": 1795224600000,
+            "price": 0.09884
+          },
+          {
+            "time_ms": 1795225500000,
+            "price": 0.09893
+          },
+          {
+            "time_ms": 1795226400000,
+            "price": 0.09909
+          },
+          {
+            "time_ms": 1795227300000,
+            "price": 0.0983
+          },
+          {
+            "time_ms": 1795228200000,
+            "price": 0.09788
+          },
+          {
+            "time_ms": 1795229100000,
+            "price": 0.097
+          },
+          {
+            "time_ms": 1795230000000,
+            "price": 0.09687
+          },
+          {
+            "time_ms": 1795230900000,
+            "price": 0.09663
+          },
+          {
+            "time_ms": 1795231800000,
+            "price": 0.09571
+          },
+          {
+            "time_ms": 1795232700000,
+            "price": 0.09241
+          },
+          {
+            "time_ms": 1795233600000,
+            "price": 0.09258
+          },
+          {
+            "time_ms": 1795234500000,
+            "price": 0.09177
+          }
+        ],
+        "actual_path": [
+          {
+            "time_ms": 1795234500000,
+            "price": 0.09177
+          },
+          {
+            "time_ms": 1795235400000,
+            "price": 0.09128
+          },
+          {
+            "time_ms": 1795236300000,
+            "price": 0.09186
+          },
+          {
+            "time_ms": 1795237200000,
+            "price": 0.09217
+          },
+          {
+            "time_ms": 1795238100000,
+            "price": 0.09271
+          },
+          {
+            "time_ms": 1795239000000,
+            "price": 0.09261
+          },
+          {
+            "time_ms": 1795239900000,
+            "price": 0.09183
+          },
+          {
+            "time_ms": 1795240800000,
+            "price": 0.09115
+          },
+          {
+            "time_ms": 1795241700000,
+            "price": 0.09036
+          },
+          {
+            "time_ms": 1795242600000,
+            "price": 0.09141
+          },
+          {
+            "time_ms": 1795243500000,
+            "price": 0.0936
+          },
+          {
+            "time_ms": 1795244400000,
+            "price": 0.09498
+          },
+          {
+            "time_ms": 1795245300000,
+            "price": 0.09439
+          },
+          {
+            "time_ms": 1795246200000,
+            "price": 0.09435
+          },
+          {
+            "time_ms": 1795247100000,
+            "price": 0.09372
+          },
+          {
+            "time_ms": 1795248000000,
+            "price": 0.0932
+          },
+          {
+            "time_ms": 1795248900000,
+            "price": 0.0936
+          }
+        ],
+        "forecast": {
+          "method": "historical_conditional_mean_v1",
+          "scope": "same_coin",
+          "sample_count": 13,
+          "as_of_ms": 1795234500000,
+          "latest_training_exit_ms": 1794705300000,
+          "frozen": true,
+          "interval": "pointwise empirical p10-p90; not a confidence interval",
+          "stop_loss": null,
+          "take_profit": null,
+          "risk_reward": null,
+          "available": true,
+          "p_up": 0.46153846153846156,
+          "mean_4h": -0.0036158348861805747,
+          "points": [
+            {
+              "time_ms": 1795234500000,
+              "mean_price": 0.09177,
+              "p10_price": 0.09177,
+              "p90_price": 0.09177
+            },
+            {
+              "time_ms": 1795235400000,
+              "mean_price": 0.09217656424287127,
+              "p10_price": 0.09096207703328055,
+              "p90_price": 0.09337160340358555
+            },
+            {
+              "time_ms": 1795236300000,
+              "mean_price": 0.09201943985112494,
+              "p10_price": 0.09092973600162356,
+              "p90_price": 0.09403975437738325
+            },
+            {
+              "time_ms": 1795237200000,
+              "mean_price": 0.09186599692513768,
+              "p10_price": 0.08996345166990523,
+              "p90_price": 0.09337413412959177
+            },
+            {
+              "time_ms": 1795238100000,
+              "mean_price": 0.09204573230792769,
+              "p10_price": 0.09042184191616766,
+              "p90_price": 0.09362747696281716
+            },
+            {
+              "time_ms": 1795239000000,
+              "mean_price": 0.09202416148416762,
+              "p10_price": 0.09040056508690449,
+              "p90_price": 0.0937953575431457
+            },
+            {
+              "time_ms": 1795239900000,
+              "mean_price": 0.0919738243909076,
+              "p10_price": 0.09080229359281437,
+              "p90_price": 0.09326473084639011
+            },
+            {
+              "time_ms": 1795240800000,
+              "mean_price": 0.0916755428750629,
+              "p10_price": 0.08998265386310356,
+              "p90_price": 0.09286152672407492
+            },
+            {
+              "time_ms": 1795241700000,
+              "mean_price": 0.091308051892492,
+              "p10_price": 0.08908200157165218,
+              "p90_price": 0.09297077423116064
+            },
+            {
+              "time_ms": 1795242600000,
+              "mean_price": 0.09127135071495723,
+              "p10_price": 0.08937585293653887,
+              "p90_price": 0.09346695316693988
+            },
+            {
+              "time_ms": 1795243500000,
+              "mean_price": 0.09123083172883864,
+              "p10_price": 0.08883932332002661,
+              "p90_price": 0.0934627995676434
+            },
+            {
+              "time_ms": 1795244400000,
+              "mean_price": 0.09118951657120838,
+              "p10_price": 0.0887744270286481,
+              "p90_price": 0.09399201823772137
+            },
+            {
+              "time_ms": 1795245300000,
+              "mean_price": 0.09123414006375138,
+              "p10_price": 0.08776593457095863,
+              "p90_price": 0.09404456881365024
+            },
+            {
+              "time_ms": 1795246200000,
+              "mean_price": 0.09127381096893365,
+              "p10_price": 0.08754540523030406,
+              "p90_price": 0.09390108617722175
+            },
+            {
+              "time_ms": 1795247100000,
+              "mean_price": 0.09144873939865368,
+              "p10_price": 0.087118245911168,
+              "p90_price": 0.09379703134231834
+            },
+            {
+              "time_ms": 1795248000000,
+              "mean_price": 0.09137788000217009,
+              "p10_price": 0.08691963027554453,
+              "p90_price": 0.09407936709604509
+            },
+            {
+              "time_ms": 1795248900000,
+              "mean_price": 0.09143817483249521,
+              "p10_price": 0.08800309878235563,
+              "p90_price": 0.09378706844264906
+            }
+          ]
+        },
+        "exit_price": 0.0936,
+        "order_budget": 500.0,
+        "gross_notional": 499.75012493753127,
+        "quantity": 5445.6807773513265,
+        "gross_pnl": 9.965595822552967,
+        "total_cost": 0.4997501249375313,
+        "net_pnl": 9.465845697615435,
+        "entry_reference": "Binance next 15m open; modeled reference, not a user fill",
+        "settlement": "SETTLED",
+        "stop_loss": null,
+        "take_profit": null,
+        "gross_return": 0.019941157240928487,
+        "net_return": 0.018941157240928486,
+        "status": "ENDED",
+        "status_label": "Đã kết thúc",
+        "quote": null,
+        "quote_stale": true,
+        "remaining_seconds": 0,
+        "unread": false
+      },
+      {
+        "coin": "LINK",
+        "priority": 11,
+        "entry_index": 20112,
+        "exit_index": 20128,
+        "signal_ms": 1795233600000,
+        "entry_ms": 1795234500000,
+        "exit_ms": 1795248900000,
+        "entry_price": 8.084,
+        "features": {
+          "mom16": -0.05306935332708518,
+          "basis": -0.0012403,
+          "mom_q01": -0.048575436771455545,
+          "basis_q01": -0.0012302251,
+          "active": true,
+          "onset": true
+        },
+        "id": "a58e6fb2a4cd1aff2503efd7",
+        "signal_name": "Signal_GFIVIP_4h",
+        "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+        "symbol": "LINKUSDT",
+        "direction": "LONG",
+        "origin": "backfill",
+        "notification_live": false,
+        "history": [
+          {
+            "time_ms": 1795206600000,
+            "price": 8.371
+          },
+          {
+            "time_ms": 1795207500000,
+            "price": 8.297
+          },
+          {
+            "time_ms": 1795208400000,
+            "price": 8.326
+          },
+          {
+            "time_ms": 1795209300000,
+            "price": 8.314
+          },
+          {
+            "time_ms": 1795210200000,
+            "price": 8.368
+          },
+          {
+            "time_ms": 1795211100000,
+            "price": 8.501
+          },
+          {
+            "time_ms": 1795212000000,
+            "price": 8.507
+          },
+          {
+            "time_ms": 1795212900000,
+            "price": 8.555
+          },
+          {
+            "time_ms": 1795213800000,
+            "price": 8.535
+          },
+          {
+            "time_ms": 1795214700000,
+            "price": 8.575
+          },
+          {
+            "time_ms": 1795215600000,
+            "price": 8.582
+          },
+          {
+            "time_ms": 1795216500000,
+            "price": 8.605
+          },
+          {
+            "time_ms": 1795217400000,
+            "price": 8.559
+          },
+          {
+            "time_ms": 1795218300000,
+            "price": 8.575
+          },
+          {
+            "time_ms": 1795219200000,
+            "price": 8.54
+          },
+          {
+            "time_ms": 1795220100000,
+            "price": 8.536
+          },
+          {
+            "time_ms": 1795221000000,
+            "price": 8.535
+          },
+          {
+            "time_ms": 1795221900000,
+            "price": 8.537
+          },
+          {
+            "time_ms": 1795222800000,
+            "price": 8.551
+          },
+          {
+            "time_ms": 1795223700000,
+            "price": 8.565
+          },
+          {
+            "time_ms": 1795224600000,
+            "price": 8.543
+          },
+          {
+            "time_ms": 1795225500000,
+            "price": 8.552
+          },
+          {
+            "time_ms": 1795226400000,
+            "price": 8.565
+          },
+          {
+            "time_ms": 1795227300000,
+            "price": 8.551
+          },
+          {
+            "time_ms": 1795228200000,
+            "price": 8.537
+          },
+          {
+            "time_ms": 1795229100000,
+            "price": 8.486
+          },
+          {
+            "time_ms": 1795230000000,
+            "price": 8.484
+          },
+          {
+            "time_ms": 1795230900000,
+            "price": 8.456
+          },
+          {
+            "time_ms": 1795231800000,
+            "price": 8.388
+          },
+          {
+            "time_ms": 1795232700000,
+            "price": 8.169
+          },
+          {
+            "time_ms": 1795233600000,
+            "price": 8.18
+          },
+          {
+            "time_ms": 1795234500000,
+            "price": 8.083
+          }
+        ],
+        "actual_path": [
+          {
+            "time_ms": 1795234500000,
+            "price": 8.084
+          },
+          {
+            "time_ms": 1795235400000,
+            "price": 8.07
+          },
+          {
+            "time_ms": 1795236300000,
+            "price": 8.115
+          },
+          {
+            "time_ms": 1795237200000,
+            "price": 8.153
+          },
+          {
+            "time_ms": 1795238100000,
+            "price": 8.138
+          },
+          {
+            "time_ms": 1795239000000,
+            "price": 8.127
+          },
+          {
+            "time_ms": 1795239900000,
+            "price": 8.048
+          },
+          {
+            "time_ms": 1795240800000,
+            "price": 8.053
+          },
+          {
+            "time_ms": 1795241700000,
+            "price": 8.045
+          },
+          {
+            "time_ms": 1795242600000,
+            "price": 8.076
+          },
+          {
+            "time_ms": 1795243500000,
+            "price": 8.28
+          },
+          {
+            "time_ms": 1795244400000,
+            "price": 8.399
+          },
+          {
+            "time_ms": 1795245300000,
+            "price": 8.368
+          },
+          {
+            "time_ms": 1795246200000,
+            "price": 8.354
+          },
+          {
+            "time_ms": 1795247100000,
+            "price": 8.343
+          },
+          {
+            "time_ms": 1795248000000,
+            "price": 8.325
+          },
+          {
+            "time_ms": 1795248900000,
+            "price": 8.316
+          }
+        ],
+        "forecast": {
+          "method": "historical_conditional_mean_v1",
+          "scope": "same_coin",
+          "sample_count": 17,
+          "as_of_ms": 1795234500000,
+          "latest_training_exit_ms": 1794687300000,
+          "frozen": true,
+          "interval": "pointwise empirical p10-p90; not a confidence interval",
+          "stop_loss": null,
+          "take_profit": null,
+          "risk_reward": null,
+          "available": true,
+          "p_up": 0.7058823529411765,
+          "mean_4h": 0.01075026428188414,
+          "points": [
+            {
+              "time_ms": 1795234500000,
+              "mean_price": 8.084,
+              "p10_price": 8.084,
+              "p90_price": 8.084
+            },
+            {
+              "time_ms": 1795235400000,
+              "mean_price": 8.085047299272107,
+              "p10_price": 7.9943963856939835,
+              "p90_price": 8.208562561666225
+            },
+            {
+              "time_ms": 1795236300000,
+              "mean_price": 8.113731791952482,
+              "p10_price": 8.02235715171905,
+              "p90_price": 8.23056160333344
+            },
+            {
+              "time_ms": 1795237200000,
+              "mean_price": 8.133143221976805,
+              "p10_price": 8.033152822830473,
+              "p90_price": 8.22840857565518
+            },
+            {
+              "time_ms": 1795238100000,
+              "mean_price": 8.14012307669419,
+              "p10_price": 8.030429306745168,
+              "p90_price": 8.282157124941612
+            },
+            {
+              "time_ms": 1795239000000,
+              "mean_price": 8.141362795688615,
+              "p10_price": 8.0233609458364,
+              "p90_price": 8.25231700646665
+            },
+            {
+              "time_ms": 1795239900000,
+              "mean_price": 8.144082454089325,
+              "p10_price": 7.9822193259991385,
+              "p90_price": 8.28442349846472
+            },
+            {
+              "time_ms": 1795240800000,
+              "mean_price": 8.136111095688266,
+              "p10_price": 7.9742584111667085,
+              "p90_price": 8.283960550234857
+            },
+            {
+              "time_ms": 1795241700000,
+              "mean_price": 8.152190300031236,
+              "p10_price": 7.990924306503899,
+              "p90_price": 8.344898270097952
+            },
+            {
+              "time_ms": 1795242600000,
+              "mean_price": 8.155433564897892,
+              "p10_price": 7.986529186095031,
+              "p90_price": 8.3475283029684
+            },
+            {
+              "time_ms": 1795243500000,
+              "mean_price": 8.16411823280467,
+              "p10_price": 7.989392817918355,
+              "p90_price": 8.338845493654992
+            },
+            {
+              "time_ms": 1795244400000,
+              "mean_price": 8.163446546749649,
+              "p10_price": 7.993850785110962,
+              "p90_price": 8.350081571663127
+            },
+            {
+              "time_ms": 1795245300000,
+              "mean_price": 8.166081591847334,
+              "p10_price": 7.991290565113263,
+              "p90_price": 8.373898200442165
+            },
+            {
+              "time_ms": 1795246200000,
+              "mean_price": 8.17916158391437,
+              "p10_price": 8.016914436456226,
+              "p90_price": 8.37973992555016
+            },
+            {
+              "time_ms": 1795247100000,
+              "mean_price": 8.189417849844778,
+              "p10_price": 8.043664619123614,
+              "p90_price": 8.384007230732216
+            },
+            {
+              "time_ms": 1795248000000,
+              "mean_price": 8.171404315473364,
+              "p10_price": 8.019259701989307,
+              "p90_price": 8.382692232454188
+            },
+            {
+              "time_ms": 1795248900000,
+              "mean_price": 8.170905136454751,
+              "p10_price": 7.989893404641867,
+              "p90_price": 8.379374838444848
+            }
+          ]
+        },
+        "exit_price": 8.316,
+        "order_budget": 500.0,
+        "gross_notional": 499.75012493753127,
+        "quantity": 61.81965919563722,
+        "gross_pnl": 14.342160933387884,
+        "total_cost": 0.4997501249375313,
+        "net_pnl": 13.842410808450353,
+        "entry_reference": "Binance next 15m open; modeled reference, not a user fill",
+        "settlement": "SETTLED",
+        "stop_loss": null,
+        "take_profit": null,
+        "gross_return": 0.028698664027709153,
+        "net_return": 0.027698664027709152,
+        "status": "ENDED",
+        "status_label": "Đã kết thúc",
+        "quote": null,
+        "quote_stale": true,
+        "remaining_seconds": 0,
+        "unread": false
+      },
+      {
+        "coin": "FIL",
+        "priority": 15,
+        "entry_index": 20112,
+        "exit_index": 20128,
+        "signal_ms": 1795233600000,
+        "entry_ms": 1795234500000,
+        "exit_ms": 1795248900000,
+        "entry_price": 0.4946,
+        "features": {
+          "mom16": -0.07411566535654135,
+          "basis": -0.00151871,
+          "mom_q01": -0.06439261076804163,
+          "basis_q01": -0.0013603702,
+          "active": true,
+          "onset": true
+        },
+        "id": "89672b69e86f4ce83753135d",
+        "signal_name": "Signal_GFIVIP_4h",
+        "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+        "symbol": "FILUSDT",
+        "direction": "LONG",
+        "origin": "backfill",
+        "notification_live": false,
+        "history": [
+          {
+            "time_ms": 1795206600000,
+            "price": 0.5236
+          },
+          {
+            "time_ms": 1795207500000,
+            "price": 0.5187
+          },
+          {
+            "time_ms": 1795208400000,
+            "price": 0.521
+          },
+          {
+            "time_ms": 1795209300000,
+            "price": 0.5193
+          },
+          {
+            "time_ms": 1795210200000,
+            "price": 0.5245
+          },
+          {
+            "time_ms": 1795211100000,
+            "price": 0.5345
+          },
+          {
+            "time_ms": 1795212000000,
+            "price": 0.5337
+          },
+          {
+            "time_ms": 1795212900000,
+            "price": 0.5379
+          },
+          {
+            "time_ms": 1795213800000,
+            "price": 0.5325
+          },
+          {
+            "time_ms": 1795214700000,
+            "price": 0.5344
+          },
+          {
+            "time_ms": 1795215600000,
+            "price": 0.5348
+          },
+          {
+            "time_ms": 1795216500000,
+            "price": 0.5353
+          },
+          {
+            "time_ms": 1795217400000,
+            "price": 0.5361
+          },
+          {
+            "time_ms": 1795218300000,
+            "price": 0.5377
+          },
+          {
+            "time_ms": 1795219200000,
+            "price": 0.5356
+          },
+          {
+            "time_ms": 1795220100000,
+            "price": 0.5343
+          },
+          {
+            "time_ms": 1795221000000,
+            "price": 0.5342
+          },
+          {
+            "time_ms": 1795221900000,
+            "price": 0.5314
+          },
+          {
+            "time_ms": 1795222800000,
+            "price": 0.532
+          },
+          {
+            "time_ms": 1795223700000,
+            "price": 0.5309
+          },
+          {
+            "time_ms": 1795224600000,
+            "price": 0.5293
+          },
+          {
+            "time_ms": 1795225500000,
+            "price": 0.5313
+          },
+          {
+            "time_ms": 1795226400000,
+            "price": 0.5324
+          },
+          {
+            "time_ms": 1795227300000,
+            "price": 0.5309
+          },
+          {
+            "time_ms": 1795228200000,
+            "price": 0.5338
+          },
+          {
+            "time_ms": 1795229100000,
+            "price": 0.5296
+          },
+          {
+            "time_ms": 1795230000000,
+            "price": 0.5287
+          },
+          {
+            "time_ms": 1795230900000,
+            "price": 0.5266
+          },
+          {
+            "time_ms": 1795231800000,
+            "price": 0.5207
+          },
+          {
+            "time_ms": 1795232700000,
+            "price": 0.5025
+          },
+          {
+            "time_ms": 1795233600000,
+            "price": 0.5045
+          },
+          {
+            "time_ms": 1795234500000,
+            "price": 0.4947
+          }
+        ],
+        "actual_path": [
+          {
+            "time_ms": 1795234500000,
+            "price": 0.4946
+          },
+          {
+            "time_ms": 1795235400000,
+            "price": 0.495
+          },
+          {
+            "time_ms": 1795236300000,
+            "price": 0.4982
+          },
+          {
+            "time_ms": 1795237200000,
+            "price": 0.4979
+          },
+          {
+            "time_ms": 1795238100000,
+            "price": 0.4977
+          },
+          {
+            "time_ms": 1795239000000,
+            "price": 0.4979
+          },
+          {
+            "time_ms": 1795239900000,
+            "price": 0.4955
+          },
+          {
+            "time_ms": 1795240800000,
+            "price": 0.4935
+          },
+          {
+            "time_ms": 1795241700000,
+            "price": 0.4921
+          },
+          {
+            "time_ms": 1795242600000,
+            "price": 0.4911
+          },
+          {
+            "time_ms": 1795243500000,
+            "price": 0.5048
+          },
+          {
+            "time_ms": 1795244400000,
+            "price": 0.5102
+          },
+          {
+            "time_ms": 1795245300000,
+            "price": 0.5078
+          },
+          {
+            "time_ms": 1795246200000,
+            "price": 0.5085
+          },
+          {
+            "time_ms": 1795247100000,
+            "price": 0.5071
+          },
+          {
+            "time_ms": 1795248000000,
+            "price": 0.502
+          },
+          {
+            "time_ms": 1795248900000,
+            "price": 0.5037
+          }
+        ],
+        "forecast": {
+          "method": "historical_conditional_mean_v1",
+          "scope": "same_coin",
+          "sample_count": 17,
+          "as_of_ms": 1795234500000,
+          "latest_training_exit_ms": 1794688200000,
+          "frozen": true,
+          "interval": "pointwise empirical p10-p90; not a confidence interval",
+          "stop_loss": null,
+          "take_profit": null,
+          "risk_reward": null,
+          "available": true,
+          "p_up": 0.5294117647058824,
+          "mean_4h": 0.005456791039433051,
+          "points": [
+            {
+              "time_ms": 1795234500000,
+              "mean_price": 0.4946,
+              "p10_price": 0.4946,
+              "p90_price": 0.4946
+            },
+            {
+              "time_ms": 1795235400000,
+              "mean_price": 0.49669212809236213,
+              "p10_price": 0.4913223515489586,
+              "p90_price": 0.503130723740297
+            },
+            {
+              "time_ms": 1795236300000,
+              "mean_price": 0.49539963529847403,
+              "p10_price": 0.487132006582793,
+              "p90_price": 0.503781698149893
+            },
+            {
+              "time_ms": 1795237200000,
+              "mean_price": 0.49426806417049535,
+              "p10_price": 0.4838923062006556,
+              "p90_price": 0.5025448615777504
+            },
+            {
+              "time_ms": 1795238100000,
+              "mean_price": 0.4955426254036328,
+              "p10_price": 0.48280183220770695,
+              "p90_price": 0.5089834275287537
+            },
+            {
+              "time_ms": 1795239000000,
+              "mean_price": 0.4956373690870621,
+              "p10_price": 0.48465890110090515,
+              "p90_price": 0.5114917502879107
+            },
+            {
+              "time_ms": 1795239900000,
+              "mean_price": 0.4965411052567336,
+              "p10_price": 0.48558685489427167,
+              "p90_price": 0.511438085579667
+            },
+            {
+              "time_ms": 1795240800000,
+              "mean_price": 0.4965311773054348,
+              "p10_price": 0.48742037208843286,
+              "p90_price": 0.5068267254308643
+            },
+            {
+              "time_ms": 1795241700000,
+              "mean_price": 0.4963814214138961,
+              "p10_price": 0.4880077602380022,
+              "p90_price": 0.5078081051536281
+            },
+            {
+              "time_ms": 1795242600000,
+              "mean_price": 0.49634958612508717,
+              "p10_price": 0.4873106318718588,
+              "p90_price": 0.5079585744526606
+            },
+            {
+              "time_ms": 1795243500000,
+              "mean_price": 0.4966726679579056,
+              "p10_price": 0.4866800062093359,
+              "p90_price": 0.5086680485235126
+            },
+            {
+              "time_ms": 1795244400000,
+              "mean_price": 0.4959936788378126,
+              "p10_price": 0.48176125106465173,
+              "p90_price": 0.5072604190709701
+            },
+            {
+              "time_ms": 1795245300000,
+              "mean_price": 0.4958979164378294,
+              "p10_price": 0.48383859353811226,
+              "p90_price": 0.5063359168058168
+            },
+            {
+              "time_ms": 1795246200000,
+              "mean_price": 0.496589635878303,
+              "p10_price": 0.4857259072340471,
+              "p90_price": 0.5077830915554735
+            },
+            {
+              "time_ms": 1795247100000,
+              "mean_price": 0.4976844003173004,
+              "p10_price": 0.4864210142476732,
+              "p90_price": 0.5084552166769064
+            },
+            {
+              "time_ms": 1795248000000,
+              "mean_price": 0.49715233387187086,
+              "p10_price": 0.4850535071487323,
+              "p90_price": 0.5061335444326329
+            },
+            {
+              "time_ms": 1795248900000,
+              "mean_price": 0.4972989288481035,
+              "p10_price": 0.4846548762608256,
+              "p90_price": 0.5076206370675291
+            }
+          ]
+        },
+        "exit_price": 0.5037,
+        "order_budget": 500.0,
+        "gross_notional": 499.75012493753127,
+        "quantity": 1010.4127071118708,
+        "gross_pnl": 9.194755634718025,
+        "total_cost": 0.4997501249375313,
+        "net_pnl": 8.695005509780493,
+        "entry_reference": "Binance next 15m open; modeled reference, not a user fill",
+        "settlement": "SETTLED",
+        "stop_loss": null,
+        "take_profit": null,
+        "gross_return": 0.018398706025070766,
+        "net_return": 0.017398706025070765,
+        "status": "ENDED",
+        "status_label": "Đã kết thúc",
+        "quote": null,
+        "quote_stale": true,
+        "remaining_seconds": 0,
+        "unread": false
+      }
+    ],
+    "unread_count": 0,
+    "server_time_ms": 1795270377653,
+    "latest_event_id": 2
+  },
+  "signal_detail": {
+    "coin": "LTC",
+    "priority": 16,
+    "entry_index": 20112,
+    "exit_index": 20128,
+    "signal_ms": 1795233600000,
+    "entry_ms": 1795234500000,
+    "exit_ms": 1795248900000,
+    "entry_price": 38.14,
+    "features": {
+      "mom16": -0.05989647522800101,
+      "basis": -0.00109499,
+      "mom_q01": -0.04843483271167784,
+      "basis_q01": -0.0010345110999999997,
+      "active": true,
+      "onset": true
+    },
+    "id": "bbe3f2634fb10639c36f30ac",
+    "signal_name": "Signal_GFIVIP_4h",
+    "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+    "symbol": "LTCUSDT",
+    "direction": "LONG",
+    "origin": "backfill",
+    "notification_live": false,
+    "history": [
+      {
+        "time_ms": 1795206600000,
+        "price": 39.92
+      },
+      {
+        "time_ms": 1795207500000,
+        "price": 39.59
+      },
+      {
+        "time_ms": 1795208400000,
+        "price": 39.75
+      },
+      {
+        "time_ms": 1795209300000,
+        "price": 39.78
+      },
+      {
+        "time_ms": 1795210200000,
+        "price": 40.02
+      },
+      {
+        "time_ms": 1795211100000,
+        "price": 40.47
+      },
+      {
+        "time_ms": 1795212000000,
+        "price": 40.34
+      },
+      {
+        "time_ms": 1795212900000,
+        "price": 40.54
+      },
+      {
+        "time_ms": 1795213800000,
+        "price": 40.58
+      },
+      {
+        "time_ms": 1795214700000,
+        "price": 40.7
+      },
+      {
+        "time_ms": 1795215600000,
+        "price": 40.69
+      },
+      {
+        "time_ms": 1795216500000,
+        "price": 40.63
+      },
+      {
+        "time_ms": 1795217400000,
+        "price": 40.56
+      },
+      {
+        "time_ms": 1795218300000,
+        "price": 40.66
+      },
+      {
+        "time_ms": 1795219200000,
+        "price": 40.62
+      },
+      {
+        "time_ms": 1795220100000,
+        "price": 40.57
+      },
+      {
+        "time_ms": 1795221000000,
+        "price": 40.58
+      },
+      {
+        "time_ms": 1795221900000,
+        "price": 40.55
+      },
+      {
+        "time_ms": 1795222800000,
+        "price": 40.66
+      },
+      {
+        "time_ms": 1795223700000,
+        "price": 40.7
+      },
+      {
+        "time_ms": 1795224600000,
+        "price": 40.54
+      },
+      {
+        "time_ms": 1795225500000,
+        "price": 40.58
+      },
+      {
+        "time_ms": 1795226400000,
+        "price": 40.66
+      },
+      {
+        "time_ms": 1795227300000,
+        "price": 40.47
+      },
+      {
+        "time_ms": 1795228200000,
+        "price": 40.54
+      },
+      {
+        "time_ms": 1795229100000,
+        "price": 40.23
+      },
+      {
+        "time_ms": 1795230000000,
+        "price": 40.15
+      },
+      {
+        "time_ms": 1795230900000,
+        "price": 40.07
+      },
+      {
+        "time_ms": 1795231800000,
+        "price": 39.8
+      },
+      {
+        "time_ms": 1795232700000,
+        "price": 38.59
+      },
+      {
+        "time_ms": 1795233600000,
+        "price": 38.74
+      },
+      {
+        "time_ms": 1795234500000,
+        "price": 38.14
+      }
+    ],
+    "actual_path": [
+      {
+        "time_ms": 1795234500000,
+        "price": 38.14
+      },
+      {
+        "time_ms": 1795235400000,
+        "price": 38.02
+      },
+      {
+        "time_ms": 1795236300000,
+        "price": 38.23
+      },
+      {
+        "time_ms": 1795237200000,
+        "price": 38.53
+      },
+      {
+        "time_ms": 1795238100000,
+        "price": 38.56
+      },
+      {
+        "time_ms": 1795239000000,
+        "price": 38.36
+      },
+      {
+        "time_ms": 1795239900000,
+        "price": 38.16
+      },
+      {
+        "time_ms": 1795240800000,
+        "price": 38.1
+      },
+      {
+        "time_ms": 1795241700000,
+        "price": 37.96
+      },
+      {
+        "time_ms": 1795242600000,
+        "price": 37.85
+      },
+      {
+        "time_ms": 1795243500000,
+        "price": 38.61
+      },
+      {
+        "time_ms": 1795244400000,
+        "price": 39.08
+      },
+      {
+        "time_ms": 1795245300000,
+        "price": 38.9
+      },
+      {
+        "time_ms": 1795246200000,
+        "price": 38.95
+      },
+      {
+        "time_ms": 1795247100000,
+        "price": 38.91
+      },
+      {
+        "time_ms": 1795248000000,
+        "price": 38.89
+      },
+      {
+        "time_ms": 1795248900000,
+        "price": 38.92
+      }
+    ],
+    "forecast": {
+      "method": "historical_conditional_mean_v1",
+      "scope": "same_coin",
+      "sample_count": 9,
+      "as_of_ms": 1795234500000,
+      "latest_training_exit_ms": 1793321100000,
+      "frozen": true,
+      "interval": "pointwise empirical p10-p90; not a confidence interval",
+      "stop_loss": null,
+      "take_profit": null,
+      "risk_reward": null,
+      "available": true,
+      "p_up": 0.6666666666666666,
+      "mean_4h": 0.02237955363014874,
+      "points": [
+        {
+          "time_ms": 1795234500000,
+          "mean_price": 38.14,
+          "p10_price": 38.14,
+          "p90_price": 38.14
+        },
+        {
+          "time_ms": 1795235400000,
+          "mean_price": 38.03277002391168,
+          "p10_price": 37.65370039364165,
+          "p90_price": 38.38937689060656
+        },
+        {
+          "time_ms": 1795236300000,
+          "mean_price": 38.15570560438667,
+          "p10_price": 37.80127516711661,
+          "p90_price": 38.50862512235127
+        },
+        {
+          "time_ms": 1795237200000,
+          "mean_price": 38.33390918481717,
+          "p10_price": 37.91717467755093,
+          "p90_price": 38.93604321683677
+        },
+        {
+          "time_ms": 1795238100000,
+          "mean_price": 38.38443444631264,
+          "p10_price": 37.95069015582162,
+          "p90_price": 39.08885800523715
+        },
+        {
+          "time_ms": 1795239000000,
+          "mean_price": 38.53446340848774,
+          "p10_price": 37.87175964491172,
+          "p90_price": 39.25492297237772
+        },
+        {
+          "time_ms": 1795239900000,
+          "mean_price": 38.6279817789642,
+          "p10_price": 37.99642337383017,
+          "p90_price": 39.44970509772554
+        },
+        {
+          "time_ms": 1795240800000,
+          "mean_price": 38.59883796705365,
+          "p10_price": 38.05112196305782,
+          "p90_price": 39.39277744620187
+        },
+        {
+          "time_ms": 1795241700000,
+          "mean_price": 38.82077129314827,
+          "p10_price": 38.17334103045799,
+          "p90_price": 39.571763794246905
+        },
+        {
+          "time_ms": 1795242600000,
+          "mean_price": 38.88502098075536,
+          "p10_price": 38.07128857517884,
+          "p90_price": 39.752914136100976
+        },
+        {
+          "time_ms": 1795243500000,
+          "mean_price": 38.976309560348234,
+          "p10_price": 37.88560703274512,
+          "p90_price": 40.038625597449375
+        },
+        {
+          "time_ms": 1795244400000,
+          "mean_price": 38.883057450831004,
+          "p10_price": 37.844251491489466,
+          "p90_price": 40.03178365057889
+        },
+        {
+          "time_ms": 1795245300000,
+          "mean_price": 38.857300536533224,
+          "p10_price": 37.75843653251588,
+          "p90_price": 39.976687770113365
+        },
+        {
+          "time_ms": 1795246200000,
+          "mean_price": 38.93205877873647,
+          "p10_price": 37.894266870479065,
+          "p90_price": 40.01928097251887
+        },
+        {
+          "time_ms": 1795247100000,
+          "mean_price": 38.963256787146285,
+          "p10_price": 37.894289814609145,
+          "p90_price": 40.05557770126515
+        },
+        {
+          "time_ms": 1795248000000,
+          "mean_price": 38.948493453999866,
+          "p10_price": 37.57037730515802,
+          "p90_price": 40.22867556234709
+        },
+        {
+          "time_ms": 1795248900000,
+          "mean_price": 38.993556175453875,
+          "p10_price": 37.607425341635,
+          "p90_price": 40.20043131437295
+        }
+      ]
+    },
+    "exit_price": 38.92,
+    "order_budget": 500.0,
+    "gross_notional": 499.75012493753127,
+    "quantity": 13.103044702085246,
+    "gross_pnl": 10.220374867626456,
+    "total_cost": 0.4997501249375313,
+    "net_pnl": 9.720624742688925,
+    "entry_reference": "Binance next 15m open; modeled reference, not a user fill",
+    "settlement": "SETTLED",
+    "stop_loss": null,
+    "take_profit": null,
+    "gross_return": 0.020450970110120537,
+    "net_return": 0.019450970110120536,
+    "status": "ENDED",
+    "status_label": "Đã kết thúc",
+    "quote": null,
+    "quote_stale": true,
+    "remaining_seconds": 0
+  },
+  "stats_total": {
+    "n_trades": 308,
+    "open_trades": 0,
+    "gross_wins": 196,
+    "net_wins": 188,
+    "gross_winrate": 0.6363636363636364,
+    "net_winrate": 0.6103896103896104,
+    "gross_pnl": 999.2167653123929,
+    "total_cost": 153.92303848075963,
+    "net_pnl": 845.2937268316332,
+    "net_profit": 0.08452937268316332,
+    "settled_equity": 10845.293726831633,
+    "max_drawdown": -0.045491756348782886,
+    "profit_factor": 1.9069933482110513,
+    "sharpe_ratio": 2.2309004605553264,
+    "sharpe_observed_daily_returns": 208,
+    "sharpe_definition": "UTC daily 15m-open MTM, sqrt(365), zero risk-free, no unobserved gap returns",
+    "initial_usdt": 10000.0,
+    "order_budget_usdt": 500.0,
+    "cost_bps": 10,
+    "equity_basis": "15m open mark-to-market",
+    "pnl_basis": "closed-trade net PnL / initial capital",
+    "coin": "TOTAL",
+    "signal_name": "Signal_GFIVIP_4h",
+    "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+    "updated_at_ms": 1795270377720,
+    "baseline": {
+      "start_ms": 1777133700000,
+      "end_ms": 1792674000000,
+      "source": "real local Binance USD-M data",
+      "n_trades": 241,
+      "period": "2026-04-25 16:15 to 2026-10-22 13:00 UTC (~180d)",
+      "initial_usdt": 10000,
+      "spec_hash": "c1eb358dcf8b5ac55f9907046d107121e53585d417c2fd17aa91b6388c4c9cf4",
+      "gap_policy": "Reference comparison only; v1.1 reconstructs all subsequent history"
+    },
+    "history": {
+      "phase": "ready",
+      "signal_name": "Signal_GFIVIP_4h",
+      "start_ms": 1777133700000,
+      "as_of_ms": 1795269600000,
+      "last_closed_open_ms": 1795268700000,
+      "n_closed": 308,
+      "n_open": 0,
+      "historical_trades_added": 67,
+      "updated_at_ms": 1795270177756,
+      "continuous": true
+    },
+    "data_start_ms": 1777133700000,
+    "data_as_of_ms": 1795269600000,
+    "marks_quality": {
+      "missing_forward_marks": 0,
+      "continuous": true
+    },
+    "equity_curve": [
+      {
+        "time_ms": 1777133700000,
+        "equity": 10000.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777315500000,
+        "equity": 10000.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777497300000,
+        "equity": 9956.537457476068,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777679100000,
+        "equity": 9958.783185430879,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777860900000,
+        "equity": 9958.783185430879,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778042700000,
+        "equity": 9958.783185430879,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778224500000,
+        "equity": 9984.554179194914,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778406300000,
+        "equity": 9984.554179194914,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778588100000,
+        "equity": 10013.579862135357,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778769900000,
+        "equity": 10016.045137957462,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778951700000,
+        "equity": 10032.341233328425,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779133500000,
+        "equity": 10026.857344265976,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779315300000,
+        "equity": 10026.857344265976,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779497100000,
+        "equity": 10030.348473503913,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779678900000,
+        "equity": 10047.83333954056,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779860700000,
+        "equity": 10055.802243311566,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780042500000,
+        "equity": 10057.959372447569,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780224300000,
+        "equity": 10057.959372447569,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780406100000,
+        "equity": 10058.624133856914,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780587900000,
+        "equity": 10155.065775248406,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780769700000,
+        "equity": 10443.46657952112,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780951500000,
+        "equity": 10443.46657952112,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781133300000,
+        "equity": 10443.46657952112,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781315100000,
+        "equity": 10443.46657952112,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781496900000,
+        "equity": 10443.46657952112,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781678700000,
+        "equity": 10443.46657952112,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781860500000,
+        "equity": 10498.225748153878,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782042300000,
+        "equity": 10511.204555426768,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782224100000,
+        "equity": 10524.052793096498,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782405900000,
+        "equity": 10713.280174014257,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782587700000,
+        "equity": 10798.49628942291,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782769500000,
+        "equity": 10798.49628942291,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782951300000,
+        "equity": 10798.49628942291,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783133100000,
+        "equity": 10798.49628942291,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783314900000,
+        "equity": 10795.89487571661,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783496700000,
+        "equity": 10827.007007773886,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783678500000,
+        "equity": 10821.62412728945,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783860300000,
+        "equity": 10841.945661563681,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784042100000,
+        "equity": 10841.945661563681,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784223900000,
+        "equity": 10841.931341380401,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784405700000,
+        "equity": 10846.032432804372,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784587500000,
+        "equity": 10838.379639327728,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784769300000,
+        "equity": 10838.379639327728,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784951100000,
+        "equity": 10845.127797431101,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785132900000,
+        "equity": 10838.102474401649,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785314700000,
+        "equity": 10827.099339286076,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785496500000,
+        "equity": 10824.106816685462,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785678300000,
+        "equity": 10825.794386508758,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785860100000,
+        "equity": 10825.794386508758,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786041900000,
+        "equity": 10828.785614544084,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786223700000,
+        "equity": 10825.12264545496,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786405500000,
+        "equity": 10828.53479913509,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786587300000,
+        "equity": 10830.163856833105,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786769100000,
+        "equity": 10822.1199878776,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786950900000,
+        "equity": 10822.1199878776,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787132700000,
+        "equity": 10821.214812470633,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787314500000,
+        "equity": 10823.326996796588,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787496300000,
+        "equity": 10849.104462420088,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787678100000,
+        "equity": 10849.104462420088,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787859900000,
+        "equity": 10849.104462420088,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788041700000,
+        "equity": 10848.3024928195,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788223500000,
+        "equity": 10870.680748596611,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788405300000,
+        "equity": 10870.66684245858,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788587100000,
+        "equity": 10870.66684245858,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788768900000,
+        "equity": 10870.66684245858,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788950700000,
+        "equity": 10870.66684245858,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789132500000,
+        "equity": 10861.159541026398,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789314300000,
+        "equity": 10854.021962336243,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789496100000,
+        "equity": 10873.113128411609,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789677900000,
+        "equity": 10861.579131967548,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789859700000,
+        "equity": 10861.579131967548,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790041500000,
+        "equity": 10861.579131967548,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790223300000,
+        "equity": 10764.260167818711,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790405100000,
+        "equity": 10819.983248820812,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790586900000,
+        "equity": 10819.983248820812,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790768700000,
+        "equity": 10835.64374150613,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790950500000,
+        "equity": 10835.64374150613,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791132300000,
+        "equity": 10869.47434394507,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791314100000,
+        "equity": 10869.47434394507,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791495900000,
+        "equity": 10968.570714874704,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791677700000,
+        "equity": 10972.852883121795,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791859500000,
+        "equity": 11051.714190576442,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792041300000,
+        "equity": 11083.41707236177,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792223100000,
+        "equity": 11083.41707236177,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792404900000,
+        "equity": 11083.41707236177,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792586700000,
+        "equity": 11083.41707236177,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792768500000,
+        "equity": 11073.690398772418,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792950300000,
+        "equity": 11078.570112608197,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793132100000,
+        "equity": 11078.570112608197,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793313900000,
+        "equity": 11059.131009170367,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793495700000,
+        "equity": 10815.435958502823,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793677500000,
+        "equity": 10810.161334033153,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793859300000,
+        "equity": 10810.161334033153,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794041100000,
+        "equity": 10803.23931263874,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794222900000,
+        "equity": 10803.23931263874,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794404700000,
+        "equity": 10775.223000857557,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794586500000,
+        "equity": 10782.253522474673,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794768300000,
+        "equity": 10742.401935846423,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794950100000,
+        "equity": 10742.401935846423,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1795131900000,
+        "equity": 10742.401935846423,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1795269600000,
+        "equity": 10845.293726831633,
+        "segment": "continuous"
+      }
+    ],
+    "full_equity_points": 20152,
+    "cash_available_usdt": 10845.29372683164
+  },
+  "stats_coin": {
+    "n_trades": 12,
+    "open_trades": 0,
+    "gross_wins": 7,
+    "net_wins": 7,
+    "gross_winrate": 0.5833333333333334,
+    "net_winrate": 0.5833333333333334,
+    "gross_pnl": 66.22093261212711,
+    "total_cost": 5.997001499250375,
+    "net_pnl": 60.223931112876755,
+    "net_profit": 0.12044786222575352,
+    "settled_equity": 560.2239311128767,
+    "max_drawdown": -0.027379587948841544,
+    "profit_factor": 4.472679280629002,
+    "sharpe_ratio": 1.9250421903217076,
+    "sharpe_observed_daily_returns": 208,
+    "sharpe_definition": "UTC daily 15m-open MTM, sqrt(365), zero risk-free, no unobserved gap returns",
+    "initial_usdt": 500.0,
+    "order_budget_usdt": 500.0,
+    "cost_bps": 10,
+    "equity_basis": "15m open mark-to-market",
+    "pnl_basis": "closed-trade net PnL / initial capital",
+    "coin": "BTC",
+    "signal_name": "Signal_GFIVIP_4h",
+    "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+    "updated_at_ms": 1795270377800,
+    "baseline": {
+      "start_ms": 1777133700000,
+      "end_ms": 1792674000000,
+      "source": "real local Binance USD-M data",
+      "n_trades": 241,
+      "period": "2026-04-25 16:15 to 2026-10-22 13:00 UTC (~180d)",
+      "initial_usdt": 10000,
+      "spec_hash": "c1eb358dcf8b5ac55f9907046d107121e53585d417c2fd17aa91b6388c4c9cf4",
+      "gap_policy": "Reference comparison only; v1.1 reconstructs all subsequent history"
+    },
+    "history": {
+      "phase": "ready",
+      "signal_name": "Signal_GFIVIP_4h",
+      "start_ms": 1777133700000,
+      "as_of_ms": 1795269600000,
+      "last_closed_open_ms": 1795268700000,
+      "n_closed": 308,
+      "n_open": 0,
+      "historical_trades_added": 67,
+      "updated_at_ms": 1795270177756,
+      "continuous": true
+    },
+    "data_start_ms": 1777133700000,
+    "data_as_of_ms": 1795269600000,
+    "marks_quality": {
+      "missing_forward_marks": 0,
+      "continuous": true
+    },
+    "equity_curve": [
+      {
+        "time_ms": 1777133700000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777315500000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777497300000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777679100000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1777860900000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778042700000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778224500000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778406300000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778588100000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778769900000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1778951700000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779133500000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779315300000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779497100000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779678900000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1779860700000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780042500000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780224300000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780406100000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780587900000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780769700000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1780951500000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781133300000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781315100000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781496900000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781678700000,
+        "equity": 500.0,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1781860500000,
+        "equity": 499.49793911978463,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782042300000,
+        "equity": 499.49793911978463,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782224100000,
+        "equity": 502.06360660999275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782405900000,
+        "equity": 519.7570852771795,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782587700000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782769500000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1782951300000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783133100000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783314900000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783496700000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783678500000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1783860300000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784042100000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784223900000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784405700000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784587500000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784769300000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1784951100000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785132900000,
+        "equity": 523.0042702356648,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785314700000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785496500000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785678300000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1785860100000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786041900000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786223700000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786405500000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786587300000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786769100000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1786950900000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787132700000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787314500000,
+        "equity": 519.9790409082996,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787496300000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787678100000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1787859900000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788041700000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788223500000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788405300000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788587100000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788768900000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1788950700000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789132500000,
+        "equity": 524.0273404264162,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789314300000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789496100000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789677900000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1789859700000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790041500000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790223300000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790405100000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790586900000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790768700000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1790950500000,
+        "equity": 523.3145942991205,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791132300000,
+        "equity": 521.8462857894835,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791314100000,
+        "equity": 521.8462857894835,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791495900000,
+        "equity": 521.8462857894835,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791677700000,
+        "equity": 521.8462857894835,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1791859500000,
+        "equity": 530.8647188833716,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792041300000,
+        "equity": 534.1661080664275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792223100000,
+        "equity": 534.1661080664275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792404900000,
+        "equity": 534.1661080664275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792586700000,
+        "equity": 534.1661080664275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792768500000,
+        "equity": 534.1661080664275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1792950300000,
+        "equity": 534.1661080664275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793132100000,
+        "equity": 534.1661080664275,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793313900000,
+        "equity": 534.8113744669552,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793495700000,
+        "equity": 522.5322435543749,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793677500000,
+        "equity": 522.5322435543749,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1793859300000,
+        "equity": 522.5322435543749,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794041100000,
+        "equity": 522.5322435543749,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794222900000,
+        "equity": 522.5322435543749,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794404700000,
+        "equity": 522.5322435543749,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794586500000,
+        "equity": 522.5322435543749,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794768300000,
+        "equity": 544.0054772947482,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1794950100000,
+        "equity": 544.0054772947482,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1795131900000,
+        "equity": 544.0054772947482,
+        "segment": "continuous"
+      },
+      {
+        "time_ms": 1795269600000,
+        "equity": 560.2239311128767,
+        "segment": "continuous"
+      }
+    ],
+    "capital_note": "Per-coin attribution divided by 500 USDT; shared portfolio starts at 10,000 USDT",
+    "full_equity_points": 20152,
+    "cash_available_usdt": 10845.29372683164
+  },
+  "health": {
+    "signal_name": "Signal_GFIVIP_4h",
+    "model_id": "mom16_basis_L_q01_w672_min168_h16_fixed500_v1",
+    "spec_hash": "c1eb358dcf8b5ac55f9907046d107121e53585d417c2fd17aa91b6388c4c9cf4",
+    "mode": "offline",
+    "history": {
+      "phase": "ready",
+      "signal_name": "Signal_GFIVIP_4h",
+      "start_ms": 1777133700000,
+      "as_of_ms": 1795269600000,
+      "last_closed_open_ms": 1795268700000,
+      "n_closed": 308,
+      "n_open": 0,
+      "historical_trades_added": 67,
+      "updated_at_ms": 1795270177756,
+      "continuous": true
+    },
+    "data_as_of_ms": 1795269600000,
+    "data_current": true,
+    "worker": {
+      "mode": "offline",
+      "feed_status": "historical_snapshot"
+    },
+    "feed_stale": false,
+    "server_time_ms": 1795270377817,
+    "last_missed_interval": null,
+    "marks_quality": {
+      "missing_forward_marks": 0,
+      "continuous": true
+    },
+    "latest_event_id": 2
+  }
+}

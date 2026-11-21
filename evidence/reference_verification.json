@@ -1,0 +1,40 @@
+{
+  "summary": {
+    "n_trades": 241,
+    "open_trades": 0,
+    "gross_wins": 167,
+    "net_wins": 160,
+    "gross_winrate": 0.6929460580912863,
+    "net_winrate": 0.6639004149377593,
+    "gross_pnl": 1194.1301788823625,
+    "total_cost": 120.43978010994505,
+    "net_pnl": 1073.6903987724172,
+    "net_profit": 0.10736903987724172,
+    "settled_equity": 11073.690398772418,
+    "max_drawdown": -0.019480738090079774,
+    "profit_factor": 3.2019354407680294,
+    "sharpe_ratio": 3.9106526547002325,
+    "sharpe_observed_daily_returns": 178,
+    "sharpe_definition": "UTC daily 15m-open MTM, sqrt(365), zero risk-free, no unobserved gap returns",
+    "initial_usdt": 10000.0,
+    "order_budget_usdt": 500.0,
+    "cost_bps": 10,
+    "equity_basis": "15m open mark-to-market",
+    "pnl_basis": "closed-trade net PnL / initial capital"
+  },
+  "checks": {
+    "source_checksums": true,
+    "causal_prefix": true,
+    "no_coin_overlap": true,
+    "no_borrowing": true,
+    "exact_4h": true,
+    "cost_10bps": true,
+    "all_241_trade_rows_match": true,
+    "all_284_decisions_match": true,
+    "all_17268_equity_marks_match": true,
+    "all_17268_cash_marks_match": true,
+    "max_equity_error_usdt": 0.0
+  },
+  "candidates": 284,
+  "skipped_same_coin": 43
+}

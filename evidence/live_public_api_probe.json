@@ -1,0 +1,330 @@
+{
+  "real_public_api": true,
+  "server_time_ms": 1795252161565,
+  "checked_at_ms": 1795252163775,
+  "rows": [
+    {
+      "coin": "BTC",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.026741284690627865,
+        "basis": -0.00030486,
+        "mom_q01": -0.050554791235351546,
+        "basis_q01": -0.0009635956,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 57773.5
+    },
+    {
+      "coin": "ETH",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.04306836461985131,
+        "basis": -0.00054593,
+        "mom_q01": -0.06089355447634118,
+        "basis_q01": -0.0010443499999999999,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 1627.51
+    },
+    {
+      "coin": "SOL",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.018939393939394034,
+        "basis": -0.00083717,
+        "mom_q01": -0.04656894187006225,
+        "basis_q01": -0.0010655432999999998,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 67.25
+    },
+    {
+      "coin": "ZEC",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.04338428947669759,
+        "basis": -0.00038428,
+        "mom_q01": -0.07300759070622073,
+        "basis_q01": -0.0012587359999999997,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 728.95
+    },
+    {
+      "coin": "BNB",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.018619357105216894,
+        "basis": -0.00011751,
+        "mom_q01": -0.051895517340180636,
+        "basis_q01": -0.0003294086,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 521.91
+    },
+    {
+      "coin": "XRP",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.011876213315062278,
+        "basis": -0.00052818,
+        "mom_q01": -0.052639815006557546,
+        "basis_q01": -0.0009943286999999999,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.8861
+    },
+    {
+      "coin": "NEAR",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.03142966653890378,
+        "basis": -0.00040429,
+        "mom_q01": -0.07164394699764112,
+        "basis_q01": -0.0012291115999999997,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 2.691
+    },
+    {
+      "coin": "DOGE",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.01716489874638394,
+        "basis": -0.00067474,
+        "mom_q01": -0.057478773286175844,
+        "basis_q01": -0.0010710036999999999,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.05274
+    },
+    {
+      "coin": "UNI",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.015746180963572387,
+        "basis": -0.00064019,
+        "mom_q01": -0.06724802422656698,
+        "basis_q01": -0.0012038236,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 4.322
+    },
+    {
+      "coin": "SUI",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.013898080741231,
+        "basis": -0.0010506,
+        "mom_q01": -0.07061516080863005,
+        "basis_q01": -0.0013103987,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.6128
+    },
+    {
+      "coin": "ENA",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.0053162634262775565,
+        "basis": -0.00090296,
+        "mom_q01": -0.07187685284197343,
+        "basis_q01": -0.0015121978999999995,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.09266
+    },
+    {
+      "coin": "LINK",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.018152827180178965,
+        "basis": -0.00072147,
+        "mom_q01": -0.0519407417879072,
+        "basis_q01": -0.0012405233,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 8.301
+    },
+    {
+      "coin": "AVAX",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.019115502996922107,
+        "basis": -0.00089736,
+        "mom_q01": -0.061864409201504024,
+        "basis_q01": -0.0014033873999999998,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 6.291
+    },
+    {
+      "coin": "ADA",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.014760147601476037,
+        "basis": -0.00097783,
+        "mom_q01": -0.05875805499582756,
+        "basis_q01": -0.0015958877999999997,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.1375
+    },
+    {
+      "coin": "BCH",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.01096645237966598,
+        "basis": -0.00077003,
+        "mom_q01": -0.0505800780139032,
+        "basis_q01": -0.0013626262999999995,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 187.14
+    },
+    {
+      "coin": "FIL",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.011448081944165578,
+        "basis": -0.00013325,
+        "mom_q01": -0.06935014529622097,
+        "basis_q01": -0.0013769042999999999,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.5036
+    },
+    {
+      "coin": "LTC",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.005451713395638436,
+        "basis": -0.00070676,
+        "mom_q01": -0.05781205990328882,
+        "basis_q01": -0.0010345110999999997,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 38.73
+    },
+    {
+      "coin": "DOT",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.01762744163887575,
+        "basis": 0.0,
+        "mom_q01": -0.07083096312460183,
+        "basis_q01": -0.0018708937999999998,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.6408
+    },
+    {
+      "coin": "ARB",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": -0.010237319683573776,
+        "basis": -0.00035034,
+        "mom_q01": -0.05777974656784247,
+        "basis_q01": -0.0018152611999999997,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 0.10635
+    },
+    {
+      "coin": "AAVE",
+      "closed_candles": 689,
+      "last_closed_open_ms": 1795250700000,
+      "basis_missing": 0,
+      "continuous": true,
+      "latest_features": {
+        "mom16": 0.02553879310344831,
+        "basis": -0.00066779,
+        "mom_q01": -0.05616186248647126,
+        "basis_q01": -0.0010323835999999998,
+        "active": false,
+        "onset": false
+      },
+      "latest_close": 95.17
+    }
+  ],
+  "quote_count": 20,
+  "notifications_created": 0,
+  "orders_submitted": 0
+}

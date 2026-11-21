@@ -1,0 +1,2 @@
+coin,n_trades,net_profit,max_drawdown,final_equity,gross_winrate,net_winrate,profit_factor,gross_pnl,total_cost,net_pnl,peak_positions,skipped_same_coin,skipped_cash
+TOTAL,241,0.10736903987724178,-0.019480738090079774,11073.690398772418,0.6929460580912863,0.6639004149377593,3.2019354407680294,1194.1301788823625,120.43978010994502,1073.6903987724172,14,43,0

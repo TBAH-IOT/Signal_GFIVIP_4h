@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Signal_GFIVIP_4h · GFI</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script defer src="/assets/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Trang tín hiệu"><span class="brand-icon">✦</span><strong>GFI<span>Intelligence</span></strong></a>
+    <span class="product">Signal_GFIVIP_4h</span>
+    <div class="header-right"><span id="feed" class="feed">Đang kết nối</span>
+      <button id="bell" class="bell" aria-label="Thông báo tín hiệu" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/></svg><span id="badge" hidden>0</span></button>
+    </div>
+    <aside id="notifications" hidden><div class="panel-head"><strong>Thông báo mới nhất</strong><small>Tối đa 5 tín hiệu</small></div><div id="notification-list"></div></aside>
+  </header>
+  <main>
+    <div class="page-heading"><div><p class="eyebrow">GFI INTELLIGENCE / SIGNAL ENGINE</p><h1>Signal_GFIVIP_4h</h1><p class="muted">Dự báo 4h · Binance USD-M · Nến 15 phút</p></div><span class="paper-tag">THEO DÕI MÔ PHỎNG · 500 USDT/LỆNH</span></div>
+    <div id="error" class="error" hidden></div>
+    <section class="setups"><div class="section-title"><h2>5 tín hiệu gần nhất</h2><small id="clock"></small></div><div id="cards" class="card-grid"><p class="muted">Đang tải dữ liệu thật…</p></div></section>
+    <section id="detail" class="detail">
+      <div class="detail-top"><div><p class="eyebrow">GFI INTELLIGENCE / BACKTEST & FORWARD</p><h2 id="detail-title">Hiệu suất danh mục</h2><p class="muted" id="stats-caption"></p></div><label class="scope-label">Phạm vi thống kê<select id="scope"><option value="">Toàn bộ 20 coin</option></select></label></div>
+      <div id="selected-signal" hidden></div>
+      <div class="metric-grid">
+        <article class="metric"><h3>TỔNG LỆNH ĐÃ ĐÓNG</h3><strong id="n-trades">—</strong><small id="open-count"></small></article>
+        <article class="metric"><h3>WINRATE TRƯỚC PHÍ</h3><strong id="gross-wr">—</strong><small id="gross-count"></small></article>
+        <article class="metric"><h3>WINRATE SAU PHÍ</h3><strong id="net-wr">—</strong><small id="net-count"></small></article>
+        <article class="metric"><h3>NET PNL</h3><strong id="net-profit" class="positive">—</strong><small id="pnl-usdt"></small></article>
+        <article class="metric"><h3>MAX DRAWDOWN</h3><strong id="max-dd" class="negative">—</strong><small>Từ equity mark-to-market mỗi 15m</small></article>
+        <article class="metric"><h3>SHARPE RATIO</h3><strong id="sharpe">—</strong><small id="sharpe-note"></small></article>
+      </div>
+      <article class="equity-panel"><div class="section-title"><div><h3>Đường cong vốn</h3><p class="muted">Equity mô phỏng · phí và slippage 10 bps tổng hai đầu</p></div><span class="legend"><i></i>Vốn tích lũy</span></div><div id="equity-chart"></div></article>
+      <p id="capital-note" class="footnote"></p>
+    </section>
+    <footer>Đường nét đứt là trung bình của các lệnh lịch sử cùng logic đã hoàn tất trước tín hiệu, được cố định khi phát tín hiệu. Vùng p10–p90 mô tả lịch sử; giá tương lai có thể nằm ngoài vùng này. Mô hình thoát theo thời gian sau 4h, không sử dụng SL/TP.</footer>
+  </main>
+  <div id="toast" role="status" hidden></div>
+</body>
+</html>

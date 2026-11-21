@@ -1,0 +1,21 @@
+{
+  "signal_name": "Signal_GFIVIP_4h",
+  "as_of_ms": 1795269600000,
+  "all_coins": 20,
+  "bars_per_coin": 20152,
+  "start_ms": 1777133700000,
+  "closed_trades": 308,
+  "open_trades": 0,
+  "original_241_unchanged": true,
+  "independent_legacy_feature_scheduler": true,
+  "all_trade_ids_times_and_pnls_match": true,
+  "cash_plus_inventory_matches_every_equity_mark": true,
+  "max_equity_error_usdt": 3.637978807091713e-12,
+  "min_available_cash_usdt": 1592.4337029437556,
+  "same_coin_non_overlap": true,
+  "forecast_cutoffs_valid": true,
+  "all_holds_exact_4h": true,
+  "no_future_bar_close_used": true,
+  "price_and_premium_complete": true,
+  "old_notifications_not_reemitted": true
+}

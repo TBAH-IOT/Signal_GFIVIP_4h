@@ -1,0 +1,10 @@
+{
+  "manifest_members_verified": 112,
+  "standalone_extracted_replay": true,
+  "standalone_api": true,
+  "standalone_ui_assets": true,
+  "archive_contains_runtime_state": false,
+  "extracted_to": "D:\\Live_Trade\\gfi_release_check_1795270409\\Signal_GFIVIP_4h_MVP",
+  "replay_stdout": "TOTAL | 241 trades | WR gross 69.29% | WR net 66.39% | Net_P +10.74% | Max DD -1.95%\n{\"source_checksums\":true,\"causal_prefix\":true,\"no_coin_overlap\":true,\"no_borrowing\":true,\"exact_4h\":true,\"cost_10bps\":true,\"all_241_trade_rows_match\":true,\"all_284_decisions_match\":true,\"all_17268_equity_marks_match\":true,\"all_17268_cash_marks_match\":true,\"max_equity_error_usdt\":0.0}",
+  "api_stdout": "Extracted API and UI assets OK"
+}

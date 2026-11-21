@@ -1,0 +1,143 @@
+{
+  "start": "2026-04-25T16:15:00+00:00",
+  "last_mark": "2026-10-22T13:00:00+00:00",
+  "coins": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "ZEC",
+    "BNB",
+    "XRP",
+    "NEAR",
+    "DOGE",
+    "UNI",
+    "SUI",
+    "ENA",
+    "LINK",
+    "AVAX",
+    "ADA",
+    "BCH",
+    "FIL",
+    "LTC",
+    "DOT",
+    "ARB",
+    "AAVE"
+  ],
+  "cost_bps": 10,
+  "initial_usd": 10000.0,
+  "order_budget_usd": 500.0,
+  "no_overlap_scope": "same coin only; different coins may overlap",
+  "cash": "Shared settled cash, fixed 500/order including entry costs; skip if insufficient; no leverage",
+  "signal": "Original MOM16:L+BASIS:L, 672/168 quantile1%, onset; reset feature warmup at sample start",
+  "holding": "Next-open entry, exit exactly 4h later",
+  "sources": [
+    {
+      "coin": "BTC",
+      "sha256": "1072b1c35aaad8fb410ed09496fa236675f82c5e30fe74d1e7de637c57e45143",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "ETH",
+      "sha256": "9255713e9a385f3a1da2b2ccc282a0032482ca61215b03c64d3d6ef96b73a420",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "SOL",
+      "sha256": "f980eb0003e032e13e6203e4b36744debae273bcbd84008ea37a738d8aadc8e0",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "ZEC",
+      "sha256": "5467b44cd823b8c47c49e7eb09f3fa4102547a8ce653b36371aabcbfbfb3b34c",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "BNB",
+      "sha256": "c22bacebc31043ea6869e3e6bf2a44759c1c696a528e85e1b9b723a71143099e",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "XRP",
+      "sha256": "087151311ac821cc7e929982eb5ae4e6a1b8bf8142429805a9402994770596e4",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "NEAR",
+      "sha256": "11941bc2e5d5f2f1f744d07e0203e8862213fec79cd2098bb49d8370dea7067d",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "DOGE",
+      "sha256": "b1b14e3b3abd219803a5da601f5b60e6ca19dbb854d5b6659ccb882c50d02091",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "UNI",
+      "sha256": "6cd0e780289108f9a05e5bdb613b927e6e3c06e425145ca116ef309bae8580f2",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "SUI",
+      "sha256": "2f2df3d7a0be38663059510f7e5d0ea474ec102c184d03c5c27dcfa6099ddd3d",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "ENA",
+      "sha256": "a9f8bf523754350589a8bbd6e59f1ff2decd4f43d2ac848b0138feddfacb8923",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "LINK",
+      "sha256": "57d3b05f59bed54f1661482ab97c37158accb9b6118eaea9b8778a572be4cba0",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "AVAX",
+      "sha256": "eab785a33411a7c1a4019d481bbf69034d22a7e4c969381519f8d52739328fb0",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "ADA",
+      "sha256": "d67997b4153770872697a16117eba7fdf2dcc03ffc3cafadc07c628f67ecba47",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "BCH",
+      "sha256": "41c47f79bfa267c38d6ab9e303f8c5fd9b7cd4d1df9299c0e739f23fa2eb23b3",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "FIL",
+      "sha256": "27c1333e99313cf76f9c0a985ce572a6959938157a0bcba6891074c360c813ab",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "LTC",
+      "sha256": "dae92c1becab926a148a4a06fd1e9639fdd337d0209c78bf7136c3a70e356a7b",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "DOT",
+      "sha256": "f64597df514221dec508764f28ec30c64d5c9804d1614c12ee43a104fde922a7",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "ARB",
+      "sha256": "4778f18176d13b0211dd5c2a4ac9181c5ab1c60be09070f6aa2751ef988d8ef9",
+      "prefix_invariance": true
+    },
+    {
+      "coin": "AAVE",
+      "sha256": "b78efad7aa6e18476a5d0df417ac55613d7be6fb383e7ce25fd2aa97604e41d7",
+      "prefix_invariance": true
+    }
+  ],
+  "checks": {
+    "independent_cash_inventory": true,
+    "no_same_coin_overlap": true,
+    "all_orders_fixed500": true,
+    "cost10bps": true,
+    "top5_subset_exactly60": true,
+    "no_borrowing": true
+  }
+}

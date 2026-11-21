@@ -1,0 +1,9 @@
+.venv
+.test_tmp
+.pytest_cache
+__pycache__
+state*
+.live_probe
+.browser_tmp
+evidence
+tests

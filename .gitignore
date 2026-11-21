@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.test_tmp/
+.browser_tmp/
+.live_probe/
+state*/
+*.sqlite3*
+*.key
