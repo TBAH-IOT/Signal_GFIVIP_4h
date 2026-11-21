@@ -26,7 +26,7 @@ def assert_axis(page,expected):
     assert int(chart.get_attribute('data-end-ms'))==curve[-1]['time_ms']
     assert page.locator('.time-tick').count()>=3
     assert page.locator('.equity-time-label').count()>=3
-    assert '01/01/2026' in page.locator('.equity-time-label').first.text_content()
+    assert '01/05/2026' in page.locator('.equity-time-label').first.text_content()
     # Monthly ticks must be spaced by timestamp, and labels must not collide.
     layout=page.evaluate('''() => {
         const svg=document.querySelector('.equity-svg');
@@ -40,7 +40,7 @@ def assert_axis(page,expected):
     assert layout['dataStart']==curve[0]['time_ms']
     data_fraction=(layout['dataStart']-layout['start'])/(layout['end']-layout['start'])
     assert abs(layout['pathStartX']-(first['x']+data_fraction*(last['x']-first['x'])))<.01
-    assert layout['pathStartX']>first['x']  # no invented curve/flat equity before actual data
+    assert abs(layout['pathStartX']-first['x'])<.01
     for tick in layout['ticks']:
         fraction=(tick['time']-layout['start'])/(layout['end']-layout['start'])
         assert abs(tick['x']-(first['x']+fraction*(last['x']-first['x'])))<.01

@@ -39,7 +39,8 @@ def main():
     serve.add_argument("--state-dir",type=Path,default=ROOT/"state")
     serve.add_argument("--host",default="127.0.0.1");serve.add_argument("--port",type=int,default=8765)
     replay = sub.add_parser("replay");replay.add_argument("--out",type=Path,default=ROOT/"evidence")
-    sync=sub.add_parser("sync",help="Catch up from ORIGINAL backtest start through current Binance time")
+    replay.add_argument("--legacy-reference",action="store_true",help="Audit the archived Apr25/241-trade reference instead of the current May1 profile")
+    sync=sub.add_parser("sync",help="Catch up the May1 profile with prior feature warmup through current Binance time")
     sync.add_argument("--state-dir",type=Path,default=ROOT/"state")
     sync.add_argument("--local-data",type=Path)
     sync.add_argument("--export",type=Path)
@@ -49,8 +50,8 @@ def main():
     sub.add_parser("stats")
     args = p.parse_args()
     if args.command == "replay":
-        from .replay import reproduce
-        r = reproduce(args.out)
+        from .replay import reproduce,reproduce_current
+        r = reproduce(args.out) if args.legacy_reference else reproduce_current(args.out)
         s = r["summary"]
         print(f"TOTAL | {s['n_trades']} trades | WR gross {s['gross_winrate']:.2%} | WR net {s['net_winrate']:.2%} | Net_P {s['net_profit']:+.2%} | Max DD {s['max_drawdown']:.2%}")
         print(encode(r["checks"]))

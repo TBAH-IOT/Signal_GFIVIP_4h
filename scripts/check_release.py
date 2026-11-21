@@ -6,9 +6,15 @@ import subprocess
 import sys
 import time
 import zipfile
+import argparse
 
 ROOT=Path(__file__).resolve().parents[1]
-archive=ROOT.parent/'Signal_GFIVIP_4h_MVP_v1.1.0.zip'
+sys.path.insert(0,str(ROOT))
+from mom_basis.model import VERSION
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--archive',type=Path,default=ROOT.parent/f'Signal_GFIVIP_4h_MVP_v{VERSION}.zip')
+parser.add_argument('--report',type=Path)
+args=parser.parse_args();archive=args.archive
 destination=ROOT.parent/('gfi_release_check_'+str(int(time.time())))
 destination.mkdir()
 with zipfile.ZipFile(archive) as z:
@@ -43,5 +49,5 @@ result=dict(manifest_members_verified=len(manifest),standalone_extracted_replay=
             standalone_api=True,standalone_ui_assets=True,
             archive_contains_runtime_state=False,extracted_to=str(release),
             replay_stdout=replay.stdout.strip(),api_stdout=api.stdout.strip())
-(ROOT/'evidence'/'standalone_release_check.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+(args.report or archive.with_suffix('.verification.json')).write_text(json.dumps(result,indent=2),encoding='utf-8')
 print(json.dumps(result))

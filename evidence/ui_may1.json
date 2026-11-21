@@ -1,0 +1,23 @@
+{
+  "caption": "Backtest liên tục: 00:00 01/05/2026 UTC → 17:45 21/11/2026 UTC · Chi phí tổng 10 bps",
+  "cards": 5,
+  "coin_option": "Coin đang xem · AAVE",
+  "current_report": "strategy",
+  "data_start_ms": "1777593600000",
+  "first_tick": "01/05/2026",
+  "gross_winrate": "64,78%",
+  "max_dd": "-4,53%",
+  "metrics": 5,
+  "n_trades": "301",
+  "net_profit": "+8,87%",
+  "no_overflow": true,
+  "sharpe_caption": "Theo ngày UTC",
+  "signal_name": "Signal_GFIVIP_4h",
+  "time_axis_start_ms": "1777593600000",
+  "time_labels_no_overlap": true,
+  "version": "1.2.0",
+  "browser_errors": [],
+  "mobile390_checked": true,
+  "coin_report_checked": "AAVE",
+  "renderer": "Cua in-app browser; real local live backend"
+}

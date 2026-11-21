@@ -1,4 +1,4 @@
-"""Continuous, causal reference replay from the ORIGINAL start through the latest open.
+"""Continuous causal replay from May1, with a separate earlier feature warmup.
 
 Closed bars drive signals. The current unclosed bar contributes ONLY its known open
 for entry/exit/MTM. No historical notification is presented as a fresh live alert.
@@ -16,6 +16,7 @@ import time
 import numpy as np
 import pandas as pd
 from .model import (BAR, BUDGET, COINS, HOLD, INITIAL, MODEL_ID, ROOT, SIGNAL_NAME,
+                    BACKTEST_START_MS, HISTORY_START_MS, PROFILE_ID,
                     clean, encode, features, forecast, pnl, signal_id, statistics)
 
 COLUMNS = ["timestamp_ms", "open", "high", "low", "close", "basis"]
@@ -34,8 +35,7 @@ class HistoryCache:
               coin TEXT,time_ms INTEGER,equity REAL,segment TEXT,
               PRIMARY KEY(coin,time_ms));
             """)
-        reference = json.loads((ROOT/"data"/"reference180"/"manifest.json").read_text(encoding="utf-8"))
-        self.start_ms = reference["start_ms"]
+        self.start_ms = HISTORY_START_MS
 
     def ingest(self, coin, d, now_ms):
         d = d[COLUMNS].sort_values("timestamp_ms").drop_duplicates("timestamp_ms").copy()
@@ -56,7 +56,8 @@ class HistoryCache:
               WHERE history_bars.is_closed=0 OR history_bars.basis IS NULL""", rows)
 
     def bootstrap(self, use_bundle=True):
-        if self.store.meta("history_cache_seeded"):
+        seeded=self.store.meta("history_cache_seeded",{})
+        if isinstance(seeded,dict) and seeded.get("profile_id")==PROFILE_ID:
             return
         directory = ROOT/"data"/("continuous" if use_bundle else "reference180")
         if not (directory/"manifest.json").exists():
@@ -69,7 +70,7 @@ class HistoryCache:
                 raise ValueError(f"Bundled history checksum mismatch: {path.name}")
             d = pd.read_csv(path,float_precision="round_trip" if directory.name=="continuous" else None)
             self.ingest(item["coin"],d,asof)
-        self.store.set_meta("history_cache_seeded", dict(source=directory.name,asof_ms=asof))
+        self.store.set_meta("history_cache_seeded", dict(source=directory.name,asof_ms=asof,profile_id=PROFILE_ID))
 
     def import_local(self, directory):
         directory = Path(directory)
@@ -88,7 +89,7 @@ class HistoryCache:
     def cursor(self, coin):
         with self.store.connect() as c:
             # Start at a missing/incomplete/invalid bar; pagination never jumps over holes.
-            rows = c.execute("SELECT timestamp_ms,is_closed,basis FROM history_bars WHERE coin=? ORDER BY timestamp_ms",(coin,))
+            rows = c.execute("SELECT timestamp_ms,is_closed,basis FROM history_bars WHERE coin=? AND timestamp_ms>=? ORDER BY timestamp_ms",(coin,self.start_ms))
             expected = self.start_ms
             for row in rows:
                 if row[0] != expected or not row[1] or row[2] is None:
@@ -148,7 +149,8 @@ class HistoryCache:
             d.to_csv(path,index=False,compression="gzip")
             items.append(dict(coin=coin,file=path.name,rows=len(d),
                 export_sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
-        manifest = dict(start_ms=self.start_ms,end_ms=target_ms,captured_server_ms=now_ms,
+        manifest = dict(start_ms=BACKTEST_START_MS,history_start_ms=self.start_ms,
+            profile_id=PROFILE_ID,end_ms=target_ms,captured_server_ms=now_ms,
             last_closed_open_ms=target_ms-BAR,datasets=items,signal_name=SIGNAL_NAME,
             source="real Binance USD-M local reference + public REST catchup",
             last_row_policy="current 15m candle contributes ONLY its OPEN")
@@ -167,13 +169,17 @@ class Book:
     start_ms: int
     asof_ms: int
     cash: float
+    profile_id: str
 
 
-def calculate_book(frames, asof_ms=None):
+def calculate_book(frames, asof_ms=None, start_ms=None):
     """Complete growing-period replay. All choices use only information at entry."""
     sample = frames[COINS[0]]
     ts = sample.timestamp_ms.to_numpy(dtype=np.int64)
     asof_ms = int(ts[-1]) if asof_ms is None else asof_ms
+    start_ms = BACKTEST_START_MS if start_ms is None else int(start_ms)
+    if start_ms<int(ts[0]) or start_ms>asof_ms or start_ms%BAR:
+        raise ValueError("Backtest start is outside the available aligned timeline")
     expected = np.arange(int(ts[0]),asof_ms+BAR,BAR)
     if not np.array_equal(ts,expected):
         raise ValueError("Reference timeline is not continuous")
@@ -187,6 +193,8 @@ def calculate_book(frames, asof_ms=None):
         f = features(d.iloc[:-1])
         for i in np.flatnonzero(f.onset.to_numpy()):
             en,ex = int(i)+1,int(i)+1+HOLD
+            if int(ts[en])<start_ms:
+                continue  # warmup affects features only; no positions/PnL before start
             info = clean(f.iloc[int(i)].to_dict())
             candidates.append(dict(coin=coin,priority=priority,entry_index=en,exit_index=ex,
                 signal_ms=int(ts[i]),entry_ms=int(ts[en]),exit_ms=int(ts[en])+HOLD*BAR,
@@ -237,27 +245,43 @@ def calculate_book(frames, asof_ms=None):
         raise AssertionError("Borrowed cash in continuous reference book")
     if not np.isclose(cash,cash_curve[-1],atol=1e-7,rtol=0):
         raise AssertionError("Ledger cash does not reconcile")
-    marks=pd.DataFrame(dict(time_ms=ts,equity=eq,cash=cash_curve,segment="continuous"))
-    coin_eq={coin:BUDGET+np.cumsum(coin_realized[coin])+coin_float[coin] for coin in COINS}
+    visible=ts>=start_ms
+    marks=pd.DataFrame(dict(time_ms=ts[visible],equity=eq[visible],cash=cash_curve[visible],segment="continuous"))
+    coin_eq={coin:(BUDGET+np.cumsum(coin_realized[coin])+coin_float[coin])[visible] for coin in COINS}
     metrics={"TOTAL":statistics(trades,marks.to_dict("records"))}
     for coin in COINS:
         own=[t for t in trades if t["coin"]==coin]
-        ce=[dict(time_ms=int(k),equity=float(v),segment="continuous") for k,v in zip(ts,coin_eq[coin])]
+        ce=[dict(time_ms=int(k),equity=float(v),segment="continuous") for k,v in zip(ts[visible],coin_eq[coin])]
         metrics[coin]=statistics(own,ce,BUDGET)
-    return Book(trades,mature,decisions,marks,coin_eq,metrics,int(ts[0]),asof_ms,float(cash))
+    profile=f"{MODEL_ID}:start{start_ms}:warmup{(start_ms-int(ts[0]))//BAR}"
+    return Book(trades,mature,decisions,marks,coin_eq,metrics,start_ms,asof_ms,float(cash),profile)
 
 
 def apply_book(store, book, now_ms, live_notices=False):
     """Replace a legacy book once, then append continuous marks/trades atomically."""
+    prior_profile=store.meta("continuous_profile_id")
+    changing=store.meta("continuous_version")==1 and prior_profile!=book.profile_id
+    if changing:
+        suffix=hashlib.sha256(str(prior_profile).encode()).hexdigest()[:12]
+        archive=store.path.parent/("before_profile_"+suffix+".sqlite3")
+        if not archive.exists():
+            with store.connect() as source:
+                target=sqlite3.connect(archive)
+                try:source.backup(target)
+                finally:target.close()
     with store.tx() as c:
-        continuous=store.get(c,"continuous_version") == 1
-        previous={r[0]:json.loads(r[1]) for r in c.execute("SELECT id,data FROM trades")}
+        continuous=store.get(c,"continuous_version") == 1 and store.get(c,"continuous_profile_id")==book.profile_id
+        previous={r[0]:json.loads(r[1]) for r in c.execute("SELECT id,data FROM trades")} if continuous else {}
         old_asof=store.get(c,"continuous_asof_ms",-1)
         if continuous and book.asof_ms<old_asof:
             raise ValueError("Refusing to rewind continuous history")
         if not continuous:
             c.execute("DELETE FROM trades");c.execute("DELETE FROM marks");c.execute("DELETE FROM paths")
             c.execute("DELETE FROM decisions");c.execute("DELETE FROM coin_marks")
+            c.execute("DELETE FROM notifications");c.execute("DELETE FROM reads")
+            if changing:
+                c.execute("DELETE FROM events")
+                live_notices=False  # a profile rebuild must not replay live alerts
         new_ids={t["id"] for t in book.trades}
         if continuous and not set(previous).issubset(new_ids):
             raise ValueError("An immutable historical trade disappeared; refusing silent rewrite")
@@ -299,11 +323,12 @@ def apply_book(store, book, now_ms, live_notices=False):
             c.execute("INSERT INTO notifications VALUES(?,?)",(t["id"],t["entry_ms"]))
         c.execute("DELETE FROM reads WHERE signal_id NOT IN (SELECT id FROM notifications)")
         store.put(c,"cash",book.cash);store.put(c,"continuous_version",1)
+        store.put(c,"continuous_profile_id",book.profile_id)
         store.put(c,"continuous_asof_ms",book.asof_ms)
         store.put(c,"continuous_start_ms",book.start_ms)
         store.put(c,"marks_quality",dict(missing_forward_marks=0,continuous=True))
         for scope,stats in book.metrics.items():store.put(c,"continuous_stats_"+scope,stats)
-        status=dict(phase="ready",signal_name=SIGNAL_NAME,start_ms=book.start_ms,as_of_ms=book.asof_ms,
+        status=dict(phase="ready",signal_name=SIGNAL_NAME,profile_id=book.profile_id,start_ms=book.start_ms,as_of_ms=book.asof_ms,
             last_closed_open_ms=book.asof_ms-BAR,n_closed=book.metrics["TOTAL"]["n_trades"],
             n_open=book.metrics["TOTAL"]["open_trades"],historical_trades_added=historical_added,
             updated_at_ms=now_ms,continuous=True)
@@ -319,7 +344,7 @@ def apply_book(store, book, now_ms, live_notices=False):
 def initialize_snapshot(store):
     cache=HistoryCache(store)
     cache.bootstrap()
-    if store.meta("continuous_version")==1:
+    if store.meta("continuous_version")==1 and store.meta("continuous_profile_id")==PROFILE_ID:
         return
     manifest_path=ROOT/"data"/"continuous"/"manifest.json"
     if not manifest_path.exists():
@@ -333,8 +358,9 @@ def initialize_snapshot(store):
                 try:source.backup(target)
                 finally:target.close()
     manifest=json.loads(manifest_path.read_text(encoding="utf-8"))
-    book=calculate_book(cache.frames(manifest["end_ms"]))
-    apply_book(store,book,manifest["captured_server_ms"],live_notices=False)
+    target=max(manifest["end_ms"],store.meta("continuous_asof_ms",0))
+    book=calculate_book(cache.frames(target))
+    apply_book(store,book,max(manifest["captured_server_ms"],int(time.time()*1000)),live_notices=False)
 
 
 def metrics(store,coin=None):
@@ -346,8 +372,8 @@ def metrics(store,coin=None):
         else:
             rows=[dict(r) for r in c.execute("SELECT time_ms,equity,segment FROM marks ORDER BY time_ms")]
     baseline=store.meta("baseline")
-    if baseline:baseline.update(gap_policy="Reference comparison only; v1.1 reconstructs all subsequent history")
-    result.update(coin=scope,signal_name=SIGNAL_NAME,model_id=MODEL_ID,
+    if baseline:baseline.update(gap_policy="Archived Apr25 reference only; current profile starts May1 with earlier feature warmup")
+    result.update(coin=scope,signal_name=SIGNAL_NAME,model_id=MODEL_ID,profile_id=store.meta("continuous_profile_id"),
         updated_at_ms=int(time.time()*1000),baseline=baseline,history=store.meta("history_status"),
         data_start_ms=store.meta("continuous_start_ms"),data_as_of_ms=store.meta("continuous_asof_ms"),
         marks_quality=store.meta("marks_quality"),equity_curve=rows)
@@ -362,7 +388,7 @@ async def synchronize(store,source,local_data=None,export=None,live_notices=Fals
     for attempt in range(4):
         now=await source.server_ms();target=now//BAR*BAR
         store.set_meta("history_status",dict(phase="downloading",signal_name=SIGNAL_NAME,
-            target_ms=target,start_ms=cache.start_ms,updated_at_ms=now))
+            target_ms=target,start_ms=BACKTEST_START_MS,history_start_ms=cache.start_ms,updated_at_ms=now))
         await cache.download(source,target,now)
         store.set_meta("history_status",dict(phase="replaying",target_ms=target,signal_name=SIGNAL_NAME,updated_at_ms=now))
         frames=await asyncio.to_thread(cache.frames,target)

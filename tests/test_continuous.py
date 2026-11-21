@@ -6,6 +6,7 @@ import pytest
 from mom_basis.continuous import HistoryCache,apply_book,calculate_book,synchronize
 from mom_basis.model import BAR,COINS,ROOT,SIGNAL_NAME,encode
 from mom_basis.store import Store
+import mom_basis.continuous as engine
 
 
 @pytest.fixture(scope="module")
@@ -13,9 +14,18 @@ def frames():
     return {c:pd.read_csv(ROOT/'data'/'reference180'/(c+'USDT_15m.csv.gz')) for c in COINS}
 
 
+@pytest.fixture(autouse=True)
+def legacy_reference_dates(monkeypatch,frames):
+    # These regression cases deliberately retain the immutable Apr25 reference.
+    start=int(frames[COINS[0]].timestamp_ms.iloc[0])
+    monkeypatch.setattr(engine,'BACKTEST_START_MS',start)
+    monkeypatch.setattr(engine,'HISTORY_START_MS',start)
+    monkeypatch.setattr(engine,'PROFILE_ID',f'{engine.MODEL_ID}:start{start}:warmup0')
+
+
 @pytest.fixture(scope="module")
 def original_book(frames):
-    return calculate_book(frames)
+    return calculate_book(frames,start_ms=int(frames[COINS[0]].timestamp_ms.iloc[0]))
 
 
 def blank_store(path):
@@ -101,7 +111,7 @@ def test_download_paginates_and_resumes_every_gap_without_fake_alerts(frames,tmp
     cache=HistoryCache(s)
     start=int(frames[COINS[0]].timestamp_ms.iloc[0]);target=start+1250*BAR
     for coin,d in frames.items():cache.ingest(coin,d.iloc[:200],start+200*BAR)
-    s.set_meta('history_cache_seeded',True)
+    s.set_meta('history_cache_seeded',{'profile_id':engine.PROFILE_ID})
     class Source:
         calls=[]
         async def server_ms(self):return target+10000
@@ -130,7 +140,7 @@ def test_download_paginates_and_resumes_every_gap_without_fake_alerts(frames,tmp
 
 def test_missing_real_data_does_not_publish_a_partial_portfolio(frames,tmp_path):
     s=blank_store(tmp_path/'incomplete.sqlite3')
-    cache=HistoryCache(s);s.set_meta('history_cache_seeded',True)
+    cache=HistoryCache(s);s.set_meta('history_cache_seeded',{'profile_id':engine.PROFILE_ID})
     start=int(frames[COINS[0]].timestamp_ms.iloc[0]);target=start+300*BAR
     class Source:
         async def server_ms(self):return target+1000

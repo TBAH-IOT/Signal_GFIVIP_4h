@@ -3,9 +3,15 @@ from pathlib import Path
 import hashlib
 import json
 import zipfile
+import argparse
+import sys
 
 ROOT=Path(__file__).resolve().parents[1]
-DEST=ROOT.parent/'Signal_GFIVIP_4h_MVP_v1.1.0.zip'
+sys.path.insert(0,str(ROOT))
+from mom_basis.model import VERSION
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--out',type=Path,default=ROOT.parent/f'Signal_GFIVIP_4h_MVP_v{VERSION}.zip')
+DEST=parser.parse_args().out
 allowed_dirs={'mom_basis','web','tests','scripts','docs','data','evidence'}
 allowed_files={'README.md','pyproject.toml','requirements.lock','requirements-test.lock',
                'install.ps1','start_offline.ps1','start_live.ps1','Dockerfile','compose.yaml','.dockerignore','.gitignore'}

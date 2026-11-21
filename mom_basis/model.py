@@ -16,6 +16,9 @@ HOLD = 16
 WINDOW = 672
 MIN_PERIODS = 168
 LIVE_WARMUP = WINDOW + HOLD + 1  # also preserves the preceding active state
+VERSION = "1.2.0"
+BACKTEST_START_MS = 1777593600000  # 2026-05-01 00:00 UTC
+HISTORY_START_MS = BACKTEST_START_MS - LIVE_WARMUP * BAR
 INITIAL = 10_000.0
 BUDGET = 500.0
 COST = 0.001  # ALL-IN total both sides; do not add a second slippage deduction
@@ -28,7 +31,12 @@ SPEC = dict(model_id=MODEL_ID, coins=COINS, bar_ms=BAR, hold_bars=HOLD,
             basis="Binance USD-M premiumIndexKlines close, dimensionless",
             stop_loss=None, take_profit=None, dca=False)
 SPEC_HASH = hashlib.sha256(json.dumps(SPEC, sort_keys=True).encode()).hexdigest()
-SPEC["signal_name"] = SIGNAL_NAME  # display name does not change strategy identity or historical IDs
+PROFILE_ID = f"{MODEL_ID}:start{BACKTEST_START_MS}:warmup{LIVE_WARMUP}"
+# SPEC_HASH identifies the unchanged mathematical trading rules; PROFILE_ID also
+# identifies the evaluation start/warmup, so old ledgers cannot be mixed into it.
+SPEC.update(signal_name=SIGNAL_NAME, version=VERSION, profile_id=PROFILE_ID,
+            backtest_start_ms=BACKTEST_START_MS, history_start_ms=HISTORY_START_MS,
+            warmup_bars=LIVE_WARMUP)
 
 
 def clean(value):

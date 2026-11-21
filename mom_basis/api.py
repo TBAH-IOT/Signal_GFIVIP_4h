@@ -13,7 +13,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from .feed import Worker
-from .model import BAR, COINS, MODEL_ID, ROOT, SIGNAL_NAME, SPEC, SPEC_HASH, encode
+from .model import BAR, COINS, MODEL_ID, ROOT, SIGNAL_NAME, SPEC, SPEC_HASH, VERSION, PROFILE_ID, encode
 from .store import Store
 
 
@@ -93,7 +93,7 @@ def create_app(state_dir=None, live=None, use_snapshot=True):
                     await task
             lock.close()
 
-    app = FastAPI(title=SIGNAL_NAME+" signal service", version="1.1.0", lifespan=lifespan)
+    app = FastAPI(title=SIGNAL_NAME+" signal service", version=VERSION, lifespan=lifespan)
     app.state.store = store
 
     @app.middleware("http")
@@ -117,7 +117,7 @@ def create_app(state_dir=None, live=None, use_snapshot=True):
         age = server_now()-worker.get("heartbeat_ms", 0)
         history=store.meta("history_status",{})
         asof=store.meta("continuous_asof_ms")
-        return dict(signal_name=SIGNAL_NAME,model_id=MODEL_ID, spec_hash=SPEC_HASH, mode="live" if live else "offline",
+        return dict(signal_name=SIGNAL_NAME,model_id=MODEL_ID,profile_id=PROFILE_ID,version=VERSION,spec_hash=SPEC_HASH, mode="live" if live else "offline",
                     history=history,data_as_of_ms=asof,
                     data_current=bool(asof==server_now()//BAR*BAR and history.get("phase")=="ready"),
                     worker=worker, feed_stale=bool(live and age > 30_000),

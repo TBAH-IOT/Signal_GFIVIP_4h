@@ -65,8 +65,7 @@ function equityChart(rows) {
   const H=compact?270:320,L=12,R=compact?64:80,T=20,B=72;
   const values=rows.map(p=>p.equity),low=Math.min(...values),high=Math.max(...values),pad=Math.max((high-low)*.14,high*.002),lo=low-pad,hi=high+pad;
   const dataStart=rows[0].time_ms,end=rows.at(-1).time_ms,right=W-R,bottom=H-B;
-  // Expand the calendar to Jan 1; keep every equity point at its real timestamp.
-  const start=Date.UTC(new Date(dataStart).getUTCFullYear(),0,1);
+  const start=dataStart;
   const x=ms=>L+(ms-start)/Math.max(1,end-start)*(right-L),y=p=>bottom-(p-lo)/(hi-lo)*(bottom-T);
   const shortDate=ms=>new Date(ms).toLocaleDateString('vi-VN',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric'});
   const ticks=[{time:start,label:shortDate(start),anchor:'start'}];
@@ -82,7 +81,7 @@ function equityChart(rows) {
   if(end>start)ticks.push({time:end,label:shortDate(end),anchor:'end'});
   let line='',segments=[];
   rows.forEach((r,i)=>{if(i&&r.segment!==rows[i-1].segment){segments.push(line);line='';} line+=`${line?'L':'M'}${x(r.time_ms).toFixed(2)},${y(r.equity).toFixed(2)} `;});segments.push(line);
-  return `<svg class="equity-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong vốn mô phỏng với trục lịch từ đầu năm UTC" data-start-ms="${dataStart}" data-axis-start-ms="${start}" data-end-ms="${end}">
+  return `<svg class="equity-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong vốn mô phỏng theo thời gian UTC" data-start-ms="${dataStart}" data-axis-start-ms="${start}" data-end-ms="${end}">
     ${[0,.25,.5,.75,1].map(k=>{const v=lo+(hi-lo)*k;return `<line x1="${L}" x2="${right}" y1="${y(v)}" y2="${y(v)}" class="equity-grid"/><text x="${right+12}" y="${y(v)+4}" class="equity-value">$${v.toLocaleString('en-US',{maximumFractionDigits:0})}</text>`}).join('')}
     ${ticks.map(t=>`<g class="time-tick" data-time-ms="${t.time}"><title>${esc(date(t.time))}</title><line x1="${x(t.time)}" x2="${x(t.time)}" y1="${T}" y2="${bottom}" class="equity-grid"/><line x1="${x(t.time)}" x2="${x(t.time)}" y1="${bottom}" y2="${bottom+7}" class="equity-axis-line"/><circle cx="${x(t.time)}" cy="${bottom}" r="2" fill="#78869d"/>${t.label?`<text class="equity-time-label" x="${x(t.time)}" y="${bottom+27}" text-anchor="${t.anchor}">${esc(t.label)}</text>`:''}</g>`).join('')}
     <line x1="${L}" x2="${right}" y1="${bottom}" y2="${bottom}" class="equity-axis-line"/>
@@ -104,7 +103,7 @@ async function loadStats() {
   $('max-dd').textContent=pct(s.max_drawdown);$('sharpe').textContent=s.sharpe_ratio==null?'—':s.sharpe_ratio.toFixed(2);$('sharpe-note').textContent='Theo ngày UTC';
   $('equity-chart').innerHTML=equityChart(s.equity_curve);
   $('stats-caption').textContent=s.data_as_of_ms?`Backtest liên tục: ${date(s.data_start_ms)} → ${date(s.data_as_of_ms)} · Chi phí tổng 10 bps`:'Mẫu tham chiếu gốc 180 ngày · Chi phí tổng 10 bps';
-  $('capital-note').textContent=(coin?'Hiệu suất riêng coin được chia cho mốc 500 USDT để thể hiện đóng góp. ':'Vốn chung ban đầu 10.000 USDT, cố định 500 USDT/lệnh, không chồng lệnh trong cùng coin. ')+`WR và Net PnL chỉ tính lệnh đã quyết toán; DD/Sharpe dùng equity MTM 15m. Hệ thống tự chạy bù toàn bộ lịch sử từ 25/04/2026 và tiếp tục cập nhật. Lệnh chạy bù là kết quả mô phỏng, không phải thông báo đã được gửi trước đây.`+(s.marks_quality?.missing_forward_marks?' Đang thiếu mốc giá thực: Max DD/Sharpe hiện chưa đầy đủ.':'');
+  $('capital-note').textContent=(coin?'Hiệu suất riêng coin được chia cho mốc 500 USDT để thể hiện đóng góp. ':'Vốn chung ban đầu 10.000 USDT, cố định 500 USDT/lệnh, không chồng lệnh trong cùng coin. ')+`WR và Net PnL chỉ tính lệnh đã quyết toán; DD/Sharpe dùng equity MTM 15m. Hệ thống tự chạy bù toàn bộ lịch sử từ 01/05/2026 và tiếp tục cập nhật. Lệnh chạy bù là kết quả mô phỏng, không phải thông báo đã được gửi trước đây.`+(s.marks_quality?.missing_forward_marks?' Đang thiếu mốc giá thực: Max DD/Sharpe hiện chưa đầy đủ.':'');
 }
 async function refresh() {
   const data=await api('/api/notifications');state.serverOffset=data.server_time_ms-Date.now();state.items=data.items;

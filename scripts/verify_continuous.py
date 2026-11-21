@@ -7,11 +7,11 @@ import sys
 import numpy as np
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-from mom_basis.model import BAR,COINS,HOLD,INITIAL,BUDGET,SIGNAL_NAME,encode
+from mom_basis.model import BAR,COINS,HOLD,INITIAL,BUDGET,SIGNAL_NAME,BACKTEST_START_MS,HISTORY_START_MS,PROFILE_ID,encode
 from mom_basis.store import Store
 from mom_basis.continuous import HistoryCache
 
-state=Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'state_handoff_v1_1'
+state=Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'state_handoff_v1_2'
 store=Store(state/'model.sqlite3')
 target=store.meta('continuous_asof_ms')
 frames=HistoryCache(store).frames(target)
@@ -24,7 +24,9 @@ candidate=[];events={}
 ts=frames[COINS[0]].timestamp_ms.to_numpy();n=len(ts)
 for priority,coin in enumerate(COINS):
     f=ns['features'](frames[coin].iloc[:-1])
-    for i in np.flatnonzero(f['events']):candidate.append((int(i)+1,priority,coin,int(i)+1+HOLD))
+    for i in np.flatnonzero(f['events']):
+        if int(ts[int(i)+1])>=BACKTEST_START_MS:
+            candidate.append((int(i)+1,priority,coin,int(i)+1+HOLD))
 cash=INITIAL;heap=[];occupied={};selected=[];skipped=0
 cashdiff=np.zeros(n);qtydiff={c:np.zeros(n) for c in COINS}
 for en,_,coin,ex in sorted(candidate):
@@ -48,10 +50,11 @@ inventory=sum(np.cumsum(qtydiff[c])*frames[c].open.to_numpy() for c in COINS)
 equity=cashcurve+inventory
 with store.connect() as con:
     marks=pd.read_sql_query('SELECT * FROM marks ORDER BY time_ms',con)
-assert np.array_equal(marks.time_ms.to_numpy(),ts)
-error=float(np.max(np.abs(equity-marks.equity.to_numpy())))
+visible=ts>=BACKTEST_START_MS
+assert np.array_equal(marks.time_ms.to_numpy(),ts[visible])
+error=float(np.max(np.abs(equity[visible]-marks.equity.to_numpy())))
 assert error<1e-7 and cashcurve.min()>=-1e-8
-assert np.allclose(cashcurve,marks.cash,atol=1e-7,rtol=0)
+assert np.allclose(cashcurve[visible],marks.cash,atol=1e-7,rtol=0)
 for t in actual:
     fp=t['forecast']
     assert fp['latest_training_exit_ms'] is None or fp['latest_training_exit_ms']<=t['entry_ms']
@@ -59,14 +62,15 @@ for t in actual:
 for coin in COINS:
     own=[t for t in actual if t['coin']==coin]
     assert all(a['exit_ms']<=b['entry_ms'] for a,b in zip(own,own[1:]))
-reference=pd.read_csv(ROOT/'data'/'baseline'/'trades.csv')
 assert not any(r['kind']=='signal.opened' for r in store.events(0)), 'Historical catchup emitted a live alert'
-prefix=[t for t in actual if t['entry_ms']<=int(reference.entry_ms.max())]
-assert [(t['coin'],t['entry_ms']) for t in prefix]==list(zip(reference.coin,reference.entry_ms))
-assert np.allclose([t['net_pnl'] for t in prefix],reference.net_pnl,atol=1e-9,rtol=0)
+assert store.meta('continuous_start_ms')==BACKTEST_START_MS
+assert store.meta('continuous_profile_id')==PROFILE_ID
+assert int(ts[0])==HISTORY_START_MS
+assert all(t['entry_ms']>=BACKTEST_START_MS for t in actual)
 result=dict(signal_name=SIGNAL_NAME,as_of_ms=target,all_coins=20,bars_per_coin=n,
-    start_ms=int(ts[0]),closed_trades=sum(t['exit_price'] is not None for t in actual),
-    open_trades=sum(t['exit_price'] is None for t in actual),original_241_unchanged=True,
+    start_ms=BACKTEST_START_MS,history_start_ms=int(ts[0]),profile_id=PROFILE_ID,
+    closed_trades=sum(t['exit_price'] is not None for t in actual),
+    open_trades=sum(t['exit_price'] is None for t in actual),warmup_excluded_from_trades_and_stats=True,
     independent_legacy_feature_scheduler=True,all_trade_ids_times_and_pnls_match=True,
     cash_plus_inventory_matches_every_equity_mark=True,max_equity_error_usdt=error,
     min_available_cash_usdt=float(cashcurve.min()),same_coin_non_overlap=True,

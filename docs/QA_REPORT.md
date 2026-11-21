@@ -1,35 +1,24 @@
-# Kiểm thử Signal_GFIVIP_4h v1.1 — 21/11/2026
+# Kiểm thử Signal_GFIVIP_4h v1.2.0 — 22/11/2026
 
-| Hạng mục | Đã kiểm tra |
+Profile mới từ **01/05/2026 00:00UTC**. Snapshot số liệu ghi rõ trong KET_QUA_DEN_BAN_GIAO.md; web tiếp tục cập nhật đến hiện tại.
+
+| Hạng mục | Kết quả |
 | --- | --- |
-| Mẫu gốc |241 lệnh/284 quyết định/17.268 mốc equity vàcash khớp hoàn toàn |
-| Bản mở rộng |Dữ liệu thật liên tục20 coin từ25/04/2026 đến mốc ghi ở `KET_QUA_DEN_BAN_GIAO.md` |
-| Đối chiếu độc lập |Dùng hàm factor gốc + scheduler khác; IDs/times/PnL khớp; equity=cash+inventory từng mốc |
-| 241 lệnh ban đầu |Giữ nguyên giá/return/PnL, không viết lại để làm đẹp kết quả |
-| Non-overlap/vốn/cost |Không chồng trong cùng coin, không vay, 500/lệnh, tổng10 bps, đúng 4h |
-| Unit/integration |20 tests pass: gồm7 tests mới cho full replay, seam đang mở, restart, causal forecast, current candle exclusion, backfill im lặng/live notify, pagination/hole recovery và commit atomic |
-| Public API/worker |Thực sự tải price/premium và đồng bộ; worker2chu kỳ; health/as_of/quotes có lưu bằng chứng |
-| Browser |Đúng tên mới,5 card/5 notification, click mở đúng coin, tổng theo snapshot mới, mobile không tràn ngang, không JavaScript error |
-| Export |OpenAPI, payload thật, snapshot20 coin vàmanifestSHA-256; ZIP được giải nén chạy độc lập |
+| Unit/integration |23tests pass:20regression hiện có và3tests May1/warmup, API mới, migration/backup/restart |
+| Kết quả độc lập |301lệnh đóng,195thắng gross, WR64,78%, Net_P+8,87%, MaxDD−4,53% tại snapshot |
+| Nguồn |20coin Binance USD-M15m price + premium-index, SHA-256 từng dataset |
+| Warmup |689nến trước01/05, không có lệnh/marks/PnL/forecast cohort trước mốc |
+| Equity |Factor gốc/scheduler độc lập khớp trade times/PnL; cash+inventory khớp toàn bộ marks, sai số tối đa dưới1e-7USDT |
+| Migration |Backup state cũ, dựng lại book/forecast/thống kê, bỏ giao dịch trước01/05, không phát lại alert lịch sử |
+| Restart |Cùng profile không reset/đếm trùng; giữ forecast frozen; cache tải bù hole/partial candle |
+| Live local |Backend v1.2 đã chạy và đồng bộ thật20coin; ready/current tại lúc kiểm tra |
+| UI |Tổng thể/coin,5thẻ/5notification, WR trước phí, NetPnL sau10bps, Sharpe không ghi số ngày, timeline từ01/05 |
+| CLI |replay mặc định May1; --legacy-reference tái hiện241lệnh gốc riêng |
 
-Số liệu hiện tại và timestamp lấy từ `evidence/continuous/summary.json`; bảng gốc241 lệnh chỉ là đối chiếu. Báo cáo independent verification ghi số mốc, sai số equity tối đa và các invariant cụ thể, không chỉ xác nhận con số tổng.
+Đã kiểm tra API v1.2 thật và sổ lệnh đã dựng từ01/05 trên local; báo cáo độc lập ở evidence/continuous/independent_verification.json. Số liệu tổng không lấy trung bình coin, không dùng số minh họa trong ảnh. State/log/config chạy thử local nằm ngoài repository.
 
-Tests dùng giá thật từ file local. Một số unit test thay timestamp hoặc dùng dãy toán học để kiểm tra vòng đời; không đưa fixture giả vào dataset/số liệu sản phẩm. Dependency test có một cảnh báo deprecation từ Starlette TestClient/httpx, không có test fail; không ảnh hưởng runtime đọc Binance.
+Các tests dùng dữ liệu thật; một số lifecycle tests dịch timestamp/dãy toán học chỉ để kiểm tra bất biến, không đưa fixture đó vào số liệu sản phẩm. TestClient/httpx và pandas float_precision có cảnh báo deprecation, không có lỗi kiểm thử.
 
-Kiểm thử trên Windows/Python 3.13, requirements đã pin. Repo/auth/gateway MVP và Docker chưa được kiểm thử trong môi trường deploy vì chưa có repo/infra đó. Chưa chờ một signal live mới chạy đủ4h trong phiên này; vòng đời đã được kiểm tra bằng replay/restart/giá thật theo nến.
+Snapshot241lệnh cũ giữ nguyên trong data/baseline/reference180 để audit; không còn là benchmark của profile sản phẩm hiện tại. ZIP/tag v1.1.0 không bị sửa. Gói v1.2 có mốc mới và giữ nguyên logic factor/vốn/phí.
 
-Kết quả backtest là virtual execution theo open và10 bps giả định; không phải PnL user-account. Các lệnh reconstruct trong downtime không được diễn giải là thông báo đã gửi hoặc giao dịch đã khớp trước đây. Forecast mean cố định theo thông tin quá khứ, không bảo đảm diễn biến tương lai.
-
-## Cập nhật giao diện trên main — 21/11/2026
-
-Đã bỏ ô winrate sau phí; còn 5 ô thống kê, với Net PnL vẫn sau tổng chi phí 10 bps. Danh mục mô hình giữ cố định 20 coin. Bộ chọn báo cáo có đúng hai lựa chọn: **Tổng thể** (mặc định) và **Coin đang xem · [tên coin]**. Khi mở trang, lấy coin của thẻ mới nhất; sau đó đổi theo thẻ/chuông vừa bấm. Không tự đánh dấu thông báo đã đọc khi chọn ngữ cảnh ban đầu.
-
-Đã chạy lại 20 tests, đều pass. Kiểm tra Chrome/Playwright trên API dữ liệu thật: 5 thẻ và 5 thông báo; chọn coin từ chuông và từ thẻ khác; chuyển tổng thể/coin khớp API; refresh giữ coin đang xem; không còn ô winrate sau phí; không tràn ngang ở màn hình 390px; không có JavaScript error. Backend local live đã đồng bộ thành công price/premium và quote cho đủ 20 coin, `history.phase=ready`/`data_current=true` tại lúc kiểm tra. Chưa quan sát thêm một tín hiệu live mới trọn 4h trong lần cập nhật UI này.
-
-ZIP/tag `v1.1.0` vẫn là bản phát hành gốc; các thay đổi trên nằm ở source nhánh main. State, log, ảnh kiểm tra và script riêng để mở bản xem local được lưu ngoài repository.
-
-Trục mới được kiểm tra thêm trên Chrome desktop/mobile: các vạch tháng ở đúng tỷ lệ timestamp, nhãn ngày bắt đầu/kết thúc khớp API và không chồng chữ sau resize. Kiểm tra chọn báo cáo tổng thể/coin, tên coin ngay khi mở trang và sau click, 5 thẻ/5 thông báo, không có JavaScript error. Dữ liệu và thống kê vẫn từ25/04/2026 (snapshot kiểm tra308 lệnh, WR trước phí63,64%, Net_P+8,45%, Max DD−4,55%); không dùng số liệu backtest riêng từ01/01/2026 cho thay đổi giao diện này.
-
-Đã rút gọn chú thích Sharpe thành **Theo ngày UTC**, bỏ số ngày quan sát trên giao diện. API vẫn giữ số quan sát và định nghĩa Sharpe để đối chiếu. Kiểm tra lại luồng giao diện desktop/mobile thành công; ngày bắt đầu và chỉ số không đổi.
-
-Đã mở khung lịch về **01/01/2026**, giữ timestamp đường vốn và dữ liệu thực từ25/04/2026. Phần trước dữ liệu để trống. Browser test kiểm tra riêng mốc trục lịch, mốc đầu dữ liệu API và tọa độ điểm vốn đầu tiên theo đúng tỷ lệ thời gian; không thêm equity giả hoặc dời đường vốn sang tháng 1. Kiểm tra desktop/mobile, chọn tổng thể/coin và các chỉ số đều pass, không có lỗi JavaScript.
+Chưa chạy Docker hoặc tích hợp auth/gateway/reverse proxy MVP thật trong môi trường này. Chưa quan sát một signal live mới từ entry tới exit4h trọn vẹn; vòng đời đã được kiểm tra bằng replay/restart/giá thật. Forecast là conditional historical mean, không bảo đảm giá tương lai; hệ thống không đặt lệnh trên sàn.

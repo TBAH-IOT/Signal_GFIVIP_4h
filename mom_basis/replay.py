@@ -9,6 +9,29 @@ import pandas as pd
 from .model import BAR, BUDGET, COINS, HOLD, INITIAL, ROOT, clean, features, pnl, statistics
 
 
+def reproduce_current(out=None):
+    """Replay the approved May1 profile from the bundled real-data snapshot."""
+    from .continuous import calculate_book
+    directory=ROOT/'data'/'continuous'
+    manifest=json.loads((directory/'manifest.json').read_text(encoding='utf-8'))
+    frames={}
+    for item in manifest['datasets']:
+        path=directory/item['file']
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==item['export_sha256']
+        frames[item['coin']]=pd.read_csv(path,float_precision='round_trip')
+    book=calculate_book(frames)
+    result=dict(summary=book.metrics['TOTAL'],start_ms=book.start_ms,asof_ms=book.asof_ms,
+        profile_id=book.profile_id,checks=dict(source_checksums=True,closed_candles_only=True,
+            no_borrowing=bool(book.marks.cash.min()>=-1e-8),warmup_excluded=True,
+            no_trade_before_start=all(t['entry_ms']>=book.start_ms for t in book.trades)))
+    if out:
+        out=Path(out);out.mkdir(parents=True,exist_ok=True)
+        (out/'current_replay_summary.json').write_text(json.dumps(clean(result),ensure_ascii=False,indent=2),encoding='utf-8')
+        pd.DataFrame(book.trades).to_csv(out/'current_replay_trades.csv',index=False)
+        book.marks.to_csv(out/'current_replay_equity.csv.gz',index=False,compression='gzip')
+    return result
+
+
 def reproduce(out=None):
     ref = ROOT/"data"/"reference180"
     baseline = ROOT/"data"/"baseline"

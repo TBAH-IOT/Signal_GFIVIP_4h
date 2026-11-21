@@ -6,7 +6,7 @@ Tên public: **Signal_GFIVIP_4h**. Logic nội bộ vẫn `MOM16:L+BASIS:L`, LON
 
 Timestamps UTC Unix milliseconds; giá USDT/coin; MOM/BASIS/return/WR/PnL% là decimal. `0.001 =0,1%=10 bps`. Không nhân100 trước khi tính toán; chỉ nhân100 khi hiển thị.
 
-Universe và thứ tự ưu tiên cố định: BTC,ETH,SOL,ZEC,BNB,XRP,NEAR,DOGE,UNI,SUI,ENA,LINK,AVAX,ADA,BCH,FIL,LTC,DOT,ARB,AAVE. Bắt đầu mẫu tại25/04/2026 16:15 UTC, khởi tạo rolling từ đây đúng bản180ngày gốc, không chèn thêm warmup trước đầu mẫu khi mở rộng.
+Universe và thứ tự ưu tiên cố định: BTC,ETH,SOL,ZEC,BNB,XRP,NEAR,DOGE,UNI,SUI,ENA,LINK,AVAX,ADA,BCH,FIL,LTC,DOT,ARB,AAVE. Bắt đầu vốn/lệnh/marks/thống kê tại **01/05/2026 00:00 UTC**. Tải689nến warmup từ23/04/2026 19:45UTC để tính factor/onset; warmup không tạo lệnh hoặc PnL, không carry vị thế trước mẫu. spec_hash giữ danh tính quy tắc toán học; profile_id nhận diện mốc bắt đầu/warmup của v1.2.
 
 ## Factor và trigger
 
@@ -76,7 +76,7 @@ Do đó stats hiển thị là hiệu suất mô hình liên tục từ đầu m
 
 ## Đường dự báo trung bình4h
 
-Tại entry `T_s`, chỉ dùng lệnh cùng logic đã hoàn tất với `exit_i<=T_s`. Ưu tiên cùng coin nếu có >=5 mẫu; dưới 5 dùng pooled20 coin và trả rõscope/N. Dùng lệnh được portfolio nhận, không gồm các onset bị chặn bởi overlap/cash. Các coin có tương quan, không xem các mẫu gộp là độc lập thống kê.
+Tại entry `T_s`, chỉ dùng lệnh trong profile bắt đầu01/05/2026 đã hoàn tất với `exit_i<=T_s`. Ưu tiên cùng coin nếu có >=5 mẫu; dưới 5 dùng pooled20 coin và trả rõscope/N. Dùng lệnh được portfolio nhận, không gồm các onset bị chặn bởi overlap/cash. Các coin có tương quan, không xem các mẫu gộp là độc lập thống kê.
 
 ```text
 r_i(k) = open_i(entry_i + k×15m) / entry_price_i − 1, k=0..16
@@ -87,11 +87,11 @@ p90_s(k) = entry_price_s × (1 + quantile_0.90_i[r_i(k)])
 P_up_history = count(r_i(16)>0) / N
 ```
 
-17 điểm0..4h, chỉ dùng past matured paths. `sample_count/scope/as_of_ms/latest_training_exit_ms/frozen=true` được lưu. Không có mẫu thì `available=false`, không vẽ đường giả. Mỗi forecast đã phát theo signal ID giữ nguyên khi restart; chỉ thêm actual path/kết quả và dùng lệnh mới đãđóng cho các forecast sau.
+17 điểm0..4h, chỉ dùng past matured paths. `sample_count/scope/as_of_ms/latest_training_exit_ms/frozen=true` được lưu. Không có mẫu thì `available=false`, không vẽ đường giả. Mỗi forecast đã phát theo signal ID giữ nguyên khi restart trong cùng profile; khi chuyển từ profile25/04 sang01/05 phải backup và dựng lại cohort/forecast, chỉ thêm actual path/kết quả và dùng lệnh mới đãđóng cho các forecast sau.
 
 Mean là conditional historical mean, không bảo đảm đường giá tương lai. P_up là tần suất gross lịch sử, không phải winrate net đã calibration cho lệnh mới. p10–p90 là dải quantile tại từng thời điểm, không phải confidence interval cho mean hoặc cam kết cả đường giá nằm trong dải80%. SL/TP/R:R=null vì chưa có quy tắc được kiểm thử.
 
-Backfilled forecast cũng dùng đúng tập đã kết thúc trước entry lịch sử; không lấy tất cả308 lệnh hiện tại để dự báo ngược cho lệnh đầu tiên.
+Backfilled forecast cũng dùng đúng tập đã kết thúc trước entry lịch sử; không lấy tất cả lệnh hiện tại để dự báo ngược cho lệnh đầu tiên.
 
 ## Thống kê liên tục
 
