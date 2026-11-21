@@ -62,7 +62,7 @@
   "docs/DEV_HANDOFF.md": "ee4d3a1c27bdc0503dcd130d1203b7d0f9ec9f0385bb21a5e08a78d8dcd587a8",
   "docs/KET_QUA_DEN_BAN_GIAO.md": "dcdcd84aaf5da860a905229e9a326a5f8a257466d042057945e619ac301ad0d3",
   "docs/MODEL_SPEC.md": "ddd3e489e265e3eca7aa79845e9496f20c0d5a34e7b65f036520bd07a2d7e121",
-  "docs/QA_REPORT.md": "f3fa78490eab1e43ad63a08c2356b73248bf9c5c023bbfb1319d9117c24d9405",
+  "docs/QA_REPORT.md": "7123e1c36a3bcc1eb9fb85c40aa492fe07738233694488f8bf258c8a09279cf2",
   "docs/api_examples.json": "da3c19bc9fe92f6c5ff04e0cb14aa72e56e31565fd7aa783f57153ff0cc5ea61",
   "docs/openapi.json": "ac8261b633a8b07532d1ef5f6399f3bcce799f62e83c08c4ba5b5b5f581b1ca9",
   "evidence/continuous/independent_verification.json": "703d149ac6a94bbc3ac5eb3b9353b9c6f6aba2905a28538ca9f121f1597f606e",
@@ -100,7 +100,7 @@
   "scripts/polish_docs.py": "21e08daddd5e7272729cb94befd40be8b52ab9a18e49fac4c0c49d370fad0df4",
   "scripts/prepare_handoff.py": "b647014d56f0b1f7c9a6338d5a63f01fde7b07f5d2857534ed28bb80845b577f",
   "scripts/smoke_live_cycle.py": "f279ac9a070b4426f25b6c496a881db1961a7f0ffc0640b08ab746f62df48ea1",
-  "scripts/smoke_ui.py": "ac58e0ea381d548f9d8a9278f786733404ddfe314096271d9930b28147cdd889",
+  "scripts/smoke_ui.py": "fbfaf01ccab8ed2cfd958a0872fad3d129c8e757b367eceeacf758729451133b",
   "scripts/verify_continuous.py": "c3284b347e171d7883b8b277ac5014c99500b94ccfb7410b3fb656061c37eb74",
   "start_live.ps1": "af4cd517cce1371c433750d79224d5be68efb865fd462bfb506b8c940389f49a",
   "start_offline.ps1": "89f8fa6d27642b6e0ea5313acd086f2aefe9bdd52a1bf1009c7c974240c580f8",
@@ -108,7 +108,7 @@
   "tests/test_continuous.py": "46ddd58e4201925b4279f0751ec052d048c9064c82c706e965b3a3b287e7e46c",
   "tests/test_model.py": "eaf88734950a1b205ccea8c6a7dc9e5a6a488dbe037724effb4b7181deadca23",
   "tests/test_recovery.py": "8c1515d895aeb9ed9a35f8a31705f42c87c0ad1396b3b0562e1cdea825b18393",
-  "web/app.js": "c2cb3a9375c6d6aab9dcc3ee25d0616e83e2a4b787ab3e8b5de8a9017767783c",
+  "web/app.js": "6fd3b4a930dbaab9bb61db92dc54fa4d0b0d4264fb650380ad9c982e5ed94724",
   "web/index.html": "8e91abde5c54cc82a0da65dbe9a3d933670f4f191f1838324f30e34015a7afe9",
   "web/styles.css": "32cb53c718577290b85dc0515f9e248e16df26f5e753fa99d36d4d4537d21915"
 }

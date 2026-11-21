@@ -55,6 +55,7 @@ with sync_playwright() as p:
     assert page.locator('.metric').count()==5
     assert page.locator('#net-wr').count()==0
     assert page.get_by_role('heading',name='WINRATE SAU PHÍ').count()==0
+    assert page.locator('#sharpe-note').inner_text()=='Theo ngày UTC'
     assert page.locator('#scope option').count()==2
     assert page.locator('#scope').input_value()=='strategy'
     page.wait_for_function("!document.querySelector('#scope option[value=coin]').disabled")

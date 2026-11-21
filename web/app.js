@@ -98,7 +98,7 @@ async function loadStats() {
   $('n-trades').textContent=s.n_trades.toLocaleString('vi-VN');$('open-count').textContent=s.open_trades+' lệnh chưa quyết toán';
   $('gross-wr').textContent=pct(s.gross_winrate);$('gross-count').textContent=`${s.gross_wins} thắng / ${s.n_trades} lệnh`;
   $('net-profit').textContent=pct(s.net_profit,true);$('net-profit').className=s.net_profit>=0?'positive':'negative';$('pnl-usdt').textContent=money(s.net_pnl);
-  $('max-dd').textContent=pct(s.max_drawdown);$('sharpe').textContent=s.sharpe_ratio==null?'—':s.sharpe_ratio.toFixed(2);$('sharpe-note').textContent=`Theo ngày UTC · ${s.sharpe_observed_daily_returns} ngày quan sát`;
+  $('max-dd').textContent=pct(s.max_drawdown);$('sharpe').textContent=s.sharpe_ratio==null?'—':s.sharpe_ratio.toFixed(2);$('sharpe-note').textContent='Theo ngày UTC';
   $('equity-chart').innerHTML=equityChart(s.equity_curve);
   $('stats-caption').textContent=s.data_as_of_ms?`Backtest liên tục: ${date(s.data_start_ms)} → ${date(s.data_as_of_ms)} · Chi phí tổng 10 bps`:'Mẫu tham chiếu gốc 180 ngày · Chi phí tổng 10 bps';
   $('capital-note').textContent=(coin?'Hiệu suất riêng coin được chia cho mốc 500 USDT để thể hiện đóng góp. ':'Vốn chung ban đầu 10.000 USDT, cố định 500 USDT/lệnh, không chồng lệnh trong cùng coin. ')+`WR và Net PnL chỉ tính lệnh đã quyết toán; DD/Sharpe dùng equity MTM 15m. Hệ thống tự chạy bù toàn bộ lịch sử từ 25/04/2026 và tiếp tục cập nhật. Lệnh chạy bù là kết quả mô phỏng, không phải thông báo đã được gửi trước đây.`+(s.marks_quality?.missing_forward_marks?' Đang thiếu mốc giá thực: Max DD/Sharpe hiện chưa đầy đủ.':'');

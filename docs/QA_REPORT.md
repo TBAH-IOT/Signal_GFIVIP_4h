@@ -29,3 +29,5 @@ Kết quả backtest là virtual execution theo open và10 bps giả định; kh
 ZIP/tag `v1.1.0` vẫn là bản phát hành gốc; các thay đổi trên nằm ở source nhánh main. State, log, ảnh kiểm tra và script riêng để mở bản xem local được lưu ngoài repository.
 
 Trục mới được kiểm tra thêm trên Chrome desktop/mobile: các vạch tháng ở đúng tỷ lệ timestamp, nhãn ngày bắt đầu/kết thúc khớp API và không chồng chữ sau resize. Kiểm tra chọn báo cáo tổng thể/coin, tên coin ngay khi mở trang và sau click, 5 thẻ/5 thông báo, không có JavaScript error. Dữ liệu và thống kê vẫn từ25/04/2026 (snapshot kiểm tra308 lệnh, WR trước phí63,64%, Net_P+8,45%, Max DD−4,55%); không dùng số liệu backtest riêng từ01/01/2026 cho thay đổi giao diện này.
+
+Đã rút gọn chú thích Sharpe thành **Theo ngày UTC**, bỏ số ngày quan sát trên giao diện. API vẫn giữ số quan sát và định nghĩa Sharpe để đối chiếu. Kiểm tra lại luồng giao diện desktop/mobile thành công; ngày bắt đầu và chỉ số không đổi.
