@@ -64,7 +64,9 @@ function equityChart(rows) {
   const W=Math.max(280,Math.floor($('equity-chart').clientWidth||1000)),compact=W<600;
   const H=compact?270:320,L=12,R=compact?64:80,T=20,B=72;
   const values=rows.map(p=>p.equity),low=Math.min(...values),high=Math.max(...values),pad=Math.max((high-low)*.14,high*.002),lo=low-pad,hi=high+pad;
-  const start=rows[0].time_ms,end=rows.at(-1).time_ms,right=W-R,bottom=H-B;
+  const dataStart=rows[0].time_ms,end=rows.at(-1).time_ms,right=W-R,bottom=H-B;
+  // Expand the calendar to Jan 1; keep every equity point at its real timestamp.
+  const start=Date.UTC(new Date(dataStart).getUTCFullYear(),0,1);
   const x=ms=>L+(ms-start)/Math.max(1,end-start)*(right-L),y=p=>bottom-(p-lo)/(hi-lo)*(bottom-T);
   const shortDate=ms=>new Date(ms).toLocaleDateString('vi-VN',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric'});
   const ticks=[{time:start,label:shortDate(start),anchor:'start'}];
@@ -80,11 +82,12 @@ function equityChart(rows) {
   if(end>start)ticks.push({time:end,label:shortDate(end),anchor:'end'});
   let line='',segments=[];
   rows.forEach((r,i)=>{if(i&&r.segment!==rows[i-1].segment){segments.push(line);line='';} line+=`${line?'L':'M'}${x(r.time_ms).toFixed(2)},${y(r.equity).toFixed(2)} `;});segments.push(line);
-  return `<svg class="equity-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong vốn mô phỏng với trục thời gian UTC" data-start-ms="${start}" data-end-ms="${end}">
+  return `<svg class="equity-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong vốn mô phỏng với trục lịch từ đầu năm UTC" data-start-ms="${dataStart}" data-axis-start-ms="${start}" data-end-ms="${end}">
     ${[0,.25,.5,.75,1].map(k=>{const v=lo+(hi-lo)*k;return `<line x1="${L}" x2="${right}" y1="${y(v)}" y2="${y(v)}" class="equity-grid"/><text x="${right+12}" y="${y(v)+4}" class="equity-value">$${v.toLocaleString('en-US',{maximumFractionDigits:0})}</text>`}).join('')}
     ${ticks.map(t=>`<g class="time-tick" data-time-ms="${t.time}"><title>${esc(date(t.time))}</title><line x1="${x(t.time)}" x2="${x(t.time)}" y1="${T}" y2="${bottom}" class="equity-grid"/><line x1="${x(t.time)}" x2="${x(t.time)}" y1="${bottom}" y2="${bottom+7}" class="equity-axis-line"/><circle cx="${x(t.time)}" cy="${bottom}" r="2" fill="#78869d"/>${t.label?`<text class="equity-time-label" x="${x(t.time)}" y="${bottom+27}" text-anchor="${t.anchor}">${esc(t.label)}</text>`:''}</g>`).join('')}
     <line x1="${L}" x2="${right}" y1="${bottom}" y2="${bottom}" class="equity-axis-line"/>
-    ${segments.map(d=>`<path d="${d}" fill="none" stroke="#48dfb9" stroke-width="2.5"/>`).join('')}
+    ${segments.map(d=>`<path class="equity-path" d="${d}" fill="none" stroke="#48dfb9" stroke-width="2.5"/>`).join('')}
+    <circle cx="${x(dataStart)}" cy="${y(rows[0].equity)}" r="3" fill="#48dfb9"><title>Bắt đầu dữ liệu: ${esc(date(dataStart))}</title></circle>
     <circle cx="${x(end)}" cy="${y(rows.at(-1).equity)}" r="4" fill="#48dfb9"><title>${esc(date(end))} · ${esc(money(rows.at(-1).equity))}</title></circle>
     <text x="${L}" y="${H-7}" class="equity-axis-note">Thời gian · UTC</text><text x="${right}" y="${H-7}" text-anchor="end" class="equity-axis-note">Nến 15 phút</text>
   </svg>`;

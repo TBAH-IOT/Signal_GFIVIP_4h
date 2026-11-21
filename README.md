@@ -2,7 +2,7 @@
 
 Phiên bản này **tự chạy liên tục từ thời điểm bắt đầu backtest đến lúc triển khai**, rồi cập nhật tiếp khi đang chạy live. Không dừng ở snapshot241 lệnh ngày22/10. Tên tín hiệu trên API, thông báo và giao diện là **Signal_GFIVIP_4h**.
 
-Giao diện trên nhánh `main` được cập nhật ngày 21/11/2026: chỉ hiển thị winrate trước phí; danh mục cố định 20 coin. Bộ chọn **Báo cáo số liệu** có hai lựa chọn: **Tổng thể** và **Coin đang xem · [tên coin]**. Khi mở trang, coin là thẻ mới nhất; sau đó đổi theo thẻ/thông báo vừa bấm. Trục đường vốn chia mốc tháng, có vạch và đường lưới nét đứt, tự giảm nhãn trên màn hình nhỏ. Dữ liệu vẫn bắt đầu **25/04/2026**, không đổi sang 01/01 chỉ để chỉnh trục. Net PnL vẫn trừ tổng chi phí 10 bps. ZIP/tag `v1.1.0` giữ nguyên bản bàn giao trước cập nhật giao diện này.
+Giao diện trên nhánh `main` được cập nhật ngày 21/11/2026: chỉ hiển thị winrate trước phí; danh mục cố định 20 coin. Bộ chọn **Báo cáo số liệu** có hai lựa chọn: **Tổng thể** và **Coin đang xem · [tên coin]**. Khi mở trang, coin là thẻ mới nhất; sau đó đổi theo thẻ/thông báo vừa bấm. Trục đường vốn chia mốc tháng, có vạch và đường lưới nét đứt, tự giảm nhãn trên màn hình nhỏ. Trục lịch hiển thị từ **01/01/2026**; đường vốn và dữ liệu vẫn bắt đầu đúng **25/04/2026**, phần thời gian trước đó để trống. Net PnL vẫn trừ tổng chi phí 10 bps. ZIP/tag `v1.1.0` giữ nguyên bản bàn giao trước cập nhật giao diện này.
 
 ## Cách hoạt động khi import/triển khai
 

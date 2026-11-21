@@ -26,16 +26,21 @@ def assert_axis(page,expected):
     assert int(chart.get_attribute('data-end-ms'))==curve[-1]['time_ms']
     assert page.locator('.time-tick').count()>=3
     assert page.locator('.equity-time-label').count()>=3
-    assert '25/04/2026' in page.locator('.equity-time-label').first.text_content()
+    assert '01/01/2026' in page.locator('.equity-time-label').first.text_content()
     # Monthly ticks must be spaced by timestamp, and labels must not collide.
     layout=page.evaluate('''() => {
         const svg=document.querySelector('.equity-svg');
-        const start=Number(svg.dataset.startMs),end=Number(svg.dataset.endMs);
+        const start=Number(svg.dataset.axisStartMs),dataStart=Number(svg.dataset.startMs),end=Number(svg.dataset.endMs);
         const ticks=[...svg.querySelectorAll('.time-tick')].map(g=>({time:Number(g.dataset.timeMs),x:Number(g.querySelector('circle').getAttribute('cx'))}));
         const labels=[...svg.querySelectorAll('.equity-time-label')].map(t=>{const b=t.getBoundingClientRect();return {text:t.textContent,left:b.left,right:b.right};});
-        return {start,end,ticks,labels};
+        const pathStartX=Number(svg.querySelector('.equity-path').getAttribute('d').match(/^M([0-9.]+),/)[1]);
+        return {start,dataStart,end,ticks,labels,pathStartX};
     }''')
     first,last=layout['ticks'][0],layout['ticks'][-1]
+    assert layout['dataStart']==curve[0]['time_ms']
+    data_fraction=(layout['dataStart']-layout['start'])/(layout['end']-layout['start'])
+    assert abs(layout['pathStartX']-(first['x']+data_fraction*(last['x']-first['x'])))<.01
+    assert layout['pathStartX']>first['x']  # no invented curve/flat equity before actual data
     for tick in layout['ticks']:
         fraction=(tick['time']-layout['start'])/(layout['end']-layout['start'])
         assert abs(tick['x']-(first['x']+fraction*(last['x']-first['x'])))<.01
