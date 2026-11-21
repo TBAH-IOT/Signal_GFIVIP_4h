@@ -1,20 +1,21 @@
 'use strict';
-const $ = id => document.getElementById(id);
-const state = {items: [], selected: null, selectedCoin: null, stats: null, serverOffset: 0, mode: 'offline', statsLoading: 0, signalName:'Signal_GFIVIP_4h'};
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pct = (v, signed=false) => v == null ? '—' : `${signed && v>0?'+':''}${(v*100).toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
-const price = v => v == null ? '—' : '$'+v.toLocaleString('en-US',{minimumFractionDigits:v<1?4:2,maximumFractionDigits:v<1?6:2});
-const money = v => v == null ? '—' : (v>0?'+':'')+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDT';
-const date = ms => new Date(ms).toLocaleString('vi-VN',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' UTC';
-const now = () => Date.now()+state.serverOffset;
-const status = t => now() >= t.exit_ms ? 'Đã kết thúc' : 'Đang mở';
-async function api(path, options) {
-  const response = await fetch(path, {...options, credentials:'same-origin'});
-  if (!response.ok) throw new Error(`API ${response.status}: ${path}`);
-  return response.json();
-}
-function reportError(err) { $('error').hidden=false; $('error').textContent='Kết nối đang gián đoạn. Giữ dữ liệu gần nhất; sẽ tự thử lại. '+err.message; }
-
+const $=id=>document.getElementById(id);
+const state={items:[],selected:null,selectedCoin:null,detail:null,stats:null,serverOffset:0,mode:'offline',statsLoading:0,tradeLoading:0,selecting:false,signalName:'Signal_GFIVIP_4h',tab:'trade',refreshingTrade:false};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=(v,signed=false)=>v==null?'—':`${signed&&v>0?'+':''}${(v*100).toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
+const price=v=>v==null?'—':'$'+v.toLocaleString('en-US',{minimumFractionDigits:v<1?4:2,maximumFractionDigits:v<1?6:2});
+const money=v=>v==null?'—':(v>0?'+':'')+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDT';
+const date=ms=>new Date(ms).toLocaleString('vi-VN',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' UTC';
+const time=ms=>new Date(ms).toLocaleTimeString('vi-VN',{timeZone:'UTC',hour:'2-digit',minute:'2-digit'});
+const now=()=>Date.now()+state.serverOffset;
+const status=t=>now()>=t.exit_ms?'Đã kết thúc':'Đang mở';
+const resultClass=v=>v==null?'muted':v>0?'positive':v<0?'negative':'neutral';
+const netReturn=t=>t.exit_price!=null&&t.net_pnl!=null?t.net_pnl/t.order_budget:null;
+const resultTag=t=>t.exit_price==null||t.net_pnl==null?null:t.net_pnl>0?'TP':t.net_pnl<0?'SL':'Hòa vốn';
+async function api(path,options){const r=await fetch(path,{...options,credentials:'same-origin'});if(!r.ok){const e=new Error(`API ${r.status}: ${path}`);e.status=r.status;throw e;}return r.json();}
+function reportError(e){$('error').hidden=false;$('error').textContent='Kết nối đang gián đoạn. Giữ dữ liệu gần nhất; sẽ tự thử lại. '+e.message;}
+function showTab(name){state.tab=name;for(const item of ['trade','performance']){const active=item===name;$('tab-'+item).setAttribute('aria-selected',String(active));$('tab-'+item).tabIndex=active?0:-1;$(item+'-panel').hidden=!active;}if(name==='trade')renderTrade();else if(state.stats)$('equity-chart').innerHTML=equityChart(state.stats.equity_curve);}
+function updateReportCoin(){const option=$('scope').querySelector('option[value="coin"]');option.disabled=!state.selectedCoin;option.textContent=state.selectedCoin?`Coin đang xem · ${state.selectedCoin}`:'Coin đang xem';$('scope-hint').textContent=state.selectedCoin?`Báo cáo riêng ${state.selectedCoin} hoặc tổng thể.`:'Bấm vào tín hiệu để chọn coin.';$('viewing-coin').innerHTML=state.selectedCoin?`<span class="coin-icon">${esc(state.selectedCoin[0])}</span><strong>${esc(state.selectedCoin)} / USDT</strong><span class="long">LONG · 4h</span>`:'Chưa có tín hiệu';}
 function priceChart(t) {
   const hist=(t.history||[]).slice(-17), fp=t.forecast?.points||[];
   const actual=(t.actual_path||[]).slice();
@@ -36,29 +37,16 @@ function priceChart(t) {
     <circle cx="200" cy="${y(t.entry_price)}" r="3" fill="#48dfb9"/>
   </svg>`;
 }
-function renderCards() {
-  $('cards').innerHTML=state.items.map(t=>{
-    const fp=t.forecast||{}, end=fp.points?.at(-1), ended=now()>=t.exit_ms;
-    return `<article class="signal-card ${state.selected===t.id?'selected':''}" data-signal="${t.id}" tabindex="0" role="button" aria-label="Xem tín hiệu ${esc(t.coin)}"><p class="eyebrow">${esc(t.signal_name||state.signalName)}</p>
-      <div class="card-head"><span class="coin-icon">${esc(t.coin[0])}</span><strong>${esc(t.coin)}</strong><span class="long">▲ Long · 4h</span><span class="status ${ended?'ended':''}">${status(t)}</span></div>
-      <div class="chart-wrap">${priceChart(t)}</div><div class="time-row"><span>Trước tín hiệu</span><span>Nét đứt: dự báo 4h</span></div>
-      <div class="card-fields"><div class="field"><small>Giá vào tham chiếu</small><strong>${price(t.entry_price)}</strong></div><div class="field"><small>${ended?'Giá thoát thật':'Giá hiện tại'}</small><strong>${price(ended?t.exit_price:(t.quote_stale?null:t.quote?.price))}</strong></div>
-      <div class="field"><small>Giá trung bình lịch sử sau 4h</small><strong class="forecast-num">${price(end?.mean_price)}</strong></div><div class="field"><small>P_up lịch sử · ${fp.sample_count||0} lệnh</small><strong>${pct(fp.p_up)}</strong></div></div>
-      <div class="card-note"><span class="legend-dot"></span>${fp.scope==='same_coin'?'Lịch sử cùng coin':'Lịch sử gộp 20 coin'} · ${t.notification_live?'LIVE':'BACKTEST'}<br>Vào: ${date(t.entry_ms)}<br>Thoát: ${date(t.exit_ms)}${t.settlement==='PENDING_MARKET_DATA'?'<br>Đang chờ dữ liệu giá thoát':''}</div></article>`;
-  }).join('') || '<p class="muted">Chưa có tín hiệu. Hệ thống chỉ phát sau khi nến 15m đóng đủ điều kiện.</p>';
-  renderSelected();
-}
-function renderSelected() {
-  const t=state.items.find(t=>t.id===state.selected);
-  if(!t)return;
-  $('selected-signal').hidden=false;
-  $('selected-signal').innerHTML=`<div class="signal-context"><strong>${esc(state.signalName)} · ${esc(t.coin)} ▲ LONG · ${status(t)}</strong><p>Vào ${date(t.entry_ms)} tại ${price(t.entry_price)} · Hết hạn ${date(t.exit_ms)} · ${t.exit_price?`PnL net ${money(t.net_pnl)}`:'Chưa có kết quả quyết toán'}</p></div>`;
-}
-function renderNotifications() {
-  $('badge').textContent=state.items.filter(t=>t.unread).length;
-  $('badge').hidden=!state.items.some(t=>t.unread);
-  $('notification-list').innerHTML=state.items.map(t=>`<button class="notification ${t.unread?'unread':''}" data-signal="${t.id}"><span class="row"><strong>${esc(t.coin)} ▲ LONG</strong><span class="status ${now()>=t.exit_ms?'ended':''}">${status(t)}</span></span><small>${esc(state.signalName)} · ${date(t.entry_ms)}${t.notification_live?'':' · Backtest'}</small></button>`).join('')||'<p class="muted" style="padding:18px">Chưa có tín hiệu</p>';
-}
+
+function renderCards(){const left=$('cards').scrollLeft;$('cards').innerHTML=state.items.map(t=>{const fp=t.forecast||{},end=fp.points?.at(-1),closed=t.exit_price!=null,ended=now()>=t.exit_ms,ret=netReturn(t),tag=resultTag(t);return `<article class="signal-card ${state.selected===t.id?'selected':''}" data-signal="${esc(t.id)}" tabindex="0" role="button" aria-label="Xem tín hiệu ${esc(t.coin)}"><div class="card-head"><span class="coin-icon">${esc(t.coin[0])}</span><strong>${esc(t.coin)}</strong><span class="long">▲ LONG 4h</span><span class="status ${ended?'ended':''}">${status(t)}</span></div><div class="chart-wrap">${priceChart(t)}</div><div class="card-fields"><div class="field"><small>Giá entry</small><strong>${price(t.entry_price)}</strong></div><div class="field"><small>${closed?'Giá thoát':'Giá hiện tại'}</small><strong>${price(closed?t.exit_price:(t.quote_stale?null:t.quote?.price))}</strong></div><div class="field"><small>TB lịch sử sau 4h</small><strong class="forecast-num">${price(end?.mean_price)}</strong></div><div class="field pnl-field"><small>PnL sau phí${tag?' · '+tag:''}</small><strong class="${resultClass(ret)}">${closed?pct(ret,true):ended?'Chờ quyết toán':'Đang mở'}</strong></div></div><div class="compact-card-time">${date(t.entry_ms)}<br>Thoát ${time(t.exit_ms)} UTC · ${fp.sample_count||0} mẫu lịch sử</div></article>`;}).join('')||'<p class="muted">Chưa có tín hiệu.</p>';$('cards').scrollLeft=left;updateStripButtons();}
+function updateStripButtons(){const el=$('cards');$('cards-prev').disabled=el.scrollLeft<3;$('cards-next').disabled=el.scrollLeft+el.clientWidth>=el.scrollWidth-3;}
+function renderNotifications(){$('badge').textContent=state.items.filter(t=>t.unread).length;$('badge').hidden=!state.items.some(t=>t.unread);$('notification-list').innerHTML=state.items.map(t=>`<button class="notification ${t.unread?'unread':''}" data-signal="${esc(t.id)}"><span class="row"><strong>${esc(t.coin)} ▲ LONG</strong><span class="status ${now()>=t.exit_ms?'ended':''}">${status(t)}</span></span><small>${esc(state.signalName)} · ${date(t.entry_ms)}${t.notification_live?'':' · Backtest'}</small></button>`).join('')||'<p class="muted">Chưa có tín hiệu.</p>';}
+async function refresh(){const r=await api('/api/notifications');state.serverOffset=r.server_time_ms-Date.now();state.items=r.items;renderCards();renderNotifications();$('error').hidden=true;}
+async function selectSignal(id,options={}){const {activate=true,markRead=true,scroll=true,scope=true}=options;if(!activate&&state.selecting)return;if(activate)state.selecting=true;const revision=++state.tradeLoading;try{const data=await api('/api/trades/'+encodeURIComponent(id));if(revision!==state.tradeLoading)return;state.serverOffset=data.server_time_ms-Date.now();state.detail=data;$('detail').hidden=false;$('signal-disclaimer').hidden=false;state.selected=data.trade.id;state.selectedCoin=data.trade.coin;updateReportCoin();if(scope)$('scope').value='coin';if(activate)showTab('trade');renderCards();renderTrade();$('notifications').hidden=true;$('bell').setAttribute('aria-expanded','false');if(markRead&&state.items.some(t=>t.id===id)){api('/api/notifications/'+encodeURIComponent(id)+'/read',{method:'POST'}).then(()=>{const t=state.items.find(t=>t.id===id);if(t)t.unread=false;renderNotifications();}).catch(e=>{if(e.status!==404)reportError(e);});}if(scope)loadStats().catch(reportError);if(scroll)$('detail').scrollIntoView({behavior:'smooth',block:'start'});}finally{if(activate&&revision===state.tradeLoading)state.selecting=false;}}
+async function refreshSelected(){if(!state.detail||state.refreshingTrade||state.selecting)return;const t=state.detail.trade;if(t.exit_price!=null)return;state.refreshingTrade=true;try{await selectSignal(t.id,{activate:false,markRead:false,scroll:false,scope:false});}finally{state.refreshingTrade=false;}}
+function renderTrade(){if(!state.detail)return;const {trade:t,navigation:n}=state.detail,closed=t.exit_price!=null,tag=resultTag(t);$('trade-title').textContent=`${t.coin} · LONG 4h`;$('trade-subtitle').textContent=`${status(t)} · ${date(t.entry_ms)}`;$('history-position').textContent=`Lệnh ${n.position} / ${n.total}`;$('history-prev').disabled=!n.previous_id;$('history-next').disabled=!n.next_id;$('history-latest').disabled=!n.next_id;$('trade-summary').innerHTML=`<div><small>ENTRY</small><strong>${price(t.entry_price)}</strong><span>${date(t.entry_ms)}</span></div><div><small>${closed?'THOÁT SAU 4H':'GIỜ THOÁT DỰ KIẾN'}</small><strong>${closed?price(t.exit_price):time(t.exit_ms)+' UTC'}</strong><span>${date(t.exit_ms)}</span></div><div><small>PNL SAU PHÍ${tag?' · '+tag:''}</small><strong class="${resultClass(netReturn(t))}">${closed?pct(netReturn(t),true):'Chưa quyết toán'}</strong><span>${closed?money(t.net_pnl):'Giữ lệnh đến '+time(t.exit_ms)+' UTC'}</span></div><div><small>TRẠNG THÁI</small><strong class="trade-status">${status(t)}</strong><span id="trade-countdown"></span></div>`;$('candle-title').textContent=`${t.coin}/USDT · Nến 15 phút`;$('show-forecast').disabled=!t.forecast?.available;$('candle-chart').innerHTML=candleChart(state.detail);$('trade-chart-note').textContent=(closed?'TP/SL phân loại lời/lỗ sau phí tại điểm đóng theo thời gian 4h. ':'Nến mờ chỉ đánh dấu giờ thoát dự kiến, không thể hiện giá tương lai. ')+`PnL mô phỏng trên ${t.order_budget} USDT; phí và slippage 10 bps tổng hai đầu.`+(state.detail.chart.missing_closed_bars?' Đang đồng bộ phần nến còn thiếu.':'');updateCountdown();}
+function updateCountdown(){if(!state.detail||!$('trade-countdown'))return;const t=state.detail.trade,seconds=Math.max(0,Math.floor((t.exit_ms-now())/1000));$('trade-countdown').textContent=t.exit_price!=null?'Đã quyết toán':seconds?`Còn ${Math.floor(seconds/3600)}h ${Math.floor(seconds%3600/60)}m ${seconds%60}s`: 'Đang chờ giá thoát';}
+function candleChart(detail){const t=detail.trade,c=detail.chart;const W=Math.max(280,Math.floor($('candle-chart').clientWidth||1000)),small=W<600,H=small?360:420,L=12,R=small?76:86,T=92,B=56,right=W-R,bottom=H-B;const start=small?Math.max(c.start_ms,t.entry_ms-16*900000):c.start_ms,end=small?Math.min(c.end_ms,t.exit_ms+4*900000):c.end_ms;const bars=c.candles.filter(b=>b.time_ms>=start&&b.time_ms<=end);if(!bars.length)return '<p class="muted empty-chart">Đang chờ dữ liệu nến thật.</p>';const fp=$('show-forecast').checked?(t.forecast?.points||[]):[];const vals=[...bars.flatMap(b=>[b.high,b.low]),...fp.map(p=>p.mean_price),t.entry_price,t.exit_price].filter(Number.isFinite);const low=Math.min(...vals),high=Math.max(...vals),pad=Math.max((high-low)*.13,high*.001),lo=low-pad,hi=high+pad;const x=ms=>L+(ms-start)/(end-start)*(right-L),y=p=>bottom-(p-lo)/(hi-lo)*(bottom-T),step=(right-L)/(end-start)*900000,body=Math.max(2,Math.min(11,step*.58));const closed=t.exit_price!=null,tag=resultTag(t),exitColor=closed?(t.net_pnl>0?'#48dfb9':t.net_pnl<0?'#fa657e':'#9da7b9'):'#d9b75e';let candidates=[start,t.entry_ms,t.exit_ms,end].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b),last=-1000;const ticks=candidates.filter((v,i)=>{if(i===0||i===candidates.length-1){last=x(v);return true;}if(x(v)-last>70&&right-x(v)>70){last=x(v);return true;}return false;});const flag=(ms,text,cy,color)=>{const width=small?102:132,px=Math.max(L,Math.min(right-width,x(ms)-width/2));return `<rect x="${px}" y="${cy}" width="${width}" height="23" rx="5" fill="${color}19" stroke="${color}85"/><text x="${px+width/2}" y="${cy+15}" text-anchor="middle" fill="${color}" font-size="10" font-weight="700">${esc(text)}</text>`;};const result=`<svg class="trade-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Biểu đồ nến ${esc(t.coin)} với entry và thoát sau 4 giờ" data-trade-id="${esc(t.id)}" data-entry-ms="${t.entry_ms}" data-exit-ms="${t.exit_ms}" data-exit-kind="${closed?'REALIZED':'SCHEDULED'}"><rect x="${x(t.entry_ms)}" y="${T}" width="${x(t.exit_ms)-x(t.entry_ms)}" height="${bottom-T}" fill="#48dfb907"/>${[0,.25,.5,.75,1].map(k=>{const v=lo+(hi-lo)*k;return `<line x1="${L}" x2="${right}" y1="${y(v)}" y2="${y(v)}" class="equity-grid"/><text class="equity-value" x="${right+9}" y="${y(v)+4}">${price(v)}</text>`;}).join('')}${ticks.map(ms=>`<line x1="${x(ms)}" x2="${x(ms)}" y1="${T}" y2="${bottom}" class="equity-grid"/><text class="equity-time-label" x="${x(ms)}" y="${bottom+23}" text-anchor="${ms===start?'start':ms===end?'end':'middle'}">${time(ms)}</text>`).join('')}${bars.map((b,i)=>{const up=b.close>=b.open,color=up?'#48dfb9':'#fa657e',top=Math.min(y(b.open),y(b.close)),height=Math.max(1,Math.abs(y(b.open)-y(b.close)));return `<g class="ohlc-candle" data-bar-index="${i}" data-time-ms="${b.time_ms}"><title>${esc(date(b.time_ms))} | O ${b.open} H ${b.high} L ${b.low} C ${b.close}${b.closed?'':' · Nến đang chạy'}</title><line x1="${x(b.time_ms)}" x2="${x(b.time_ms)}" y1="${y(b.high)}" y2="${y(b.low)}" stroke="${color}" stroke-width="1"/><rect x="${x(b.time_ms)-body/2}" y="${top}" width="${body}" height="${height}" fill="${color}" rx=".6"/><rect x="${x(b.time_ms)-step/2}" y="${T}" width="${step}" height="${bottom-T}" fill="transparent"/></g>`;}).join('')}${fp.length?`<path class="forecast-mean" d="${fp.map((p,i)=>`${i?'L':'M'}${x(p.time_ms)},${y(p.mean_price)}`).join(' ')}" fill="none" stroke="#b695ff" stroke-width="1.6" stroke-dasharray="3 5"/>`:''}<g class="entry-marker"><line x1="${x(t.entry_ms)}" x2="${x(t.entry_ms)}" y1="32" y2="${bottom}" stroke="#48dfb978" stroke-dasharray="3 4"/>${flag(t.entry_ms,'ENTRY · '+time(t.entry_ms),5,'#48dfb9')}<circle cx="${x(t.entry_ms)}" cy="${y(t.entry_price)}" r="5" fill="#48dfb9" stroke="#0d1418" stroke-width="2"/><title>Entry ${date(t.entry_ms)} · ${price(t.entry_price)}</title></g><g class="exit-marker"><line x1="${x(t.exit_ms)}" x2="${x(t.exit_ms)}" y1="${closed?59:76}" y2="${bottom}" stroke="${exitColor}" stroke-width="1.4" stroke-dasharray="${closed?'4 3':'6 5'}"/>${flag(t.exit_ms,(closed?tag:'Hẹn thoát')+' · '+time(t.exit_ms),34,exitColor)}${closed?`<circle cx="${x(t.exit_ms)}" cy="${y(t.exit_price)}" r="5" fill="${exitColor}" stroke="#0d1418" stroke-width="2"/>`:`<g class="scheduled-candle" opacity=".5"><line x1="${x(t.exit_ms)}" x2="${x(t.exit_ms)}" y1="60" y2="81" stroke="${exitColor}"/><rect x="${x(t.exit_ms)-4}" y="65" width="8" height="11" fill="${exitColor}22" stroke="${exitColor}" stroke-dasharray="2 2"/></g>`}<title>${closed?tag+' · Thoát sau 4h':'Giờ thoát dự kiến'}: ${date(t.exit_ms)}${closed?' · '+price(t.exit_price):' · Chưa có giá tương lai'}</title></g><text x="${L}" y="${H-6}" class="equity-axis-note">${new Date(start).toLocaleDateString('vi-VN',{timeZone:'UTC'})} · UTC</text><text x="${right}" y="${H-6}" text-anchor="end" class="equity-axis-note">Giữ 4h · ${closed?'Đã đóng':'Đang mở'}</text></svg>`;const latest=bars.at(-1);$('candle-readout').textContent=`${time(latest.time_ms)} UTC · O ${price(latest.open)} H ${price(latest.high)} L ${price(latest.low)} C ${price(latest.close)}`;return result;}
 function equityChart(rows) {
   if (!rows.length) return '<p class="muted">Chưa đủ dữ liệu</p>';
   const W=Math.max(280,Math.floor($('equity-chart').clientWidth||1000)),compact=W<600;
@@ -91,6 +79,7 @@ function equityChart(rows) {
     <text x="${L}" y="${H-7}" class="equity-axis-note">Thời gian · UTC</text><text x="${right}" y="${H-7}" text-anchor="end" class="equity-axis-note">Nến 15 phút</text>
   </svg>`;
 }
+
 async function loadStats() {
   const revision=++state.statsLoading,coin=$('scope').value==='coin'?state.selectedCoin:null;
   const s=await api('/api/stats'+(coin?'?coin='+encodeURIComponent(coin):''));
@@ -105,51 +94,28 @@ async function loadStats() {
   $('stats-caption').textContent=s.data_as_of_ms?`Backtest liên tục: ${date(s.data_start_ms)} → ${date(s.data_as_of_ms)} · Chi phí tổng 10 bps`:'Mẫu tham chiếu gốc 180 ngày · Chi phí tổng 10 bps';
   $('capital-note').textContent=(coin?'Hiệu suất riêng coin được chia cho mốc 500 USDT để thể hiện đóng góp. ':'Vốn chung ban đầu 10.000 USDT, cố định 500 USDT/lệnh, không chồng lệnh trong cùng coin. ')+`WR và Net PnL chỉ tính lệnh đã quyết toán; DD/Sharpe dùng equity MTM 15m. Hệ thống tự chạy bù toàn bộ lịch sử từ 01/05/2026 và tiếp tục cập nhật. Lệnh chạy bù là kết quả mô phỏng, không phải thông báo đã được gửi trước đây.`+(s.marks_quality?.missing_forward_marks?' Đang thiếu mốc giá thực: Max DD/Sharpe hiện chưa đầy đủ.':'');
 }
-async function refresh() {
-  const data=await api('/api/notifications');state.serverOffset=data.server_time_ms-Date.now();state.items=data.items;
-  // Start with the newest card in view, without marking its notification as read.
-  if(!state.selectedCoin&&state.items.length){state.selected=state.items[0].id;state.selectedCoin=state.items[0].coin;}
-  updateReportCoin();
-  renderCards();renderNotifications();$('error').hidden=true;
-  if(state.selected&&!state.items.some(t=>t.id===state.selected)){$('selected-signal').hidden=true;state.selected=null;}
-}
-function updateReportCoin(){
-  const coinOption=$('scope').querySelector('option[value="coin"]');
-  coinOption.disabled=!state.selectedCoin;
-  coinOption.textContent=state.selectedCoin?`Coin đang xem · ${state.selectedCoin}`:'Coin đang xem';
-  $('scope-hint').textContent=state.selectedCoin?`Báo cáo riêng ${state.selectedCoin} hoặc tổng thể.`:'Bấm vào tín hiệu để xem báo cáo riêng coin đó.';
-}
-async function selectSignal(id) {
-  const t=await api('/api/signals/'+encodeURIComponent(id));state.selected=id;state.selectedCoin=t.coin;
-  await api('/api/notifications/'+encodeURIComponent(id)+'/read',{method:'POST'});
-  updateReportCoin();
-  $('scope').value='coin';
-  $('selected-signal').hidden=false;$('selected-signal').innerHTML=`<div class="signal-context"><strong>${esc(t.coin)} ▲ LONG · ${status(t)}</strong><p>Vào ${date(t.entry_ms)} tại ${price(t.entry_price)} · Hết hạn ${date(t.exit_ms)} · ${t.exit_price?`PnL net ${money(t.net_pnl)}`:'Chưa có kết quả quyết toán'}</p></div>`;
-  $('notifications').hidden=true;$('bell').setAttribute('aria-expanded','false');
-  await Promise.all([refresh(),loadStats()]);$('detail').scrollIntoView({behavior:'smooth',block:'start'});
-}
+
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;setTimeout(()=>$('toast').hidden=true,6500);}
-async function health(){const h=await api('/api/health');state.mode=h.mode;const phase=h.history?.phase;const syncing=['downloading','replaying'].includes(phase);$('feed').textContent=h.mode==='offline'?'Snapshot · '+(h.data_as_of_ms?date(h.data_as_of_ms):'mẫu gốc'):syncing?'Đang đồng bộ lịch sử…':h.feed_stale||h.worker.feed_status!=='ok'?'Dữ liệu đang gián đoạn':!h.data_current?'Đang cập nhật nến mới…':'Live · đã đồng bộ';$('feed').className='feed '+(h.mode==='live'&&h.data_current&&!h.feed_stale&&h.worker.feed_status==='ok'?'live':'');}
-async function main(){
-  const model=await api('/api/model');state.signalName=model.signal_name;
+async function health(){const h=await api('/api/health');state.mode=h.mode;const syncing=['downloading','replaying'].includes(h.history?.phase);$('feed').textContent=h.mode==='offline'?'Snapshot · '+(h.data_as_of_ms?date(h.data_as_of_ms):'mẫu gốc'):syncing?'Đang đồng bộ lịch sử…':h.feed_stale||h.worker.feed_status!=='ok'?'Dữ liệu đang gián đoạn':!h.data_current?'Đang cập nhật nến mới…':'Live · đã đồng bộ';$('feed').className='feed '+(h.mode==='live'&&h.data_current&&!h.feed_stale&&h.worker.feed_status==='ok'?'live':'');}
+async function refreshAll(){await refresh();await Promise.all([loadStats(),health(),refreshSelected()]);}
+async function main(){const model=await api('/api/model');state.signalName=model.signal_name;
   $('bell').onclick=()=>{const open=$('notifications').hidden;$('notifications').hidden=!open;$('bell').setAttribute('aria-expanded',String(open));};
-  $('scope').onchange=()=>loadStats().catch(reportError);
+  $('tab-trade').onclick=()=>showTab('trade');$('tab-performance').onclick=()=>showTab('performance');$('scope').onchange=()=>loadStats().catch(reportError);
+  for(const [id,direction] of [['history-prev','previous_id'],['history-next','next_id']])$(id).onclick=()=>{const sid=state.detail?.navigation[direction];if(sid)selectSignal(sid,{markRead:false}).catch(reportError);};
+  $('history-latest').onclick=async()=>{try{const r=await api('/api/trades?coin='+encodeURIComponent(state.selectedCoin)+'&limit=1');if(r.items.length)await selectSignal(r.items[0].id,{markRead:false});}catch(e){reportError(e);}};
+  $('cards-prev').onclick=()=>$('cards').scrollBy({left:-236,behavior:'smooth'});$('cards-next').onclick=()=>$('cards').scrollBy({left:236,behavior:'smooth'});$('cards').onscroll=updateStripButtons;
+  $('show-forecast').onchange=renderTrade;
   document.addEventListener('click',e=>{const card=e.target.closest('[data-signal]');if(card)selectSignal(card.dataset.signal).catch(reportError);});
-  document.addEventListener('keydown',e=>{const card=e.target.closest('[data-signal]');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();selectSignal(card.dataset.signal).catch(reportError);}if(e.key==='Escape')$('notifications').hidden=true;});
-  await Promise.all([refresh(),loadStats(),health()]);
-  let chartWidth=0;
-  new ResizeObserver(entries=>{const width=Math.round(entries[0].contentRect.width);if(width!==chartWidth){chartWidth=width;if(state.stats)$('equity-chart').innerHTML=equityChart(state.stats.equity_curve);}}).observe($('equity-chart'));
-  const stream=new EventSource('/api/events');
-  stream.addEventListener('snapshot',()=>Promise.all([refresh(),loadStats()]).catch(reportError));
-  stream.addEventListener('signal.opened',e=>{const v=JSON.parse(e.data);if(now()-v.entry_ms<120000)toast(`${state.signalName} · ${v.coin}: LONG 4h mới`);Promise.all([refresh(),loadStats()]).catch(reportError);});
-  stream.addEventListener('history.updated',()=>Promise.all([refresh(),loadStats(),health()]).catch(reportError));
-  stream.addEventListener('signal.ended',()=>Promise.all([refresh(),loadStats()]).catch(reportError));
-  stream.addEventListener('stats.updated',()=>loadStats().catch(reportError));
-  stream.addEventListener('equity.updated',()=>loadStats().catch(reportError));
-  stream.addEventListener('quotes',e=>{const v=JSON.parse(e.data);state.serverOffset=v.server_time_ms-Date.now();for(const t of state.items){t.quote=v.quotes[t.coin];t.quote_stale=!t.quote||now()-t.quote.received_ms>20000||now()-t.quote.exchange_ms>20000;}renderCards();renderNotifications();});
+  document.addEventListener('keydown',e=>{const card=e.target.closest('[data-signal]');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();selectSignal(card.dataset.signal).catch(reportError);}if(e.key==='Escape'){$('notifications').hidden=true;$('bell').setAttribute('aria-expanded','false');}if(e.target.getAttribute('role')==='tab'&&['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();const name=state.tab==='trade'?'performance':'trade';showTab(name);$('tab-'+name).focus();}});
+  $('candle-chart').onpointerover=e=>{const el=e.target.closest('.ohlc-candle');if(!el||!state.detail)return;const b=state.detail.chart.candles.find(b=>String(b.time_ms)===el.dataset.timeMs);if(b)$('candle-readout').textContent=`${date(b.time_ms)} · O ${price(b.open)} H ${price(b.high)} L ${price(b.low)} C ${price(b.close)}${b.closed?'':' · Đang chạy'}`;};
+  await refresh();await Promise.all([loadStats(),health()]);
+  const widths=new Map();new ResizeObserver(entries=>{for(const e of entries){const width=Math.round(e.contentRect.width);if(width>0&&width!==widths.get(e.target.id)){widths.set(e.target.id,width);if(e.target.id==='equity-chart'&&state.stats)$('equity-chart').innerHTML=equityChart(state.stats.equity_curve);if(e.target.id==='candle-chart'&&state.detail)renderTrade();}}}).observe($('candle-chart'));
+  const equityResize=new ResizeObserver(entries=>{const width=Math.round(entries[0].contentRect.width);if(width>0&&width!==widths.get('equity-chart')){widths.set('equity-chart',width);if(state.stats)$('equity-chart').innerHTML=equityChart(state.stats.equity_curve);}});equityResize.observe($('equity-chart'));
+  const stream=new EventSource('/api/events');for(const kind of ['snapshot','history.updated','signal.ended'])stream.addEventListener(kind,()=>refreshAll().catch(reportError));
+  stream.addEventListener('signal.opened',e=>{const v=JSON.parse(e.data);if(now()-v.entry_ms<120000)toast(`${state.signalName} · ${v.coin}: LONG 4h mới`);refreshAll().catch(reportError);});
+  for(const kind of ['stats.updated','equity.updated'])stream.addEventListener(kind,()=>loadStats().catch(reportError));
+  stream.addEventListener('quotes',e=>{const v=JSON.parse(e.data);state.serverOffset=v.server_time_ms-Date.now();for(const t of state.items){t.quote=v.quotes[t.coin];t.quote_stale=!t.quote||now()-t.quote.received_ms>20000||now()-t.quote.exchange_ms>20000;}renderCards();renderNotifications();refreshSelected().catch(reportError);});
   stream.onerror=()=>{$('feed').textContent='Đang kết nối lại luồng tín hiệu';$('feed').className='feed';};
-  setInterval(()=>{refresh().catch(reportError);health().catch(reportError);},15000);
-  setInterval(()=>loadStats().catch(reportError),60000);
-  setInterval(()=>{$('clock').textContent=new Date(now()).toLocaleTimeString('vi-VN',{timeZone:'UTC'})+' UTC';renderNotifications();renderSelected();document.querySelectorAll('.signal-card').forEach(el=>{const t=state.items.find(t=>t.id===el.dataset.signal);if(t){const badge=el.querySelector('.status');badge.textContent=status(t);badge.classList.toggle('ended',now()>=t.exit_ms);}});},1000);
+  setInterval(()=>refreshAll().catch(reportError),15000);setInterval(()=>{updateCountdown();$('clock').textContent=new Date(now()).toLocaleTimeString('vi-VN',{timeZone:'UTC'})+' UTC';},1000);
 }
 main().catch(reportError);

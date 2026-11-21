@@ -120,3 +120,7 @@ Risk-free0, không annualize theo số lệnh. Không đủ mẫu/variance thì 
 Tổng danh mục chia vốn10.000 USDT. Từng coin chia mốc500 USDT để thể hiện attribution, không phải một tài khoản riêng bị khóa500. Không cộng/trung bình WR hoặc DD các coin để ra tổng.
 
 API `data_start_ms/data_as_of_ms` là khoảng số liệu thực đã commit; `updated_at_ms` là thời gian tính/đọc. Chỉ `data_current=true` khi ready và as_of bằng boundary Binance hiện tại. Snapshot241 lệnh gốc giữ nguyên cho audit; số hiện tại lấy ledger liên tục, không hard-code241.
+
+## Nhãn kết quả trong chi tiết lệnh v1.3
+
+`return_on_budget = net_pnl / 500`. Thẻ hiển thị phần trăm này sau toàn bộ10bps chi phí. TP nếu net_pnl>0, SL nếu net_pnl<0, Hòa vốn nếu0; chỉ gán sau khi có exit_price thật. Các nhãn không thay quy tắc exit_time=entry_time+4h và không có giá TP/SL kích hoạt đóng sớm. Ví dụ entry01:00 thì markup thoát05:00. Biểu tượng nến mờ nằm ở vùng chú thích thời gian; không nằm trong tập OHLC và không thể hiện giá tương lai.

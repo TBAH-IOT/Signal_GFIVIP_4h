@@ -106,9 +106,29 @@ class Worker:
         now=self.now()
         quotes=await self.source.quotes(now)
         self.store.set_meta("quotes",quotes)
+        await self.refresh_open_candles(now)
         self.store.set_meta("worker",dict(mode="live_public_data",feed_status="ok",
             heartbeat_ms=now,quote_count=len(quotes),clock_offset_ms=self.offset,
             last_boundary_ms=self.store.meta("continuous_asof_ms"),coin_errors={},not_ready=[]))
+
+    async def refresh_open_candles(self,now_ms):
+        """Refresh actual unfinished OHLC for open trades; closed factor bars stay immutable."""
+        with self.store.connect() as c:
+            coins=[r[0] for r in c.execute('SELECT DISTINCT coin FROM trades WHERE exit_price IS NULL')]
+        boundary=now_ms//BAR*BAR
+        async def one(coin):
+            rows=await asyncio.wait_for(self.source.get('/fapi/v1/klines',symbol=coin+'USDT',interval='15m',startTime=boundary,limit=1),timeout=4)
+            if not rows or int(rows[0][0])!=boundary:raise ValueError('Current candle not ready')
+            r=rows[0];values=[float(r[i]) for i in (2,3,4)]
+            if not all(np.isfinite(v) and v>0 for v in values):raise ValueError('Invalid current OHLC')
+            with self.store.tx() as c:
+                changed=c.execute('UPDATE history_bars SET high=?,low=?,close=? WHERE coin=? AND timestamp_ms=? AND is_closed=0',(*values,coin,boundary)).rowcount
+                if not changed:return
+                updates=self.store.get(c,'chart_candle_updates',{})
+                updates[coin]=dict(time_ms=boundary,received_ms=now_ms)
+                self.store.put(c,'chart_candle_updates',updates)
+        results=await asyncio.gather(*(one(c) for c in coins),return_exceptions=True)
+        self.store.set_meta('chart_candle_errors',{coin:f'{type(r).__name__}: {r}' for coin,r in zip(coins,results) if isinstance(r,Exception)})
 
     async def run(self):
         try:

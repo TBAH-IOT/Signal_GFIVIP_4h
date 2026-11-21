@@ -1,4 +1,4 @@
-# Tích hợp Signal_GFIVIP_4h v1.2.0
+# Tích hợp Signal_GFIVIP_4h v1.3.0
 
 ## Profile bắt buộc
 
@@ -27,6 +27,8 @@ Ngày deploy tương lai tự catchup; không hard-code ngày cuối/số lệnh
 | GET /api/notifications |5 tín hiệu mới nhất, unread riêng user/session |
 | POST /api/notifications/{id}/read | Đánh dấu đã đọc |
 | GET /api/signals/{id} | Chi tiết tín hiệu thuộc latest5 |
+| GET /api/trades?coin=BTC&limit=50&offset=0 | Lịch sử coin có phân trang; không giới hạn latest5 |
+| GET /api/trades/{id} | Chi tiết archive, OHLC thật, entry/exit và navigation previous/next |
 | GET /api/stats[?coin=BTC] | Tổng/từng coin, chỉ số và equity_curve |
 | GET /api/events | SSE, Last-Event-ID/reconnect, snapshot bắt buộc |
 
@@ -36,9 +38,9 @@ API percent/return là decimal, tiền USDT, timestamp milliseconds UTC. Tổng 
 
 ## UI và auth
 
-Danh mục20coin cố định. Bộ chọn chỉ Tổng thể và Coin đang xem · tên coin. Mặc định tổng thể, tên coin từ thẻ mới nhất; click thẻ/chuông đổi coin. Không tự mark read khi chọn ngữ cảnh ban đầu; refresh giữ phạm vi đang xem. Trục/caption/đường vốn bắt đầu01/05, không còn trục tháng1–tháng4.
+Danh mục20coin cố định. Trang đầu chỉ có dải5thẻ nhỏ nằm ngang và PnL sau phí cho lệnh đã đóng, nền xanh/đỏ nhẹ. Chỉ sau click thẻ/chuông mới hiện vùng bên dưới, luôn mở Chi tiết lệnh của đúng ID được bấm. Mũi tên đi qua toàn bộ ledger cùng coin; latest5 chỉ là giới hạn thông báo. Tab Hiệu suất mô hình giữ selector Tổng thể / Coin đang xem. Trục/caption/đường vốn vẫn từ01/05. Xem TRADE_EXPLORER.md cho payload, màu, markup và các quy tắc UI.
 
-Thẻ: signal_name, coin/LONG4h, entry/current/exit, timestamps, frozen historical mean/p10/p90, sample_count/scope, actual price. Không tự điền SL/TP/R:R=null. Backfill là BACKTEST, alert kịp lúc mới là LIVE. Theo dõi mô phỏng, không có broker execution.
+Thẻ và chi tiết giữ frozen historical mean. Biểu đồ chi tiết dùng OHLC thật từ cache, entry/exit open đúng4h. Kết quả dương sau phí gắn TP, âm gắn SL, zero gắn Hòa vốn; đây là result_tag, không phải bracket order. exit_reason luôn TIME_4H; stop_loss/take_profit/R:R vẫn null. Lệnh đang mở chỉ có đường dọc/nến mờ đánh dấu giờ thoát, không gán OHLC tương lai. Current OHLC của coin đang mở cập nhật từ price klines khoảng5s, không sửa closed factor bars. Backfill là BACKTEST, alert kịp lúc mới là LIVE. Theo dõi mô phỏng, không có broker execution.
 
 Cookie HMAC demo chỉ tách read state theo browser. Tích hợp account MVP vào request.state.user_id từ gateway/backend đã xác thực, không nhận ID tự khai. REST/SSE cùng origin/identity, Secure cookie sau HTTPS. Giữ DB/WAL/session.key bền vững; backup bằng SQLite API hoặc dừng writer. Docker cung cấp nhưng chưa kiểm thử deploy tại môi trường này.
 

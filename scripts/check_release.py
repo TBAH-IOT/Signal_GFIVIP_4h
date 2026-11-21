@@ -40,6 +40,11 @@ with TestClient(app) as c:
     assert stats['data_as_of_ms']==expected['data_as_of_ms']
     assert stats['signal_name']=='Signal_GFIVIP_4h'
     assert len(c.get('/api/notifications').json()['items'])==5
+    sid=c.get('/api/notifications').json()['items'][0]['id']
+    trade=c.get('/api/trades/'+sid).json()
+    assert trade['trade']['id']==sid
+    assert trade['chart']['candles'] and trade['chart']['exit_marker']['kind']=='REALIZED'
+    assert c.get('/api/trades?coin=BTC&limit=1').json()['total']>0
     assert 'Signal_GFIVIP_4h' in c.get('/').text
     assert c.get('/assets/app.js').status_code==200
 print('Extracted API and UI assets OK')

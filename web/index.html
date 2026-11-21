@@ -18,10 +18,19 @@
   <main>
     <div class="page-heading"><div><p class="eyebrow">GFI INTELLIGENCE / SIGNAL ENGINE</p><h1>Signal_GFIVIP_4h</h1><p class="muted">Dự báo 4h · Binance USD-M · Nến 15 phút</p></div><span class="paper-tag">THEO DÕI MÔ PHỎNG · 500 USDT/LỆNH</span></div>
     <div id="error" class="error" hidden></div>
-    <section class="setups"><div class="section-title"><h2>5 tín hiệu gần nhất</h2><small id="clock"></small></div><div id="cards" class="card-grid"><p class="muted">Đang tải dữ liệu thật…</p></div></section>
-    <section id="detail" class="detail">
+    <section class="setups">
+      <div class="section-title"><h2>5 tín hiệu gần nhất</h2><div class="strip-controls"><small id="clock"></small><button id="cards-prev" class="icon-button" aria-label="Thẻ trước">‹</button><button id="cards-next" class="icon-button" aria-label="Thẻ tiếp theo">›</button></div></div>
+      <div id="cards" class="card-grid" aria-label="Dải tín hiệu gần nhất"><p class="muted">Đang tải dữ liệu thật…</p></div>
+    </section>
+    <section id="detail" class="detail" hidden>
+      <div class="detail-nav"><div class="detail-tabs" role="tablist" aria-label="Nội dung tín hiệu"><button id="tab-trade" role="tab" aria-selected="true" aria-controls="trade-panel">Chi tiết lệnh</button><button id="tab-performance" role="tab" aria-selected="false" aria-controls="performance-panel" tabindex="-1">Hiệu suất mô hình</button></div><div id="viewing-coin" class="viewing-coin">Đang tải…</div></div>
+      <div id="trade-panel" role="tabpanel" aria-labelledby="tab-trade">
+        <div class="trade-heading"><div><p class="eyebrow">CHI TIẾT GIAO DỊCH</p><h2 id="trade-title">Đang tải lệnh…</h2><p id="trade-subtitle" class="muted"></p></div><div class="history-navigation"><button id="history-prev" class="icon-button" aria-label="Lệnh cũ hơn" disabled>‹</button><span id="history-position">—</span><button id="history-next" class="icon-button" aria-label="Lệnh mới hơn" disabled>›</button><button id="history-latest" class="quiet-button">Mới nhất</button></div></div>
+        <div id="trade-summary" class="trade-summary"></div>
+        <article class="candle-panel"><div class="candle-toolbar"><div><strong id="candle-title">Biểu đồ nến 15 phút</strong><p id="candle-readout" class="muted">Giá thực tế · Binance USD-M</p></div><label class="forecast-toggle"><input type="checkbox" id="show-forecast" checked> Dự báo TB lịch sử</label></div><div id="candle-chart" class="candle-chart"><p class="muted">Đang tải nến thật…</p></div><div class="candle-legend"><span><i class="entry-key"></i>Entry</span><span><i class="exit-key"></i>Thoát sau 4h</span><span>Nến mờ: giờ thoát dự kiến</span></div><p id="trade-chart-note" class="footnote"></p></article>
+      </div>
+      <div id="performance-panel" role="tabpanel" aria-labelledby="tab-performance" hidden>
       <div class="detail-top"><div><p class="eyebrow">GFI INTELLIGENCE / BACKTEST & FORWARD</p><h2 id="detail-title">Tổng thể</h2><p class="muted" id="stats-caption"></p></div><label class="scope-label" for="scope">Báo cáo số liệu<select id="scope" aria-describedby="scope-hint"><option value="strategy">Tổng thể</option><option value="coin" disabled>Coin đang xem</option></select><small id="scope-hint">Bấm vào tín hiệu để xem báo cáo riêng coin đó.</small></label></div>
-      <div id="selected-signal" hidden></div>
       <div class="metric-grid">
         <article class="metric"><h3>TỔNG LỆNH ĐÃ ĐÓNG</h3><strong id="n-trades">—</strong><small id="open-count"></small></article>
         <article class="metric"><h3>WINRATE TRƯỚC PHÍ</h3><strong id="gross-wr">—</strong><small id="gross-count"></small></article>
@@ -31,8 +40,9 @@
       </div>
       <article class="equity-panel"><div class="section-title"><div><h3>Đường cong vốn</h3><p class="muted">Equity mô phỏng · phí và slippage 10 bps tổng hai đầu</p></div><span class="legend"><i></i>Vốn tích lũy</span></div><div id="equity-chart"></div></article>
       <p id="capital-note" class="footnote"></p>
+      </div>
     </section>
-    <footer>Đường nét đứt là trung bình của các lệnh lịch sử cùng logic đã hoàn tất trước tín hiệu, được cố định khi phát tín hiệu. Vùng p10–p90 mô tả lịch sử; giá tương lai có thể nằm ngoài vùng này. Mô hình thoát theo thời gian sau 4h, không sử dụng SL/TP.</footer>
+    <footer id="signal-disclaimer" hidden>Đường nét đứt là trung bình của các lệnh lịch sử cùng logic đã hoàn tất trước tín hiệu, được cố định khi phát tín hiệu. Vùng p10–p90 mô tả lịch sử; giá tương lai có thể nằm ngoài vùng này. Vị thế kết thúc sau 4h; TP/SL thể hiện kết quả lời/lỗ sau phí tại lúc đóng lệnh.</footer>
   </main>
   <div id="toast" role="status" hidden></div>
 </body>

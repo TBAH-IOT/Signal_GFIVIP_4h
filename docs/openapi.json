@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Signal_GFIVIP_4h signal service",
-    "version": "1.2.0"
+    "version": "1.3.0"
   },
   "paths": {
     "/api/health": {
@@ -156,6 +156,100 @@
               "type": "integer",
               "default": 1000,
               "title": "Chart Points"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trades": {
+      "get": {
+        "summary": "Archive",
+        "operationId": "archive_api_trades_get",
+        "parameters": [
+          {
+            "name": "coin",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Coin"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trades/{sid}": {
+      "get": {
+        "summary": "Archive Detail",
+        "operationId": "archive_detail_api_trades__sid__get",
+        "parameters": [
+          {
+            "name": "sid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sid"
             }
           }
         ],

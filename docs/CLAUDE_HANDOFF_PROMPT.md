@@ -1,4 +1,4 @@
-# Prompt tích hợp Signal_GFIVIP_4h v1.2.0
+# Prompt tích hợp Signal_GFIVIP_4h v1.3.0
 
 Đọc README, MODEL_SPEC.md, DEV_HANDOFF.md, OpenAPI và mom_basis/continuous.py rồi tích hợp service này vào MVP hiện có. Khảo sát stack/auth/router thật, giữ Python backend độc lập nếu phù hợp.
 
@@ -6,8 +6,8 @@
 2. **Mốc thực toàn hệ thống:01/05/2026 00:00UTC**. Tải689nến warmup từ23/04/2026 19:45UTC trước mẫu để tính factor, không giao dịch/tính PnL/marks/forecast cohort trước01/05. Không chỉ đổi nhãn ngày hoặc cắt PnL từ book25/04.
 3. Deploy/restart tự đồng bộ toàn bộ phần nến thiếu tới Binance hiện tại, replay từ vốn gốc; current candle chỉ OPEN. Đủ20coin cùng as_of mới atomic commit. Thiếu dữ liệu giữ snapshot và báo syncing/error/retry, không forward-fill.
 4. Nâng từ state cũ phải backup SQLite, nhận diện profile_id, dựng lại toàn bộ ledger/forecast/equity/stats/latest5. Cùng profile thì idempotent, không reset, forecast frozen; backfill không spamchuông. spec_hash là quy tắc toán học; profile_id bổ sung start/warmup.
-5. Chuông5tín hiệu mới nhất, readstate theo user thật của MVP. Thẻ entry/current/exit, Đang mở/Đã kết thúc, vào/thoát, frozen mean/p10p90/actual, N/scope. Không tự thêm SL/TP/R:R hay vẽ forecast giả.
-6. Selector chỉ Tổng thể và Coin đang xem · tên coin; ngữ cảnh ban đầu từ thẻ mới nhất, không tự đánh dấu đã đọc. Click thẻ/chuông chuyển đúng coin; refresh giữ lựa chọn. Chỉ hiện WR trước phí, NetPnL sau phí, DD, Sharpe, equity; bỏ WR sau phí và số ngày quan sát dưới Sharpe. Trục bắt đầu đúng01/05/2026, không để khoảng trống từ01/01.
+5. Trang đầu chỉ có dải5thẻ nhỏ ngang; chưa chọn thì ẩn toàn bộ vùng chi tiết/hiệu suất. PnL sau phí của lệnh đóng có nền xanh/đỏ nhẹ. Click thẻ/chuông luôn mở đúng ID trong tab Chi tiết lệnh, không tự chọn lệnh mới nhất thay thế. Biểu đồ nến OHLC thật, dấu entry và exit4h; nhãn TP/SL theo net_pnl, không thêm price target/stop. Lệnh mở vẽ đường dọc và nến mờ tượng trưng giờ thoát T+4h, không tạo OHLC tương lai. Mũi tên previous/next xem toàn bộ lịch sử cùng coin qua /api/trades/{id}; latest5 chỉ giới hạn notification. Chuông5tín hiệu mới nhất, readstate theo user thật của MVP. Thẻ entry/current/exit, Đang mở/Đã kết thúc, vào/thoát, frozen mean/p10p90/actual, N/scope. Không tự thêm SL/TP/R:R hay vẽ forecast giả.
+6. Selector chỉ Tổng thể và Coin đang xem · tên coin; coin lấy từ lệnh vừa được bấm; không tự mở chi tiết khi vào trang. Click thẻ/chuông chuyển đúng coin; refresh giữ lựa chọn. Chỉ hiện WR trước phí, NetPnL sau phí, DD, Sharpe, equity; bỏ WR sau phí và số ngày quan sát dưới Sharpe. Trục bắt đầu đúng01/05/2026, không để khoảng trống từ01/01.
 7. Nối SSE snapshot/history.updated/signal.opened/signal.ended/stats.updated/quotes, reconnect/poll/stale/pending settlement. Timestamp UTCms, return decimal; tổng10k/attribution coin500. Không hard-code301 hoặc bảng minh họa; ngày cuối và mọi chỉ số tự tăng khi có dữ liệu.
 8. Auth từ gateway/backend tin cậy, REST/SSE cùng origin; Secure cookie trên HTTPS. Một singleton engine/writer, persistent SQLite/cache/session.key. Đây là mô phỏng tín hiệu, không có API key đặt lệnh/broker execution.
 

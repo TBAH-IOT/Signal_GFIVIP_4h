@@ -167,6 +167,20 @@ def create_app(state_dir=None, live=None, use_snapshot=True):
         result["cash_available_usdt"] = store.meta("cash")
         return result
 
+    @app.get('/api/trades')
+    def archive(coin: str,limit: int=50,offset: int=0):
+        if coin not in COINS or not 1<=limit<=100 or offset<0:
+            raise HTTPException(422,'Use a known coin, limit1..100 and offset>=0')
+        from .trade_views import list_trades
+        return list_trades(store,coin,server_now(),limit,offset)
+
+    @app.get('/api/trades/{sid}')
+    def archive_detail(sid: str):
+        from .trade_views import trade_detail
+        result=trade_detail(store,sid,server_now())
+        if result is None:raise HTTPException(404,'Unknown trade ID')
+        return result
+
     @app.get("/api/events")
     async def events(request: Request):
         raw = request.headers.get("last-event-id") or request.query_params.get("after")

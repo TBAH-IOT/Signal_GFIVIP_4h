@@ -16,6 +16,8 @@ with tempfile.TemporaryDirectory(dir=temp_parent) as state:
         stats=client.get('/api/stats?chart_points=100').json()
         examples=dict(model=client.get('/api/model').json(),notifications=notif,
             signal_detail=client.get('/api/signals/'+notif['items'][0]['id']).json(),
+            trade_archive=client.get('/api/trades',params={'coin':notif['items'][0]['coin'],'limit':3}).json(),
+            trade_detail=client.get('/api/trades/'+notif['items'][0]['id']).json(),
             stats_total=stats,stats_coin=client.get('/api/stats?coin=BTC&chart_points=100').json(),
             health=client.get('/api/health').json())
         (ROOT/'docs'/'api_examples.json').write_text(json.dumps(examples,ensure_ascii=False,indent=2),encoding='utf-8')
