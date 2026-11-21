@@ -2,6 +2,8 @@
 
 Phiên bản này **tự chạy liên tục từ thời điểm bắt đầu backtest đến lúc triển khai**, rồi cập nhật tiếp khi đang chạy live. Không dừng ở snapshot241 lệnh ngày22/10. Tên tín hiệu trên API, thông báo và giao diện là **Signal_GFIVIP_4h**.
 
+Giao diện trên nhánh `main` được cập nhật ngày 21/11/2026: chỉ hiển thị winrate trước phí; danh mục cố định 20 coin. Bộ chọn **Báo cáo số liệu** có hai lựa chọn: **Tổng thể chiến thuật · 20 coin** và **Coin đang xem** (coin vừa bấm trên thẻ hoặc thông báo). Net PnL vẫn trừ tổng chi phí 10 bps. ZIP/tag `v1.1.0` giữ nguyên bản bàn giao trước cập nhật giao diện này.
+
 ## Cách hoạt động khi import/triển khai
 
 1. Backend nạp dữ liệu thật và snapshot mới nhất kèm trong ZIP.
@@ -86,7 +88,7 @@ Hoặc `docker compose up --build -d`. Đã cung cấp cấu hình; kiểm thử
 - Chuông có badge theo user/session, chỉ5 tín hiệu mới nhất trên toàn20 coin. Backend vẫn giữ toàn bộ ledger/price cache để tính thống kê và restart.
 - Thẻ: coin/LONG4h, entry reference, current/exit price, thời điểm vào/thoát, đường trung bình lịch sử và dải p10–p90, đường giá thực tế.
 - Trước deadline: **[Đang mở]**; hết 4h: **[Đã kết thúc]**. Dữ liệu chưa đủ thì ghi đang chờ đồng bộ/giá thoát; chưa tính thắng/thua.
-- Click tới thống kê coin; selector xem tổng20 coin. Chỉ lệnh đã quyết toán vào WR/NetPnL. DD/Sharpe từ MTM15m liên tục.
+- Click thẻ hoặc thông báo để xem thống kê coin vừa bấm; bộ chọn báo cáo chỉ chuyển giữa coin đó và toàn thể chiến thuật 20 coin. Khi vừa mở trang, mặc định là tổng thể; lựa chọn coin được bật sau khi bấm tín hiệu. Không có bộ chọn số lượng coin. Hiển thị winrate trước phí; NetPnL vẫn sau phí. Chỉ lệnh đã quyết toán vào WR/NetPnL. DD/Sharpe từ MTM15m liên tục.
 - Lệnh chạy bù là **BACKTEST**. Tín hiệu phát kịp thời khi service đang live có nhãn **LIVE**. PnL là mô phỏng theo mô hình, không phải PnL tài khoản thật; không đặt lệnh lên sàn.
 
 Đường dự báo được cố định lúc phát tín hiệu, chỉ dùng lệnh lịch sử đã kết thúc trước thời điểm đó. Đây là trung bình lịch sử, không bảo đảm giá tương lai đi đúng đường vẽ; p10–p90 không phải SL/TP. Không sửa dự báo cũ để khớp kết quả sau này.

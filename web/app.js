@@ -1,6 +1,6 @@
 'use strict';
 const $ = id => document.getElementById(id);
-const state = {items: [], selected: null, stats: null, serverOffset: 0, mode: 'offline', statsLoading: 0, signalName:'Signal_GFIVIP_4h'};
+const state = {items: [], selected: null, selectedCoin: null, stats: null, serverOffset: 0, mode: 'offline', statsLoading: 0, signalName:'Signal_GFIVIP_4h'};
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pct = (v, signed=false) => v == null ? '—' : `${signed && v>0?'+':''}${(v*100).toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
 const price = v => v == null ? '—' : '$'+v.toLocaleString('en-US',{minimumFractionDigits:v<1?4:2,maximumFractionDigits:v<1?6:2});
@@ -68,14 +68,13 @@ function equityChart(rows) {
   return `<svg class="equity-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong vốn mô phỏng">${[0,.25,.5,.75,1].map(k=>{const v=lo+(hi-lo)*k;return `<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" class="chart-grid"/><text x="${W-R+12}" y="${y(v)+4}" fill="#9da7b9" font-size="12">$${v.toLocaleString('en-US',{maximumFractionDigits:0})}</text>`}).join('')}${segments.map(d=>`<path d="${d}" fill="none" stroke="#48dfb9" stroke-width="2.5"/>`).join('')}<circle cx="${x(rows.length-1)}" cy="${y(rows.at(-1).equity)}" r="4" fill="#48dfb9"/><text x="${L}" y="${H-4}" fill="#818ca0" font-size="11">${esc(date(rows[0].time_ms))}</text><text x="${W-R}" y="${H-4}" text-anchor="end" fill="#818ca0" font-size="11">${esc(date(rows.at(-1).time_ms))}</text></svg>`;
 }
 async function loadStats() {
-  const revision=++state.statsLoading,coin=$('scope').value;
+  const revision=++state.statsLoading,coin=$('scope').value==='coin'?state.selectedCoin:null;
   const s=await api('/api/stats'+(coin?'?coin='+encodeURIComponent(coin):''));
   if(revision!==state.statsLoading)return;
   state.stats=s;
-  $('detail-title').textContent=coin?`${coin} · ${state.signalName}`:`${state.signalName} · Danh mục 20 coin`;
+  $('detail-title').textContent=coin?`${coin} · ${state.signalName}`:`${state.signalName} · Tổng thể chiến thuật 20 coin`;
   $('n-trades').textContent=s.n_trades.toLocaleString('vi-VN');$('open-count').textContent=s.open_trades+' lệnh chưa quyết toán';
   $('gross-wr').textContent=pct(s.gross_winrate);$('gross-count').textContent=`${s.gross_wins} thắng / ${s.n_trades} lệnh`;
-  $('net-wr').textContent=pct(s.net_winrate);$('net-count').textContent=`${s.net_wins} thắng / ${s.n_trades} lệnh`;
   $('net-profit').textContent=pct(s.net_profit,true);$('net-profit').className=s.net_profit>=0?'positive':'negative';$('pnl-usdt').textContent=money(s.net_pnl);
   $('max-dd').textContent=pct(s.max_drawdown);$('sharpe').textContent=s.sharpe_ratio==null?'—':s.sharpe_ratio.toFixed(2);$('sharpe-note').textContent=`Theo ngày UTC · ${s.sharpe_observed_daily_returns} ngày quan sát`;
   $('equity-chart').innerHTML=equityChart(s.equity_curve);
@@ -88,9 +87,12 @@ async function refresh() {
   if(state.selected&&!state.items.some(t=>t.id===state.selected)){$('selected-signal').hidden=true;state.selected=null;}
 }
 async function selectSignal(id) {
-  const t=await api('/api/signals/'+encodeURIComponent(id));state.selected=id;
+  const t=await api('/api/signals/'+encodeURIComponent(id));state.selected=id;state.selectedCoin=t.coin;
   await api('/api/notifications/'+encodeURIComponent(id)+'/read',{method:'POST'});
-  $('scope').value=t.coin;
+  const coinOption=$('scope').querySelector('option[value="coin"]');
+  coinOption.disabled=false;coinOption.textContent=`Coin đang xem · ${t.coin}`;
+  $('scope-hint').textContent=`Báo cáo riêng ${t.coin} hoặc toàn bộ chiến thuật 20 coin.`;
+  $('scope').value='coin';
   $('selected-signal').hidden=false;$('selected-signal').innerHTML=`<div class="signal-context"><strong>${esc(t.coin)} ▲ LONG · ${status(t)}</strong><p>Vào ${date(t.entry_ms)} tại ${price(t.entry_price)} · Hết hạn ${date(t.exit_ms)} · ${t.exit_price?`PnL net ${money(t.net_pnl)}`:'Chưa có kết quả quyết toán'}</p></div>`;
   $('notifications').hidden=true;$('bell').setAttribute('aria-expanded','false');
   await Promise.all([refresh(),loadStats()]);$('detail').scrollIntoView({behavior:'smooth',block:'start'});
@@ -98,7 +100,7 @@ async function selectSignal(id) {
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;setTimeout(()=>$('toast').hidden=true,6500);}
 async function health(){const h=await api('/api/health');state.mode=h.mode;const phase=h.history?.phase;const syncing=['downloading','replaying'].includes(phase);$('feed').textContent=h.mode==='offline'?'Snapshot · '+(h.data_as_of_ms?date(h.data_as_of_ms):'mẫu gốc'):syncing?'Đang đồng bộ lịch sử…':h.feed_stale||h.worker.feed_status!=='ok'?'Dữ liệu đang gián đoạn':!h.data_current?'Đang cập nhật nến mới…':'Live · đã đồng bộ';$('feed').className='feed '+(h.mode==='live'&&h.data_current&&!h.feed_stale&&h.worker.feed_status==='ok'?'live':'');}
 async function main(){
-  const model=await api('/api/model');state.signalName=model.signal_name;for(const coin of model.coins){const o=document.createElement('option');o.value=coin;o.textContent=coin;$('scope').appendChild(o);}
+  const model=await api('/api/model');state.signalName=model.signal_name;
   $('bell').onclick=()=>{const open=$('notifications').hidden;$('notifications').hidden=!open;$('bell').setAttribute('aria-expanded',String(open));};
   $('scope').onchange=()=>loadStats().catch(reportError);
   document.addEventListener('click',e=>{const card=e.target.closest('[data-signal]');if(card)selectSignal(card.dataset.signal).catch(reportError);});

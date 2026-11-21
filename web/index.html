@@ -20,12 +20,11 @@
     <div id="error" class="error" hidden></div>
     <section class="setups"><div class="section-title"><h2>5 tín hiệu gần nhất</h2><small id="clock"></small></div><div id="cards" class="card-grid"><p class="muted">Đang tải dữ liệu thật…</p></div></section>
     <section id="detail" class="detail">
-      <div class="detail-top"><div><p class="eyebrow">GFI INTELLIGENCE / BACKTEST & FORWARD</p><h2 id="detail-title">Hiệu suất danh mục</h2><p class="muted" id="stats-caption"></p></div><label class="scope-label">Phạm vi thống kê<select id="scope"><option value="">Toàn bộ 20 coin</option></select></label></div>
+      <div class="detail-top"><div><p class="eyebrow">GFI INTELLIGENCE / BACKTEST & FORWARD</p><h2 id="detail-title">Hiệu suất chiến thuật · 20 coin</h2><p class="muted" id="stats-caption"></p></div><label class="scope-label" for="scope">Báo cáo số liệu<select id="scope" aria-describedby="scope-hint"><option value="strategy">Tổng thể chiến thuật · 20 coin</option><option value="coin" disabled>Coin đang xem · Chưa chọn</option></select><small id="scope-hint">Bấm vào tín hiệu để xem báo cáo riêng coin đó.</small></label></div>
       <div id="selected-signal" hidden></div>
       <div class="metric-grid">
         <article class="metric"><h3>TỔNG LỆNH ĐÃ ĐÓNG</h3><strong id="n-trades">—</strong><small id="open-count"></small></article>
         <article class="metric"><h3>WINRATE TRƯỚC PHÍ</h3><strong id="gross-wr">—</strong><small id="gross-count"></small></article>
-        <article class="metric"><h3>WINRATE SAU PHÍ</h3><strong id="net-wr">—</strong><small id="net-count"></small></article>
         <article class="metric"><h3>NET PNL</h3><strong id="net-profit" class="positive">—</strong><small id="pnl-usdt"></small></article>
         <article class="metric"><h3>MAX DRAWDOWN</h3><strong id="max-dd" class="negative">—</strong><small>Từ equity mark-to-market mỗi 15m</small></article>
         <article class="metric"><h3>SHARPE RATIO</h3><strong id="sharpe">—</strong><small id="sharpe-note"></small></article>

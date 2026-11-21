@@ -80,7 +80,9 @@ Tắt buffering/cache ở proxy SSE, giữ timeout>=60s; event log hữu hạn, 
 
 Thẻ chứa `signal_name`, coin/LONG4h, entry reference, current/exit price, entry/exit time, `forecast.points[].mean_price` nét đứt, p10/p90, `sample_count`, `scope`, actual path/quote. Không điền số vào stop_loss/take_profit/R:R đang null vì mô hình chưa backtest các rule đó.
 
-Click tới stats coin được bấm; có selector tổng20 coin. Hiển thị n_trades đóng, open_trades, WR gross/net, NetPnL%/USDT, Max DD, Sharpe và equity. Tổng dùng10.000 USDT; từng coin là attribution trên500 USDT, không phải tài khoản bị khóa vốn riêng. Nhãn BACKTEST/LIVE lấy `notification_live`, không đoán chỉ bằng ngày hoặc trạng thái mở.
+Click thẻ/notification tới stats coin được bấm. Bộ chọn **Báo cáo số liệu** chỉ có hai giá trị `strategy` (mặc định, tổng thể 20 coin) và `coin` (coin vừa được bấm; chưa bấm thì disabled). Không tạo danh sách chọn tất cả coin hoặc chọn số lượng coin. Coin được giữ theo lần bấm gần nhất khi đổi qua lại hai báo cáo; refresh/SSE không tự đổi phạm vi. Bộ chọn này chỉ lọc báo cáo, không thay danh mục chạy mô hình.
+
+Hiển thị n_trades đóng, open_trades, **WR gross trước phí**, NetPnL%/USDT **sau tổng chi phí 10 bps**, Max DD, Sharpe và equity. Không hiển thị ô WR net sau phí; API vẫn giữ `net_winrate`/`net_wins` để tương thích. Tổng dùng10.000 USDT; từng coin là attribution trên500 USDT, không phải tài khoản bị khóa vốn riêng. Nhãn BACKTEST/LIVE lấy `notification_live`, không đoán chỉ bằng ngày hoặc trạng thái mở.
 
 ## Auth và deploy
 
