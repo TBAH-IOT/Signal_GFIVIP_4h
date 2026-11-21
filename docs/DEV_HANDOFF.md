@@ -80,7 +80,9 @@ Tắt buffering/cache ở proxy SSE, giữ timeout>=60s; event log hữu hạn, 
 
 Thẻ chứa `signal_name`, coin/LONG4h, entry reference, current/exit price, entry/exit time, `forecast.points[].mean_price` nét đứt, p10/p90, `sample_count`, `scope`, actual path/quote. Không điền số vào stop_loss/take_profit/R:R đang null vì mô hình chưa backtest các rule đó.
 
-Click thẻ/notification tới stats coin được bấm. Bộ chọn **Báo cáo số liệu** chỉ có hai giá trị `strategy` (mặc định, tổng thể 20 coin) và `coin` (coin vừa được bấm; chưa bấm thì disabled). Không tạo danh sách chọn tất cả coin hoặc chọn số lượng coin. Coin được giữ theo lần bấm gần nhất khi đổi qua lại hai báo cáo; refresh/SSE không tự đổi phạm vi. Bộ chọn này chỉ lọc báo cáo, không thay danh mục chạy mô hình.
+Click thẻ/notification tới stats coin được bấm. Bộ chọn **Báo cáo số liệu** chỉ có hai giá trị `strategy` (mặc định, nhãn **Tổng thể**) và `coin` (nhãn **Coin đang xem · [tên coin]**). Khi mới mở trang, chọn ngữ cảnh coin từ thẻ mới nhất để luôn có tên cụ thể, nhưng vẫn hiển thị báo cáo tổng thể; không tự đánh dấu thông báo là đã đọc. Nếu không có tín hiệu nào thì lựa chọn coin mới bị khóa. Không tạo danh sách chọn tất cả coin hoặc chọn số lượng coin. Coin được giữ theo lần bấm gần nhất khi đổi qua lại hai báo cáo; refresh/SSE không tự đổi phạm vi. Bộ chọn này chỉ lọc báo cáo, không thay danh mục chạy mô hình.
+
+Trục đường vốn dùng timestamp thật cho vị trí ngang; vạch/đường lưới nét đứt theo đầu tháng UTC, có thêm hai mốc đầu/cuối thực tế. Nhãn tự giãn theo chiều rộng qua ResizeObserver để không chồng trên mobile. Mốc bắt đầu vẫn 25/04/2026; không thêm vùng dữ liệu giả từ 01/01/2026 hoặc đổi thuật toán/vốn chỉ để sửa đồ thị.
 
 Hiển thị n_trades đóng, open_trades, **WR gross trước phí**, NetPnL%/USDT **sau tổng chi phí 10 bps**, Max DD, Sharpe và equity. Không hiển thị ô WR net sau phí; API vẫn giữ `net_winrate`/`net_wins` để tương thích. Tổng dùng10.000 USDT; từng coin là attribution trên500 USDT, không phải tài khoản bị khóa vốn riêng. Nhãn BACKTEST/LIVE lấy `notification_live`, không đoán chỉ bằng ngày hoặc trạng thái mở.
 

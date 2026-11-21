@@ -22,8 +22,10 @@ Kết quả backtest là virtual execution theo open và10 bps giả định; kh
 
 ## Cập nhật giao diện trên main — 21/11/2026
 
-Đã bỏ ô winrate sau phí; còn 5 ô thống kê, với Net PnL vẫn sau tổng chi phí 10 bps. Danh mục mô hình giữ cố định 20 coin. Bộ chọn báo cáo có đúng hai lựa chọn: tổng thể chiến thuật (mặc định) và coin vừa bấm từ thẻ/chuông; chưa bấm thì lựa chọn coin bị khóa.
+Đã bỏ ô winrate sau phí; còn 5 ô thống kê, với Net PnL vẫn sau tổng chi phí 10 bps. Danh mục mô hình giữ cố định 20 coin. Bộ chọn báo cáo có đúng hai lựa chọn: **Tổng thể** (mặc định) và **Coin đang xem · [tên coin]**. Khi mở trang, lấy coin của thẻ mới nhất; sau đó đổi theo thẻ/chuông vừa bấm. Không tự đánh dấu thông báo đã đọc khi chọn ngữ cảnh ban đầu.
 
 Đã chạy lại 20 tests, đều pass. Kiểm tra Chrome/Playwright trên API dữ liệu thật: 5 thẻ và 5 thông báo; chọn coin từ chuông và từ thẻ khác; chuyển tổng thể/coin khớp API; refresh giữ coin đang xem; không còn ô winrate sau phí; không tràn ngang ở màn hình 390px; không có JavaScript error. Backend local live đã đồng bộ thành công price/premium và quote cho đủ 20 coin, `history.phase=ready`/`data_current=true` tại lúc kiểm tra. Chưa quan sát thêm một tín hiệu live mới trọn 4h trong lần cập nhật UI này.
 
 ZIP/tag `v1.1.0` vẫn là bản phát hành gốc; các thay đổi trên nằm ở source nhánh main. State, log, ảnh kiểm tra và script riêng để mở bản xem local được lưu ngoài repository.
+
+Trục mới được kiểm tra thêm trên Chrome desktop/mobile: các vạch tháng ở đúng tỷ lệ timestamp, nhãn ngày bắt đầu/kết thúc khớp API và không chồng chữ sau resize. Kiểm tra chọn báo cáo tổng thể/coin, tên coin ngay khi mở trang và sau click, 5 thẻ/5 thông báo, không có JavaScript error. Dữ liệu và thống kê vẫn từ25/04/2026 (snapshot kiểm tra308 lệnh, WR trước phí63,64%, Net_P+8,45%, Max DD−4,55%); không dùng số liệu backtest riêng từ01/01/2026 cho thay đổi giao diện này.

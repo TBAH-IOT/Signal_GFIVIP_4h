@@ -61,18 +61,40 @@ function renderNotifications() {
 }
 function equityChart(rows) {
   if (!rows.length) return '<p class="muted">Chưa đủ dữ liệu</p>';
-  const W=1000,H=300,L=12,R=91,T=20,B=30, values=rows.map(p=>p.equity),low=Math.min(...values),high=Math.max(...values),pad=Math.max((high-low)*.14,high*.002),lo=low-pad,hi=high+pad;
-  const x=i=>L+i/Math.max(1,rows.length-1)*(W-L-R),y=p=>H-B-(p-lo)/(hi-lo)*(H-T-B);
+  const W=Math.max(280,Math.floor($('equity-chart').clientWidth||1000)),compact=W<600;
+  const H=compact?270:320,L=12,R=compact?64:80,T=20,B=72;
+  const values=rows.map(p=>p.equity),low=Math.min(...values),high=Math.max(...values),pad=Math.max((high-low)*.14,high*.002),lo=low-pad,hi=high+pad;
+  const start=rows[0].time_ms,end=rows.at(-1).time_ms,right=W-R,bottom=H-B;
+  const x=ms=>L+(ms-start)/Math.max(1,end-start)*(right-L),y=p=>bottom-(p-lo)/(hi-lo)*(bottom-T);
+  const shortDate=ms=>new Date(ms).toLocaleDateString('vi-VN',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric'});
+  const ticks=[{time:start,label:shortDate(start),anchor:'start'}];
+  const cursor=new Date(start);cursor.setUTCDate(1);cursor.setUTCHours(0,0,0,0);cursor.setUTCMonth(cursor.getUTCMonth()+1);
+  // Labels are spaced in actual screen pixels; every month still has a grid/tick.
+  let lastLabelRight=L+72;
+  while(cursor.getTime()<end){
+    const ms=cursor.getTime(),px=x(ms),show=px-23>=lastLabelRight+16&&px+23<=right-88;
+    ticks.push({time:ms,label:show?`Thg ${String(cursor.getUTCMonth()+1).padStart(2,'0')}`:'',anchor:'middle'});
+    if(show)lastLabelRight=px+23;
+    cursor.setUTCMonth(cursor.getUTCMonth()+1);
+  }
+  if(end>start)ticks.push({time:end,label:shortDate(end),anchor:'end'});
   let line='',segments=[];
-  rows.forEach((r,i)=>{if(i&&r.segment!==rows[i-1].segment){segments.push(line);line='';} line+=`${line?'L':'M'}${x(i).toFixed(2)},${y(r.equity).toFixed(2)} `;});segments.push(line);
-  return `<svg class="equity-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong vốn mô phỏng">${[0,.25,.5,.75,1].map(k=>{const v=lo+(hi-lo)*k;return `<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" class="chart-grid"/><text x="${W-R+12}" y="${y(v)+4}" fill="#9da7b9" font-size="12">$${v.toLocaleString('en-US',{maximumFractionDigits:0})}</text>`}).join('')}${segments.map(d=>`<path d="${d}" fill="none" stroke="#48dfb9" stroke-width="2.5"/>`).join('')}<circle cx="${x(rows.length-1)}" cy="${y(rows.at(-1).equity)}" r="4" fill="#48dfb9"/><text x="${L}" y="${H-4}" fill="#818ca0" font-size="11">${esc(date(rows[0].time_ms))}</text><text x="${W-R}" y="${H-4}" text-anchor="end" fill="#818ca0" font-size="11">${esc(date(rows.at(-1).time_ms))}</text></svg>`;
+  rows.forEach((r,i)=>{if(i&&r.segment!==rows[i-1].segment){segments.push(line);line='';} line+=`${line?'L':'M'}${x(r.time_ms).toFixed(2)},${y(r.equity).toFixed(2)} `;});segments.push(line);
+  return `<svg class="equity-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Đường cong vốn mô phỏng với trục thời gian UTC" data-start-ms="${start}" data-end-ms="${end}">
+    ${[0,.25,.5,.75,1].map(k=>{const v=lo+(hi-lo)*k;return `<line x1="${L}" x2="${right}" y1="${y(v)}" y2="${y(v)}" class="equity-grid"/><text x="${right+12}" y="${y(v)+4}" class="equity-value">$${v.toLocaleString('en-US',{maximumFractionDigits:0})}</text>`}).join('')}
+    ${ticks.map(t=>`<g class="time-tick" data-time-ms="${t.time}"><title>${esc(date(t.time))}</title><line x1="${x(t.time)}" x2="${x(t.time)}" y1="${T}" y2="${bottom}" class="equity-grid"/><line x1="${x(t.time)}" x2="${x(t.time)}" y1="${bottom}" y2="${bottom+7}" class="equity-axis-line"/><circle cx="${x(t.time)}" cy="${bottom}" r="2" fill="#78869d"/>${t.label?`<text class="equity-time-label" x="${x(t.time)}" y="${bottom+27}" text-anchor="${t.anchor}">${esc(t.label)}</text>`:''}</g>`).join('')}
+    <line x1="${L}" x2="${right}" y1="${bottom}" y2="${bottom}" class="equity-axis-line"/>
+    ${segments.map(d=>`<path d="${d}" fill="none" stroke="#48dfb9" stroke-width="2.5"/>`).join('')}
+    <circle cx="${x(end)}" cy="${y(rows.at(-1).equity)}" r="4" fill="#48dfb9"><title>${esc(date(end))} · ${esc(money(rows.at(-1).equity))}</title></circle>
+    <text x="${L}" y="${H-7}" class="equity-axis-note">Thời gian · UTC</text><text x="${right}" y="${H-7}" text-anchor="end" class="equity-axis-note">Nến 15 phút</text>
+  </svg>`;
 }
 async function loadStats() {
   const revision=++state.statsLoading,coin=$('scope').value==='coin'?state.selectedCoin:null;
   const s=await api('/api/stats'+(coin?'?coin='+encodeURIComponent(coin):''));
   if(revision!==state.statsLoading)return;
   state.stats=s;
-  $('detail-title').textContent=coin?`${coin} · ${state.signalName}`:`${state.signalName} · Tổng thể chiến thuật 20 coin`;
+  $('detail-title').textContent=coin?`${coin} · ${state.signalName}`:`${state.signalName} · Tổng thể`;
   $('n-trades').textContent=s.n_trades.toLocaleString('vi-VN');$('open-count').textContent=s.open_trades+' lệnh chưa quyết toán';
   $('gross-wr').textContent=pct(s.gross_winrate);$('gross-count').textContent=`${s.gross_wins} thắng / ${s.n_trades} lệnh`;
   $('net-profit').textContent=pct(s.net_profit,true);$('net-profit').className=s.net_profit>=0?'positive':'negative';$('pnl-usdt').textContent=money(s.net_pnl);
@@ -83,15 +105,22 @@ async function loadStats() {
 }
 async function refresh() {
   const data=await api('/api/notifications');state.serverOffset=data.server_time_ms-Date.now();state.items=data.items;
+  // Start with the newest card in view, without marking its notification as read.
+  if(!state.selectedCoin&&state.items.length){state.selected=state.items[0].id;state.selectedCoin=state.items[0].coin;}
+  updateReportCoin();
   renderCards();renderNotifications();$('error').hidden=true;
   if(state.selected&&!state.items.some(t=>t.id===state.selected)){$('selected-signal').hidden=true;state.selected=null;}
+}
+function updateReportCoin(){
+  const coinOption=$('scope').querySelector('option[value="coin"]');
+  coinOption.disabled=!state.selectedCoin;
+  coinOption.textContent=state.selectedCoin?`Coin đang xem · ${state.selectedCoin}`:'Coin đang xem';
+  $('scope-hint').textContent=state.selectedCoin?`Báo cáo riêng ${state.selectedCoin} hoặc tổng thể.`:'Bấm vào tín hiệu để xem báo cáo riêng coin đó.';
 }
 async function selectSignal(id) {
   const t=await api('/api/signals/'+encodeURIComponent(id));state.selected=id;state.selectedCoin=t.coin;
   await api('/api/notifications/'+encodeURIComponent(id)+'/read',{method:'POST'});
-  const coinOption=$('scope').querySelector('option[value="coin"]');
-  coinOption.disabled=false;coinOption.textContent=`Coin đang xem · ${t.coin}`;
-  $('scope-hint').textContent=`Báo cáo riêng ${t.coin} hoặc toàn bộ chiến thuật 20 coin.`;
+  updateReportCoin();
   $('scope').value='coin';
   $('selected-signal').hidden=false;$('selected-signal').innerHTML=`<div class="signal-context"><strong>${esc(t.coin)} ▲ LONG · ${status(t)}</strong><p>Vào ${date(t.entry_ms)} tại ${price(t.entry_price)} · Hết hạn ${date(t.exit_ms)} · ${t.exit_price?`PnL net ${money(t.net_pnl)}`:'Chưa có kết quả quyết toán'}</p></div>`;
   $('notifications').hidden=true;$('bell').setAttribute('aria-expanded','false');
@@ -106,6 +135,8 @@ async function main(){
   document.addEventListener('click',e=>{const card=e.target.closest('[data-signal]');if(card)selectSignal(card.dataset.signal).catch(reportError);});
   document.addEventListener('keydown',e=>{const card=e.target.closest('[data-signal]');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();selectSignal(card.dataset.signal).catch(reportError);}if(e.key==='Escape')$('notifications').hidden=true;});
   await Promise.all([refresh(),loadStats(),health()]);
+  let chartWidth=0;
+  new ResizeObserver(entries=>{const width=Math.round(entries[0].contentRect.width);if(width!==chartWidth){chartWidth=width;if(state.stats)$('equity-chart').innerHTML=equityChart(state.stats.equity_curve);}}).observe($('equity-chart'));
   const stream=new EventSource('/api/events');
   stream.addEventListener('snapshot',()=>Promise.all([refresh(),loadStats()]).catch(reportError));
   stream.addEventListener('signal.opened',e=>{const v=JSON.parse(e.data);if(now()-v.entry_ms<120000)toast(`${state.signalName} · ${v.coin}: LONG 4h mới`);Promise.all([refresh(),loadStats()]).catch(reportError);});

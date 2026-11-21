@@ -19,6 +19,30 @@ def assert_report(page,expected):
         text=f"{expected[key]*100:.2f}".replace('.',',')+'%'
         assert text in page.locator(selector).inner_text(),(selector,text)
 
+def assert_axis(page,expected):
+    curve=expected['equity_curve']
+    page.wait_for_function("document.querySelector('.equity-svg')?.dataset.startMs === "+json.dumps(str(curve[0]['time_ms'])))
+    chart=page.locator('.equity-svg')
+    assert int(chart.get_attribute('data-end-ms'))==curve[-1]['time_ms']
+    assert page.locator('.time-tick').count()>=3
+    assert page.locator('.equity-time-label').count()>=3
+    assert '25/04/2026' in page.locator('.equity-time-label').first.text_content()
+    # Monthly ticks must be spaced by timestamp, and labels must not collide.
+    layout=page.evaluate('''() => {
+        const svg=document.querySelector('.equity-svg');
+        const start=Number(svg.dataset.startMs),end=Number(svg.dataset.endMs);
+        const ticks=[...svg.querySelectorAll('.time-tick')].map(g=>({time:Number(g.dataset.timeMs),x:Number(g.querySelector('circle').getAttribute('cx'))}));
+        const labels=[...svg.querySelectorAll('.equity-time-label')].map(t=>{const b=t.getBoundingClientRect();return {text:t.textContent,left:b.left,right:b.right};});
+        return {start,end,ticks,labels};
+    }''')
+    first,last=layout['ticks'][0],layout['ticks'][-1]
+    for tick in layout['ticks']:
+        fraction=(tick['time']-layout['start'])/(layout['end']-layout['start'])
+        assert abs(tick['x']-(first['x']+fraction*(last['x']-first['x'])))<.01
+    for a,b in zip(layout['labels'],layout['labels'][1:]):
+        assert a['right']+5<=b['left'],(a,b)
+    return [r['text'] for r in layout['labels']]
+
 with sync_playwright() as p:
     browser=p.chromium.launch(channel='chrome',headless=True)
     page=browser.new_page(viewport={'width':1440,'height':1250},device_scale_factor=1)
@@ -33,7 +57,12 @@ with sync_playwright() as p:
     assert page.get_by_role('heading',name='WINRATE SAU PHÍ').count()==0
     assert page.locator('#scope option').count()==2
     assert page.locator('#scope').input_value()=='strategy'
-    assert page.locator('#scope option[value="coin"]').is_disabled()
+    page.wait_for_function("!document.querySelector('#scope option[value=coin]').disabled")
+    default_coin=page.locator('.signal-card.selected .card-head strong').inner_text()
+    assert page.locator('#scope option[value="coin"]').inner_text()=='Coin đang xem · '+default_coin
+    assert page.locator('#scope option[value="strategy"]').inner_text()=='Tổng thể'
+    assert page.locator('#detail-title').inner_text()=='Signal_GFIVIP_4h · Tổng thể'
+    desktop_ticks=assert_axis(page,expected)
     assert len(page.request.get(url+'/api/model').json()['coins'])==20
     assert page.locator('h1').inner_text()=='Signal_GFIVIP_4h'
     page.locator('#detail').screenshot(path=out/'ui_strategy_report.png')
@@ -57,7 +86,7 @@ with sync_playwright() as p:
     assert page.locator('#scope').input_value()=='coin'
     assert_report(page,own)
     page.locator('#scope').select_option('strategy')
-    page.wait_for_function("document.getElementById('detail-title').textContent.includes('Tổng thể chiến thuật 20 coin')")
+    page.wait_for_function("document.getElementById('detail-title').textContent === 'Signal_GFIVIP_4h · Tổng thể'")
     assert_report(page,expected)
     page.locator('#scope').select_option('coin')
     page.wait_for_function("document.getElementById('detail-title').textContent.startsWith("+json.dumps(coin)+")")
@@ -83,15 +112,21 @@ with sync_playwright() as p:
         page.locator('#scope').select_option(scope)
         assert_report(page,expected if scope=='strategy' else next_own)
         page.set_viewport_size({'width':390,'height':844})
+        page.wait_for_function("Math.abs(document.querySelector('.equity-svg').viewBox.baseVal.width-document.getElementById('equity-chart').clientWidth)<2")
+        mobile_ticks=assert_axis(page,expected if scope=='strategy' else next_own)
         page.locator('#detail').scroll_into_view_if_needed()
         page.screenshot(path=out/('ui_mobile_'+name+'.png'),full_page=True)
+        page.locator('.equity-panel').screenshot(path=out/('ui_axis_mobile_'+name+'.png'))
         assert page.evaluate('document.documentElement.scrollWidth<=window.innerWidth')
         assert page.locator('#scope').is_visible()
     assert not errors,errors
     result=dict(cards=5,notification_limit=5,bell_opens=True,click_opens_coin_stats=True,
         displayed_metrics=5,net_winrate_hidden=True,universe_fixed_at=20,
         report_options=['strategy','coin'],default_report='strategy',
-        coin_disabled_before_click=True,last_clicked_coin=next_coin,
+        initial_coin=default_coin,last_clicked_coin=next_coin,
+        default_coin_option_named=True,overall_label='Tổng thể',
+        desktop_time_ticks=desktop_ticks,mobile_time_ticks=mobile_ticks,
+        time_labels_no_overlap=True,time_axis_matches_real_timestamps=True,
         refresh_preserves_coin=True,switching_reports_matches_real_api=True,
         continuous_n=expected['n_trades'],net_profit=expected['net_profit'],max_dd=expected['max_drawdown'],
         signal_name='Signal_GFIVIP_4h',continuous_period_shown=True,mobile_no_overflow=True,
