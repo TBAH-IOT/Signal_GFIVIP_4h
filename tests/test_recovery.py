@@ -27,3 +27,44 @@ def test_rebuild_full_real_mtm_after_downtime(tmp_path):
     expected=[cash+n*p['price']/price-BUDGET for p in path[:-1]]+[cash+pnl(price,path[-1]['price'])['net_pnl']]
     assert np.allclose([r['equity'] for r in marks],expected,atol=1e-9,rtol=0)
     assert resumed.meta('marks_quality')['missing_forward_marks']==0
+
+
+def test_transient_quote_error_preserves_ready_history(tmp_path, monkeypatch):
+    import asyncio
+    from unittest.mock import AsyncMock
+    from mom_basis.feed import Worker
+    from mom_basis.continuous import HistoryCache
+
+    store = Store(tmp_path / "model.sqlite3")
+    HistoryCache(store)
+    boundary = 1779000300000 // BAR * BAR
+    ready = {"phase": "ready", "as_of_ms": boundary}
+    store.set_meta("history_status", ready)
+    store.set_meta("continuous_asof_ms", boundary)
+    source = AsyncMock()
+    observed = []
+
+    async def quotes(now):
+        observed.append((store.meta("history_status"), store.meta("worker", {}).get("feed_status")))
+        if len(observed) == 1:
+            raise ConnectionError("quote feed offline")
+        if len(observed) == 2:
+            return {"BTC": {"price": 100, "exchange_ms": now, "received_ms": now}}
+        raise asyncio.CancelledError
+
+    source.quotes.side_effect = quotes
+    worker = Worker(store, source=source, poll_seconds=0)
+    worker.started = True
+    monkeypatch.setattr(worker, "now", lambda: boundary + 1000)
+    source.server_ms.return_value = boundary + 1000
+
+    async def run():
+        try:
+            await worker.run()
+        except asyncio.CancelledError:
+            pass
+
+    asyncio.run(run())
+    assert observed == [(ready, None), (ready, "error"), (ready, "ok")]
+    assert store.meta("history_status") == ready
+    source.close.assert_awaited_once()

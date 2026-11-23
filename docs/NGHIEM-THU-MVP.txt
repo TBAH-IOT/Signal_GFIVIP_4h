@@ -1,0 +1,72 @@
+﻿GFI | BÀN GIAO MVP CHO ĐỘI TÍCH HỢP
+23/11/2026 · Windows · Python 3.13 · nguồn công khai Binance
+
+Phạm vi đã duyệt
+GFI-Similar-Pattern dùng BTC/NEAR/SOL Spot, ba khung pattern 15m, 1h, 4h. Khung 1d có giá. BTC dùng baseline cố định, NEAR/SOL có registry riêng. Signal_GFIVIP_4h dùng đúng danh mục 20 coin USD-M và sổ mẫu hiện tại. Mở rộng danh mục là công việc của phiên bản tương lai.
+
+Nguồn và bản cần triển khai
+GFI-Similar-Pattern.zip
+Nguồn https://github.com/TBAH-IOT/GFI-Similar-Pattern
+Commit gốc c57b532486bd1977ec007849bbb1483fffc473b8
+SHA-256 của ZIP 981e6c76abca80cd6abc5ad85cd9163a8debf94c9f53d2221f21f0b21debbd63
+
+Signal_GFIVIP_4h.zip
+Nguồn https://github.com/TBAH-IOT/Signal_GFIVIP_4h
+Commit gốc 698dec32e752726100a222e8c14e431e60e7ebd2
+SHA-256 của ZIP 03c7c5e0cc6375b0070942e1a6f350cd8dc0f9715cb3abe5a29ca031af9df108
+
+Đội dev có thể clone nhánh main từ hai URL trên. Các commit gốc ghi nhận phiên bản trước khi sửa. Hai mã SHA-256 ở trên dùng để kiểm tra các ZIP của phiên nghiệm thu ngày 23/11/2026. Báo cáo này đi kèm trong thư mục docs của mỗi repo. v=41 và view=v40 là phiên bản giao diện và hợp đồng API đang được gọi.
+
+GFI-Similar-Pattern
+• Đã tái hiện HTTP 500 trên Binance thật. Khi web vẽ đường đại diện, hàm chấm số lần đổi hướng nhận giá mục tiêu tùy chọn bằng None rồi gọi numpy.isfinite(None). Bản sửa xử lý đúng trường hợp thiếu giá mục tiêu và có ca hồi quy cho cả hướng tăng và giảm.
+• Đã sửa URL của trang nghiên cứu, thư viện, API và chuyển hướng snapshot khi đặt dưới đường dẫn con. Demo có thêm hai route đọc baseline BTC và CSV mà giao diện hiện tại cần.
+• Đã đối chiếu 144 tệp theo manifest, 12 snapshot, 12 file lịch sử, 9 thư viện đường giá và 6 mục registry NEAR/SOL. Đã đối chiếu 558 đường nguồn trên 5.580 dòng OHLC cho 279 pattern lưu sẵn.
+• Đã chạy preflight, kiểm tra danh tính model, trùng Entry, thời điểm nguồn, quy tắc cố định N theo từng occurrence, hợp đồng V41 và năm bộ kiểm thử JavaScript của repo. Đã giải nén và kiểm tra lại gói giao.
+• Đã gọi /api/market, /api/patterns và /api/tick cho 3 coin × 4 khung ở cả hai chế độ live và snapshot. Sau khi toàn bộ 9 bộ quét báo live, đã kiểm tra lại các đường đại diện đều có dữ liệu nguồn kết thúc trước hoặc đúng thời điểm Entry của pattern được hiển thị. Với pattern đã qua, policy V41 có thể dùng đường giá đã xảy ra để xác định N hồi cứu; API đánh dấu horizon_policy.hindsight cho trường hợp này. Nến ngày chỉ hiển thị giá.
+• Trình duyệt đã kiểm tra PATH, bật/tắt pattern, đổi coin và khung, điều hướng pattern, mở trang nghiên cứu và thư viện qua proxy cục bộ. Trạng thái trực tiếp trong ảnh là kết nối giá. Các thẻ tin tức/on-chain/cộng đồng mang nhãn MẪU trong giao diện tham chiếu.
+
+Kết quả live sau khi dựng lịch sử
+Coin      Khung  Pattern  Nhánh   GET ấm (giây)
+BTCUSDT   15m     80      160         0.79
+BTCUSDT   1h      18       36         0.49
+BTCUSDT   4h       2        4         0.81
+NEARUSDT  15m     44       88         1.02
+NEARUSDT  1h      32       64         0.60
+NEARUSDT  4h      22       44         1.08
+SOLUSDT   15m     56      112         1.36
+SOLUSDT   1h      33       66         1.10
+SOLUSDT   4h      18       36         0.43
+GET ấm là thời gian gọi một lượt /api/market?view=v40 sau khi đã dựng dữ liệu và có cache. Đây là số đo đơn máy tại thời điểm kiểm tra. Khi nhiều khung cùng dựng lần đầu, một thao tác đổi khung trên trình duyệt vượt 90 giây. Cặp truy vấn /market rồi /patterns lâu nhất trong lượt thử song song khoảng 156 giây. Khi cache đã có, thao tác đổi khung và cả chín API đều đạt. Đội dev cần đo giai đoạn này trên staging và làm nóng các cặp dùng để demo trước khi mở traffic. Kiểm tra trạng thái từng pipeline và phản hồi market thực tế.
+
+Signal_GFIVIP_4h
+• 28 bài pytest đạt. Có 101 cảnh báo về API thư viện sắp thay đổi (pandas và httpx/Starlette TestClient). Bộ test chạy với requirements-test.lock.
+• Replay danh mục từ 01/05/2026 trên snapshot cho 301 lệnh đã đóng, 195 lệnh thắng trước phí và PnL mô phỏng sau phí +886,5105414 USDT. Mẫu đối chứng cũ khớp 241 lệnh, 284 quyết định và toàn bộ 17.268 mốc equity/cash, sai lệch equity lớn nhất 0 USDT.
+• Đã chạy worker USD-M live, kiểm tra 20 báo giá, thời điểm dữ liệu hiện hành, tổng PnL và số lệnh từng coin cộng lại khớp danh mục. REST/SSE chạy qua đường dẫn con cùng origin. UI desktop và mobile đã kiểm tra 5 thẻ, chuông, chọn đúng mã lệnh, nến thật, dấu entry/exit, lịch sử cùng coin và hai phạm vi hiệu suất.
+• Đã tái hiện lỗi mất kết nối giá ngắn làm trạng thái lịch sử kẹt ở phase=error dù báo giá đã trở lại trong cùng nến. Bản sửa ghi lỗi đồng bộ lịch sử tại chính bước replay/download, báo lỗi giá qua worker và có test rớt mạng → kết nối lại trong cùng nến. Đã khởi động lại service với sổ hiện tại và xác nhận data_current=true, feed_stale=false cùng 20 báo giá.
+• Đã sửa đường dẫn JS/CSS/API/SSE và liên kết trang chủ khi nhúng dưới /signal-4h/. Bài thử giao diện chọn đúng thẻ tín hiệu thay vì nút thông báo đang ẩn có cùng ID lệnh. ZIP đã được giải nén riêng, kiểm 130 tệp theo manifest, chạy replay và thử API/trang web từ bản giải nén.
+
+Vì sao thẻ gần nhất hiển thị 21/11 khi live đã đồng bộ đến 23/11
+• Mốc kiểm tra 02:45 UTC ngày 23/11/2026, tức 09:45 giờ Việt Nam. Nến đóng gần nhất bắt đầu lúc 02:30 UTC. Dữ liệu mới cập nhật sau mỗi nến đóng 15 phút, lệnh mô phỏng chỉ phát khi có tín hiệu đủ điều kiện.
+• Lần mở gần nhất 04:15 UTC ngày 21/11 gồm AAVE, BCH, BNB, BTC, ENA, FIL, LINK, LTC, SUI, ZEC. Các lệnh đóng sau bốn giờ. Năm thẻ gần nhất có thể cùng timestamp vì nhiều coin phát tín hiệu cùng nến.
+• Đã tải lại 186 nến sau mốc vào lệnh trên mỗi coin, cộng 689 nến để khởi động phép tính. Trong 3.720 nến cần xét có đúng một lần bắt đầu tín hiệu đủ hai điều kiện MOM16 và BASIS. Đó là LINK với giờ dự kiến vào lệnh 05:45 UTC ngày 21/11. Sổ quyết định ghi SKIP_SAME_COIN vì vị thế LINK trước đó giữ đến 08:15 UTC. Số lệnh được mở thêm bằng 0.
+• OHLC trong khoảng so sánh trùng nguồn lấy lại. Một số giá trị premium-index/BASIS khác giữa dữ liệu lưu tại thời điểm chạy và lần tải REST sau đó, tại bốn mốc nến trong phép kiểm tra, chênh lệch tuyệt đối lớn nhất 0,00073066. Hai nguồn cho cùng kết quả tín hiệu trong cửa sổ này. Nếu cần audit từng tick, giữ bản dữ liệu đã dùng khi ra quyết định.
+
+Chạy đồng thời sau khi giải nén
+Dùng venv Python 3.13 riêng cho từng gói. Chạy từ thư mục chứa README của mỗi dự án.
+1. GFI-Similar-Pattern
+   python -m pip install -r requirements-lock.txt
+   python tools/preflight.py --runtime
+   python tools/model_identity.py --check-registry
+   python server.py --host 127.0.0.1 --port 8767
+   Xem http://127.0.0.1:8767/?v=41
+2. Signal_GFIVIP_4h
+   python -m pip install -r requirements.lock
+   python -m mom_basis serve --mode live --host 127.0.0.1 --port 8765 --state-dir ./state
+   Xem http://127.0.0.1:8765/
+3. Khi dùng Compose với cả hai gói, đặt GFI_PATTERN_PORT=8767 cho Pattern. Signal dùng 8765. Chi tiết tích hợp có ở docs/INTEGRATION-VI.md (Pattern) và docs/DEV_HANDOFF.md (Signal). Dùng /similar-pattern/ và /signal-4h/ cho hai route, giữ dấu / cuối. Với Signal, tắt cache/buffering SSE, giữ một worker cho một SQLite state. Giữ volume của hai dịch vụ qua lần triển khai.
+
+Điểm nghiệm thu trên hạ tầng công ty
+Kết quả phiên này đủ để bàn giao dev và kiểm thử staging. Chưa chạy Docker, TLS, đăng nhập/quyền truy cập, reverse proxy của công ty, load test nhiều người dùng hoặc vận hành dài ngày tại đích. Vòng đời lệnh 4h được kiểm tra bằng replay và recovery; phiên này không quan sát một lệnh mới từ lúc mở đến lúc đóng sau bốn giờ. Chỉ mở live sau khi các điều kiện hạ tầng đích đã được kiểm chứng.
+
+Mở rộng trong tương lai
+Pattern có cơ chế đăng ký asset và chạy research riêng rồi kiểm registry. Một số màn hình nghiên cứu và bộ lọc peer vẫn gắn với phạm vi hiện tại. Khi thêm coin cần kiểm tra các chỗ đó, dữ liệu lịch sử và tải worker. Với Signal, COINS, spec, snapshot, seed và định danh sổ phải được phiên bản hóa đồng bộ cho danh mục mới. N coin chưa được nghiệm thu tải trong lần bàn giao này.

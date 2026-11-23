@@ -42,6 +42,8 @@ Danh mục20coin cố định. Trang đầu chỉ có dải5thẻ nhỏ nằm ng
 
 Thẻ và chi tiết giữ frozen historical mean. Biểu đồ chi tiết dùng OHLC thật từ cache, entry/exit open đúng4h. Kết quả dương sau phí gắn TP, âm gắn SL, zero gắn Hòa vốn; đây là result_tag, không phải bracket order. exit_reason luôn TIME_4H; stop_loss/take_profit/R:R vẫn null. Lệnh đang mở chỉ có đường dọc/nến mờ đánh dấu giờ thoát, không gán OHLC tương lai. Current OHLC của coin đang mở cập nhật từ price klines khoảng5s, không sửa closed factor bars. Backfill là BACKTEST, alert kịp lúc mới là LIVE. Theo dõi mô phỏng, không có broker execution.
 
+Khi nhúng cùng Similar Pattern, proxy cả trang và REST/SSE dưới cùng tiền tố, ví dụ `/signal-4h/` → `http://127.0.0.1:8765/`. URL iframe có dấu `/` cuối để trình duyệt tải đúng JS, CSS và API. Tắt buffering cho SSE.
+
 Cookie HMAC demo chỉ tách read state theo browser. Tích hợp account MVP vào request.state.user_id từ gateway/backend đã xác thực, không nhận ID tự khai. REST/SSE cùng origin/identity, Secure cookie sau HTTPS. Giữ DB/WAL/session.key bền vững; backup bằng SQLite API hoặc dừng writer. Docker cung cấp nhưng chưa kiểm thử deploy tại môi trường này.
 
 ## Nghiệm thu

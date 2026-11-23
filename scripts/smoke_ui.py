@@ -37,7 +37,7 @@ with sync_playwright() as p:
     page.screenshot(path=out/'ui_cards_v1_3.png',full_page=True)
     notifications=page.request.get(url+'/api/notifications').json()['items']
     first=notifications[0];second=next(t for t in notifications if t['coin']!=first['coin'])
-    page.locator('[data-signal="'+first['id']+'"]').first.click()
+    page.locator('.signal-card[data-signal="'+first['id']+'"]').first.click()
     expect_trade(page,first['id'])
     assert page.locator('.ohlc-candle').count()>0
     assert page.locator('.entry-marker').count()==1 and page.locator('.exit-marker').count()==1
@@ -46,7 +46,7 @@ with sync_playwright() as p:
     expected=page.request.get(url+'/api/stats').json();expect_stats(page,expected)
     assert page.locator('#net-wr').count()==0
     assert page.locator('#sharpe-note').inner_text()=='Theo ngày UTC'
-    page.locator('[data-signal="'+second['id']+'"]').first.click()
+    page.locator('.signal-card[data-signal="'+second['id']+'"]').first.click()
     expect_trade(page,second['id'])
     detail=page.request.get(url+'/api/trades/'+second['id']).json()
     assert second['coin'] in page.locator('#viewing-coin').inner_text()
@@ -65,7 +65,8 @@ with sync_playwright() as p:
     page.wait_for_function("Math.abs(document.querySelector('.trade-chart').viewBox.baseVal.width-document.getElementById('candle-chart').clientWidth)<2")
     assert page.evaluate('document.documentElement.scrollWidth<=window.innerWidth')
     page.locator('#detail').screenshot(path=out/'ui_trade_mobile_v1_3.png')
-    page.locator('#tab-performance').click();expect_stats(page,expected)
+    page.locator('#tab-performance').click()
+    page.locator('#scope').select_option('strategy');expect_stats(page,expected)
     assert page.evaluate('document.documentElement.scrollWidth<=window.innerWidth')
     assert not errors,errors
     result=dict(initial_view='cards_only',cards=5,one_horizontal_strip=True,completed_pnl_on_cards=True,

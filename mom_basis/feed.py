@@ -101,7 +101,13 @@ class Worker:
                 heartbeat_ms=now,clock_offset_ms=self.offset))
             if not self.store.meta("forward_started_ms"):
                 self.store.set_meta("forward_started_ms",now)
-            await synchronize(self.store,self.source,live_notices=True)
+            try:
+                await synchronize(self.store, self.source, live_notices=True)
+            except Exception as exc:
+                status = self.store.meta("history_status", {})
+                status.update(phase="error", error=f"{type(exc).__name__}: {exc}", updated_at_ms=self.now())
+                self.store.set_meta("history_status", status)
+                raise
             self.started=True
         now=self.now()
         quotes=await self.source.quotes(now)
@@ -138,12 +144,9 @@ class Worker:
                 except asyncio.CancelledError:
                     raise
                 except Exception as exc:
-                    log.exception("Continuous history synchronization will retry")
+                    log.exception("Live market data update will retry")
                     self.store.set_meta("worker",dict(mode="live_public_data",feed_status="error",
                         heartbeat_ms=self.now(),error=f"{type(exc).__name__}: {exc}"))
-                    status=self.store.meta("history_status",{})
-                    status.update(phase="error",error=f"{type(exc).__name__}: {exc}",updated_at_ms=self.now())
-                    self.store.set_meta("history_status",status)
                 await asyncio.sleep(self.poll_seconds)
         finally:
             await self.source.close()

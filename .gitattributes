@@ -1,0 +1,2 @@
+# Keep the SHA-256 handoff reproducible across Git clients.
+* -text
